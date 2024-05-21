@@ -1,0 +1,140 @@
+TC068 000:150.289   SEGGER J-Link V7.92k Log File
+TC068 000:150.373   DLL Compiled: Oct 18 2023 14:58:31
+TC068 000:150.377   Logging started @ 2024-04-17 02:49
+TC068 000:150.380   Process: C:\Keil_v5\UV4\UV4.exe
+TC068 000:150.385 - 150.382ms
+TC068 000:150.390 JLINK_SetWarnOutHandler(...)
+TC068 000:150.393 - 0.003ms
+TC068 000:150.397 JLINK_OpenEx(...)
+TC068 000:151.838   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+TC068 000:152.292   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+TC068 000:152.515   Decompressing FW timestamp took 173 us
+TC068 000:159.475   Hardware: V9.20
+TC068 000:159.495   S/N: 4294967295
+TC068 000:159.499   OEM: SEGGER
+TC068 000:159.504   Feature(s): RDI, FlashBP, FlashBDL, FlashDL, JFlash, GDB
+TC068 000:160.173   Bootloader: (Could not read)
+TC068 000:160.987   TELNET listener socket opened on port 19021
+TC068 000:161.102   WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+TC068 000:161.207   WEBSRV Webserver running on local port 19080
+TC068 000:161.293   Looking for J-Link GUI Server exe at: C:\Keil_v5\ARM\Segger\JLinkGUIServer.exe
+TC068 000:161.358   Looking for J-Link GUI Server exe at: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe
+TC068 000:161.385   Forking J-Link GUI Server: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe
+TC068 000:164.504   J-Link GUI Server info: "J-Link GUI server V7.88m "
+TC068 000:164.660 - 14.254ms returns "O.K."
+TC068 000:164.674 JLINK_GetEmuCaps()
+TC068 000:164.679 - 0.004ms returns 0xB9FF7BBF
+TC068 000:164.720 JLINK_TIF_GetAvailable(...)
+TC068 000:164.923 - 0.202ms
+TC068 000:164.933 JLINK_SetErrorOutHandler(...)
+TC068 000:164.936 - 0.003ms
+TC068 000:164.957 JLINK_ExecCommand("ProjectFile = "C:\Users\CANCER_CMP\Desktop\RT1064\RT1064\E09_08_mt9v03x_seekfree_assistant_demo\mdk\JLinkSettings.ini"", ...). 
+TC068 000:172.629 - 7.672ms returns 0x00
+TC068 000:172.649 JLINK_ExecCommand("Device = MIMXRT1064DVL6A", ...). 
+TC068 000:173.125   Flash bank @ 0x60000000: SFL: Parsing sectorization info from ELF file
+TC068 000:173.133     FlashDevice.SectorInfo[0]: .SectorSize = 0x00010000, .SectorStartAddr = 0x00000000
+TC068 000:181.729   Device "MIMXRT1064XXX6A" selected.
+TC068 000:182.044 - 9.390ms returns 0x00
+TC068 000:182.054 JLINK_ExecCommand("DisableConnectionTimeout", ...). 
+TC068 000:182.059 - 0.001ms returns 0x01
+TC068 000:182.063 JLINK_GetHardwareVersion()
+TC068 000:182.067 - 0.003ms returns 92000
+TC068 000:182.075 JLINK_GetDLLVersion()
+TC068 000:182.078 - 0.003ms returns 79211
+TC068 000:182.081 JLINK_GetOEMString(...)
+TC068 000:182.085 JLINK_GetFirmwareString(...)
+TC068 000:182.088 - 0.003ms
+TC068 000:182.093 JLINK_GetDLLVersion()
+TC068 000:182.096 - 0.002ms returns 79211
+TC068 000:182.100 JLINK_GetCompileDateTime()
+TC068 000:182.103 - 0.002ms
+TC068 000:182.107 JLINK_GetFirmwareString(...)
+TC068 000:182.110 - 0.002ms
+TC068 000:182.114 JLINK_GetHardwareVersion()
+TC068 000:182.117 - 0.002ms returns 92000
+TC068 000:182.121 JLINK_GetSN()
+TC068 000:182.124 - 0.003ms returns -1
+TC068 000:182.128 JLINK_GetOEMString(...)
+TC068 000:182.133 JLINK_TIF_Select(JLINKARM_TIF_JTAG)
+TC068 000:183.077 - 0.943ms returns 0x00
+TC068 000:183.087 JLINK_HasError()
+TC068 000:183.105 JLINK_SetSpeed(5000)
+TC068 000:183.239 - 0.134ms
+TC068 000:183.453 JLINK_HasError()
+TC068 000:183.459 JLINK_SetResetType(JLINKARM_RESET_TYPE_NORMAL)
+TC068 000:183.462 - 0.003ms returns JLINKARM_RESET_TYPE_NORMAL
+TC068 000:183.466 JLINK_Reset()
+TC068 000:183.702   InitTarget() start
+TC068 000:183.707    J-Link Script File: Executing InitTarget()
+TC068 000:184.808   Failed to power up DAP.
+TC068 000:184.814   Executing Connect Under Reset
+TC068 000:286.144   Failed to power up DAP.
+TC068 000:286.162   Executing Connect Under Reset
+TC068 000:487.440   _TargetHalt: CPU did not halt.
+TC068 000:689.177   _TargetHalt: CPU did not halt.
+TC068 000:891.928   _TargetHalt: CPU did not halt.
+TC068 000:992.627   InitTarget() end - Took 808ms
+TC068 000:992.666   Connect failed. Resetting via Reset pin and trying again.
+TC068 001:054.398   InitTarget() start
+TC068 001:054.520    J-Link Script File: Executing InitTarget()
+TC068 001:055.675   Failed to power up DAP.
+TC068 001:055.683   Executing Connect Under Reset
+TC068 001:158.072   Failed to power up DAP.
+TC068 001:158.096   Executing Connect Under Reset
+TC068 001:360.539   _TargetHalt: CPU did not halt.
+TC068 001:562.328   _TargetHalt: CPU did not halt.
+TC068 001:763.209   _TargetHalt: CPU did not halt.
+TC068 001:864.299   InitTarget() end - Took 809ms
+TC068 001:864.352 - 1680.884ms
+TC068 001:864.383 JLINK_GetIdData(pIdData)
+TC068 001:864.669   InitTarget() start
+TC068 001:864.712    J-Link Script File: Executing InitTarget()
+TC068 001:865.871   Failed to power up DAP.
+TC068 001:865.894   Executing Connect Under Reset
+TC068 001:967.936   Failed to power up DAP.
+TC068 001:967.953   Executing Connect Under Reset
+TC068 002:169.729   _TargetHalt: CPU did not halt.
+TC068 002:369.961   _TargetHalt: CPU did not halt.
+TC068 002:572.073   _TargetHalt: CPU did not halt.
+TC068 002:672.988   InitTarget() end - Took 808ms
+TC068 002:673.004   Connect failed. Resetting via Reset pin and trying again.
+TC068 002:735.085   InitTarget() start
+TC068 002:735.116    J-Link Script File: Executing InitTarget()
+TC068 002:736.151   Failed to power up DAP.
+TC068 002:736.179   Executing Connect Under Reset
+TC068 002:838.586   Failed to power up DAP.
+TC068 002:838.645   Executing Connect Under Reset
+TC068 003:040.511   _TargetHalt: CPU did not halt.
+TC068 003:242.962   _TargetHalt: CPU did not halt.
+TC068 003:444.175   _TargetHalt: CPU did not halt.
+TC068 003:544.888   InitTarget() end - Took 809ms
+TC068 003:544.907 - 1680.523ms
+TC068 003:544.919 JLINK_GetIdData(pIdData)
+TC068 003:545.145   InitTarget() start
+TC068 003:545.152    J-Link Script File: Executing InitTarget()
+TC068 003:546.075   Failed to power up DAP.
+TC068 003:546.084   Executing Connect Under Reset
+TC068 003:648.052   Failed to power up DAP.
+TC068 003:648.069   Executing Connect Under Reset
+TC068 003:849.278   _TargetHalt: CPU did not halt.
+TC068 004:051.100   _TargetHalt: CPU did not halt.
+TC068 004:253.782   _TargetHalt: CPU did not halt.
+TC068 004:354.801   InitTarget() end - Took 809ms
+TC068 004:354.823   Connect failed. Resetting via Reset pin and trying again.
+TC068 004:416.991   InitTarget() start
+TC068 004:417.040    J-Link Script File: Executing InitTarget()
+TC068 004:418.279   Failed to power up DAP.
+TC068 004:418.303   Executing Connect Under Reset
+TC068 004:520.376   Failed to power up DAP.
+TC068 004:520.429   Executing Connect Under Reset
+TC068 004:722.620   _TargetHalt: CPU did not halt.
+TC068 004:925.494   _TargetHalt: CPU did not halt.
+TC068 005:126.053   _TargetHalt: CPU did not halt.
+TC068 005:226.755   InitTarget() end - Took 809ms
+TC068 005:226.784 - 1681.864ms
+TC068 005:233.566 JLINK_GetFirmwareString(...)
+TC068 005:233.581 - 0.014ms
+TC068 006:219.518 JLINK_Close()
+TC068 006:234.018 - 14.499ms
+TC068 006:234.036   
+TC068 006:234.041   Closed
