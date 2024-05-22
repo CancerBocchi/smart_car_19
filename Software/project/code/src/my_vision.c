@@ -31,6 +31,68 @@ void Vision_GetMyImage()
     }   
 }
 
+//
+// @brief 大津法
+//
+int My_Adapt_Threshold(uint8*image,uint16 width, uint16 height)   //大津算法，注意计算阈值的一定要是原图像
+{
+    #define GrayScale 256
+    int pixelCount[GrayScale];
+    float pixelPro[GrayScale];
+    int i, j;
+    int pixelSum = width * height/4;
+    int  threshold = 0;
+    uint8* data = image;  //指向像素数据的指针
+    for (i = 0; i < GrayScale; i++)
+    {
+        pixelCount[i] = 0;
+        pixelPro[i] = 0;
+    }
+    uint32 gray_sum=0;
+    for (i = 0; i < height; i+=2)//统计灰度级中每个像素在整幅图像中的个数
+    {
+        for (j = 0; j <width; j+=2)
+        {
+            pixelCount[(int)data[i * width + j]]++;  //将当前的点的像素值作为计数数组的下标
+            gray_sum+=(int)data[i * width + j];       //灰度值总和
+        }
+    }
+    for (i = 0; i < GrayScale; i++) //计算每个像素值的点在整幅图像中的比例
+    {
+        pixelPro[i] = (float)pixelCount[i] / pixelSum;
+    }
+    float w0, w1, u0tmp, u1tmp, u0, u1, u, deltaTmp, deltaMax = 0;
+    w0 = w1 = u0tmp = u1tmp = u0 = u1 = u = deltaTmp = 0;
+    for (j = 0; j < GrayScale; j++)//遍历灰度级[0,255]
+    {
+        w0 += pixelPro[j];  //背景部分每个灰度值的像素点所占比例之和   即背景部分的比例
+        if(pixelPro[j] == 0)
+            continue;
+
+        u0tmp += j * pixelPro[j];  //背景部分 每个灰度值的点的比例 *灰度值
+        w1=1-w0;
+        u1tmp=gray_sum/pixelSum-u0tmp;
+        u0 = u0tmp / w0;              //背景平均灰度
+        u1 = u1tmp / w1;              //前景平均灰度
+        u = u0tmp + u1tmp;            //全局平均灰度
+        deltaTmp = w0 * pow((u0 - u), 2) + w1 * pow((u1 - u), 2);//平方
+        if (deltaTmp > deltaMax)
+        {
+            deltaMax = deltaTmp;//最大类间方差法
+            threshold = j;
+        }
+        if (deltaTmp < deltaMax)
+        {
+            break;
+        }
+    }
+    if(threshold>255)
+        threshold=255;
+    if(threshold<0)
+        threshold=0;
+  return threshold;
+}
+
 void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int height, int block, uint8_t clip_value)
 {
     assert(block % 2 == 1); // block必须为奇数
@@ -50,6 +112,61 @@ void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int h
         }
     }
 }
+
+/**
+ * @brief 双边最长白边界法
+ *  
+ * 
+*/
+int Longest_White_Column_Left[2];
+int Longest_White_Column_Right[2];
+int White_Column[IMAGE_COL];//每列白列长度
+int Center;
+void Vision_FindBoundery(){
+
+    int start_column = 0;
+    int end_column = IMAGE_COL;
+    //从左到右，从下往上，遍历全图记录范围内的每一列白点数量
+		for(int j =start_column; j<=end_column; j++ ){
+				White_Column[j] = 0;
+		}
+	
+    for (int j =start_column; j<=end_column; j++)
+    {
+        for (int i = IMAGE_ROW - 1; i >= 0; i--)
+        {
+            if(my_image[i][j] == 0){
+                break;
+						}
+            else
+                White_Column[j]++;
+        }
+    }
+    //从左到右找左边最长白列
+    Longest_White_Column_Left[0] = 0;
+    for(int i=start_column;i<=end_column;i++)
+    {
+        if (Longest_White_Column_Left[0] < White_Column[i])//找最长的那一列
+        {
+            Longest_White_Column_Left[0] = White_Column[i];//【0】是白列长度
+            Longest_White_Column_Left[1] = i;              //【1】是下标，第j列
+        }
+    }
+    //从右到左找右左边最长白列
+    Longest_White_Column_Right[0] = 0;
+    for(int i=end_column;i>=start_column;i--)//从右往左，注意条件，找到左边最长白列位置就可以停了
+    {
+        if (Longest_White_Column_Right[0] < White_Column[i])//找最长的那一列
+        {
+            Longest_White_Column_Right[0] = White_Column[i];//【0】是白列长度
+            Longest_White_Column_Right[1] = i;              //【1】是下标，第j列
+        }
+
+    }
+    Center = (Longest_White_Column_Left[1]+Longest_White_Column_Right[1]) / 2;
+}
+
+
 //
 //@breif 将边界分割函数，将边界分割为
 //      LorR 1---L 0---R
@@ -278,7 +395,7 @@ void Vision_BroderFindFP(int16* broder)
                 }
                 //通过角度寻找角点
                 else{
-                    target_FP[0] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
+                    target_FP[1] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
                     (*target_n)++;
                 }
             }
@@ -542,10 +659,10 @@ void Vision_CrossHandle()
     switch (F.FP_n_L)
     {
     case 1:
-        Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+        //Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
         break;
     case 2:
-        Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
+        //Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
         break;
     default:
         break;
@@ -553,10 +670,10 @@ void Vision_CrossHandle()
     switch (F.FP_n_L)
     {
     case 1:
-        Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+        //Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
         break;
     case 2:
-        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
+        //Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
         break;
     default:
         break;

@@ -47,9 +47,15 @@ extern int adaptivePara;
 extern uint8 handle_image[IMAGE_ROW][IMAGE_COL];
 extern RoadSymbol_type Current_Road;
 
+extern int Longest_White_Column_Left[2];
+extern int Longest_White_Column_Right[2];
+extern int White_Column[IMAGE_COL];//每列白列长度
+extern int Center;
+
 //预处理自己的摸索（不一定用得上
 void Vision_GetMyImage();
 void adaptiveThreshold(uint8_t* img_data, uint8_t* output_data, int width, int height, int block, uint8_t clip_value);
+int My_Adapt_Threshold(uint8*image,uint16 width, uint16 height);
 void Vision_FindBoundery();
 //
 void Vision_ErrorLogin();

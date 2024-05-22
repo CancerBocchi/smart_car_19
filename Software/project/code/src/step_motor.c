@@ -14,20 +14,21 @@ void Catch_Entry()
 		{
 			if(!catch_flag)
 			{
-			Step_Motor_Catch();
-			Step_Motor_Catch();
-			Step_Motor_Catch();
-//			Step_Motor_Catch();
-		
-			rt_thread_delay(1000);
-		
-			Step_Motor_Put();
-			Step_Motor_Put();
-			Step_Motor_Put();
+				Step_Motor_Catch();
+				Step_Motor_Catch();
+				Step_Motor_Catch();
+				Step_Motor_Catch();
+					
+				gpio_set_level(B10,1);
+//			rt_thread_delay(1000);
+	//		
+				Step_Motor_Put();
+				Step_Motor_Put();
+				Step_Motor_Put();
+					
+				Step_Motor_Reset();
 				
-			Step_Motor_Reset();
-				
-			catch_flag = 1;
+				catch_flag = 1;
 				//servo_slow_ctrl(120, 180, 100);
 			}
 			

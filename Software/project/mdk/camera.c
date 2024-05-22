@@ -22,21 +22,21 @@ uint8 my_image[imgRow][imgCol];
 int16 Threshold = 250;
 int8 left_add_flag[imgRow],right_add_flag[imgRow]; //补线标志位
 
-
 /*========================================*/
 
 void UseImage()
 {
     ReadMyImage();
-    FindMidLine(); 
+    // FindMidLine(); 
 
-		Vision_SymbolJudge();
-		Vision_RSHandle();
+	// 	Vision_SymbolJudge();
+	// 	Vision_RSHandle();
+    Vision_FindBoundery();
 
-    for(i=imgRow-1;i>=0;i--)
-    {
-        Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
-    }
+//    for(i=imgRow-1;i>=0;i--)
+//    {
+//        Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
+//    }
 }
 
 /*****************************************/
@@ -50,6 +50,7 @@ void ReadMyImage()  //图像处理
 //    if(Threshold>Threshold_up) Threshold=Threshold_up;
 //     tft180_show_float(00,100,Threshold,3,1);//横向纵向Judge_Round
 //         tft180_show_float(50,100,Opening_flag,3,1);//横向纵向
+    Threshold = My_Adapt_Threshold(mt9v03x_image[0],IMAGE_COL,IMAGE_ROW);
 
     for(i=0;i<imgRow;i++)
             for(j=0;j<imgCol;j++)
@@ -57,6 +58,7 @@ void ReadMyImage()  //图像处理
                 if(mt9v03x_image[i][j]>Threshold)   my_image[i][j]=255;  //白
                 else                                 my_image[i][j]=0;   //黑
             }
+    
 //          Pixle_Filter(imgRow-1,imgCol-1);
 }
 

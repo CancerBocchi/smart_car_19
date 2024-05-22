@@ -192,7 +192,7 @@ arg_change arg_register[] = {
 		{"AngleKp",DEBUG_FLOAT,&(Car_Yaw_Controller.Kp)},
 		{"AngleKd",DEBUG_FLOAT,&(Car_Yaw_Controller.Kd)},
         {"adPara",DEBUG_INT,&(adaptivePara)},
-				{"Car_Switch",DEBUG_INT,&(Car_BootSwitch)},
+        {"Car_Switch",DEBUG_INT,&(Car_BootSwitch)}, 
         {NULL,NULL,NULL}
 };
 
