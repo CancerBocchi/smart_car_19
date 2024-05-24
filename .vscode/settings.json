@@ -4,6 +4,7 @@
         "zf_common_headfile.h": "c",
         "user_math.h": "c",
         "car.h": "c",
-        "trace_line.h": "c"
+        "trace_line.h": "c",
+        "camera.h": "c"
     }
 }

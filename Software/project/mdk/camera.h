@@ -14,52 +14,29 @@ typedef enum LineState{
 		Line_Arc_exit,	//判断有圆弧存在
 }LineState_t;
 
-//元素标志
-typedef enum feature_flag
-{
-		left_cirque_flag,
-		right_cirque_flag,
-		straight_flag,
-		cross_flag,
-		turn_flag,
-}feature_flag;
-
-typedef struct {
-		float pitch;
-		float row;
-		float yaw;
-}_eulerAngle;
 
 typedef struct{
     int16 MID_Table[imgRow];
     int16 leftBroder[imgRow];//左边边界
     int16 rightBroder[imgRow];//右边边界
-}ImageStruct;
+}RoadLine_t;
 
-typedef struct{
-	
-	uint8_t* 				left_point[10];
-	uint8_t 				left_line_state;
-	LineState_t 		leftLine_State;
-	uint8_t         left_pointnum;
-	
-	uint8_t*				right_point[10];
-	uint8_t 				right_line_state;
-	LineState_t 		rightLine_State;
-	uint8_t         right_pointnum;
-		
-}feature_t;
 
-extern int rrrrrr;
-extern int16 MID_Table[imgCol];
-extern ImageStruct Image_S;
+extern RoadLine_t Image_S;
 extern uint8 my_image[imgRow][imgCol];   
+extern uint8 my_image_BW[imgRow][imgCol];
 extern int16 Threshold;
 
-extern void UseImage(void);
-void ReadMyImage(void);
+extern int Longest_White_Column_Left[2];
+extern int Longest_White_Column_Right[2];
+extern int White_Column[imgCol];//每列白列长度
+extern int Center;
 
-void FindMidLine(void);
+//巡线策略方式一
+void Camera_LongestWight(int8_t * my_image);
+void Camera_PreProcess(void);
+void Camera_FindMidLine(void);
+void Vision_Handle();
 
 
 #endif

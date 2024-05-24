@@ -4,7 +4,7 @@
 /**
  * 	CAR 控制框架�? 
  * 	控制车的运动只需要调用此 h文件中的函数即可
- * 	最终运�?	       [ CAR MOTION ]
+ * 	朢�终运�?	       [ CAR MOTION ]
  * 	算法�?	    [ MOTOR PID ]    [ Att_Algo ]
  * 	传感�?		[ MOTOR ] [ encoder ] [ IMU ]
  * 	 外设		[ PWM ]   [ qtimer ]  [ spi ]
@@ -23,8 +23,9 @@ typedef struct{
 
 }mecanum_Speed;
 
-typedef enum Omega_Right{
-	
+//�����ٶȿ���Ȩ��
+typedef enum Speed_Right{
+
 	Con_By_TraceLine,
 	Con_By_AngleLoop,
 	
@@ -42,11 +43,11 @@ extern uint8_t Car_BootSwitch;
 void car_motion_Init();
 // 车运动函数，调用此接口即�?
 void car_motion_run();
-// 改变车速度的函数，外部改变车的运行调用此接�?,当角度闭环时，最后一个参数失�?
+// �ٶȿ��ƽӿ�
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed);
 // 改变车的偏航角的函数
 void Car_Change_Yaw(float Yaw_Ref);
-// 使车目前旋转一个角度的函数
+// 使车目前旋转丢�个角度的函数
 void Car_Rotate(float angle);
 //��������
 void Car_Start();

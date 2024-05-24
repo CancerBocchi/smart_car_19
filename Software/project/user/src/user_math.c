@@ -1,8 +1,14 @@
 #include "user_math.h"
 #include "zf_common_headfile.h"
-//
-//@brief 计算三点的角度 以p2为角的顶点
-//
+
+ /**
+  * @brief 计算三点的角度 以p2为角的顶点
+  * 
+  * @param p1 	点 1
+  * @param p2 	点 2
+  * @param p3 	点 3
+  * @return float 角度的cos值
+  */
 float Vector_AngleGet(point_t p1,point_t p2,point_t p3)
 {
 	vector vec1 = {p1.x - p2.x,p1.y - p2.y};
@@ -13,19 +19,30 @@ float Vector_AngleGet(point_t p1,point_t p2,point_t p3)
 	return cos_value;
 }
 
-//
-//@brief 计算斜率
-//
+/**
+ * @brief 计算斜率
+ * 
+ * @param p1 点1坐标
+ * @param p2 点二坐标
+ * @return float 斜率
+ */
 float Point_CalSlope(point_t p1,point_t p2)
 {
 	return (float)(p1.y-p2.y)/ (float)(p1.x-p2.x);
 }
 
-//
-//@brief 判断直线
-//		输入两点的横坐标和函数，判断这两点之间是否是直线
-//		1---直线  0---非直线
-//
+/**
+ * @brief 判断直线
+ * 		输入两点的横坐标和函数，判断这两点之间是否是直线
+ * 		1---直线  0---非直线
+ * 		思路：线计算出理想的直线，当点与理想直线的点相差大与一个阈值的时候判定为非直线
+ * 
+ * @param broder 输入的线的数组，下表为横坐标
+ * @param x1 	横坐标 1
+ * @param x2 	横坐标 2
+ * @return uint8_t 
+ */
+ int Math_StraightJudgeValue = 10; //阈值
 uint8_t Line_IsStraight(int16* broder,int16 x1,int16 x2)
 {
 	//斜率
@@ -44,7 +61,7 @@ uint8_t Line_IsStraight(int16* broder,int16 x1,int16 x2)
 	for(int i = 0;i<howmany_point;i++)
 	{
 		target_value = broder[min]+K_*i;
-		if(fabsf(broder[i] - target_value) > 10)
+		if(fabsf(broder[i] - target_value) > Math_StraightJudgeValue)
 		{
 			return NOTSTRAIGHT;
 		}
@@ -54,33 +71,40 @@ uint8_t Line_IsStraight(int16* broder,int16 x1,int16 x2)
 	
 }
 
-//
-//@brief 检测单调性
-//		输入两点的横坐标和边界，判断这两点之间的单调性
-//		1---单重单调性  0---双重单调性 
+/**
+ * @brief 检测单调性
+ *		输入两点的横坐标和边界，判断这两点之间的单调性
+ *		1---单重单调性  0---双重单调性 
+ *		加入了突变点的置信判断，相当于滤除了值变化巨大的点
+ * 
+ * @param broder 输入判断的线
+ * @param x1 	横坐标 1
+ * @param x2 	横坐标 2
+ * @return uint8_t 
+ */
 uint8_t Line_IsMonotonous(int16* broder,int16 x1,int16 x2)
 {
 	int16 df[160];//求导
-	int aver_df;
+	int aver_df;//平均导数
 	uint8_t add_flag = 0;//单增标志位
 	uint8_t dec_flag = 0;//单减标志位
 
 	int16 max = Tool_CmpMax(x1,x2);
 	int16 min = Tool_CmpMin(x1,x2);
 
-	int howmany_point = max - min;
-
+	int howmany_point = max - min + 1;
+	//记录导数值
 	for(int i = 0 ; i < howmany_point-1;i++)
 	{
 		df[i] = broder[max-i] - broder[max-i-1];
-		aver_df += df;
+		aver_df += df; 
 		//因为寻线的点有时候不稳定，所以当单调性突然很大时，不予置信
-		if(fabs(df[i]) >= fabs(aver_df/(i+1))+20)
+		if(fabs(df[i]) >= fabs(aver_df/(i+1))+20) //累加平均滤波
 			df[i] = df[i-1];
 	}
 	
 	for(int i = 0 ; i < howmany_point-1;i++){
-		//对于第一个元素进行判定
+		//对于第一个元素进行判定 判断刚开始是单增还是单减
 		if(i == 0){
 			add_flag = df[i]>0? 1:0;
 			dec_flag = df[i]>0? 0:1;
@@ -115,9 +139,15 @@ uint8_t Line_IsMonotonous(int16* broder,int16 x1,int16 x2)
 	return MONO_EXIST;
 }
 
-//
-//@brief 已知三点坐标 求外接圆半径
-//		以P2为中心点
+/**
+ * @brief 已知三点坐标 求外接圆半径
+ *		  以P2为中心点
+ * 
+ * @param p1 点 1 坐标
+ * @param p2 点 2 坐标
+ * @param p3 点 3 坐标
+ * @return float 
+ */
 float Point_GetCurvity(point_t p1,point_t p2,point_t p3)
 {
 	float cosvalue = Vector_AngleGet(p1,p2,p3);
@@ -127,9 +157,14 @@ float Point_GetCurvity(point_t p1,point_t p2,point_t p3)
 	float r = 2*sinvalue/distance;
 }
 
-//
-//@brief 找到序列某个区间内中最大的点
-//
+/**
+ * @brief 寻找最大值/最小值点
+ * 
+ * @param broder 目标函数
+ * @param x1 	范围1
+ * @param x2 	范围2
+ * @return int16 
+ */
 int16 Line_FindMaxPoint(int16* broder,int x1,int x2)
 {
 	int min = Tool_CmpMin(x1,x2);

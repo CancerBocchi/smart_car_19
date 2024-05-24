@@ -1,112 +1,138 @@
 #include "zf_common_headfile.h"
 #include "camera.h"
 
-//        tft180_show_float(00,80,threshold,3,1);//横向纵向
+RoadLine_t Image_S;//保存图像边界
 
-/*========================================*/
-
-//int8 Camera_element=-1;
- int8 Camera_element=0;
-
-int8 Threshold_up=65;
-int8 Threshold_down=52;
-
-int16 i=0,j=0,w=0,p=0,z=0;
-ImageStruct Image_S;
-
-feature_t 	 Feature_Judge;
-feature_flag road_Feature;
-
-
+//我的灰度图像
 uint8 my_image[imgRow][imgCol];
+//二值化后的图像
+uint8 my_image_BW[imgRow][imgCol];
+
 int16 Threshold = 250;
-int8 left_add_flag[imgRow],right_add_flag[imgRow]; //补线标志位
 
-/*========================================*/
-
-void UseImage()
+void Vision_Handle()
 {
-    ReadMyImage();
-    // FindMidLine(); 
+    //获取图像
+    Camera_PreProcess();
 
-	// 	Vision_SymbolJudge();
-	// 	Vision_RSHandle();
-    Vision_FindBoundery();
+    Camera_FindMidLine();   //常规扫线
+    Camera_LongestWight(my_image_BW);  //最远线巡线
 
-//    for(i=imgRow-1;i>=0;i--)
-//    {
-//        Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
-//    }
+    Vision_SymbolJudge();   //元素判断，但是会有问题
+    Vision_RSHandle();      //元素判断的解决方式
+
+    //获取中线
+    for(int i=imgRow-1;i>=0;i--)
+    {
+       Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
+    }
+
 }
 
-/*****************************************/
-
-
-void ReadMyImage()  //图像处理
+/**
+ * @brief 图像预处理
+ * 
+ */
+void Camera_PreProcess()  
 {
-//    Threshold = 160; // OTSU(mt9v03x_image[0],0,0,imgCol,imgRow);
 
-//    if(Threshold<Threshold_down) Threshold=Threshold_down;
-//    if(Threshold>Threshold_up) Threshold=Threshold_up;
-//     tft180_show_float(00,100,Threshold,3,1);//横向纵向Judge_Round
-//         tft180_show_float(50,100,Opening_flag,3,1);//横向纵向
     Threshold = My_Adapt_Threshold(mt9v03x_image[0],IMAGE_COL,IMAGE_ROW);
 
-    for(i=0;i<imgRow;i++)
-            for(j=0;j<imgCol;j++)
-            {
-                if(mt9v03x_image[i][j]>Threshold)   my_image[i][j]=255;  //白
-                else                                 my_image[i][j]=0;   //黑
-            }
+    for(int i=0;i<imgRow;i++){
+        for(int j=0;j<imgCol;j++)
+        {
+            my_image_BW[i][j] = mt9v03x_image[i][j]>Threshold? 255:0;
+            my_image[i][j] = mt9v03x_image[i][j];
+        }
+    }
+
     
 //          Pixle_Filter(imgRow-1,imgCol-1);
 }
 
-uint16 OTSU(uint8 *image, uint16 col_start, uint16 row_start, uint16 col_end, uint16 row_end)               //大津法
+/**
+ * @brief 大津法
+ * 
+ * @param image  二维图像指针
+ * @param width  图像宽度    
+ * @param height 图像高度
+ * @return int   最终得到的阈值
+ */
+int Camera_My_Adapt_Threshold(uint8*image,uint16 width, uint16 height)   //大津算法，注意计算阈值的一定要是原图像
 {
-        #define GrayScale 256
-        uint16 width = col_end;
-        uint16 height = row_end;
-        int pixelCount[GrayScale];
-        float pixelPro[GrayScale];
-        uint16 i, j, pixelSum = width * height/4;
-        uint16 threshold = 0;
-        uint8* data = image;
-        uint32 gray_sum = 0;
-        for (i = 0; i < GrayScale; i++)
+    #define GrayScale 256
+    int pixelCount[GrayScale];
+    float pixelPro[GrayScale];
+    int i, j;
+    int pixelSum = width * height/4;
+    int  threshold = 0;
+    uint8* data = image;  //指向像素数据的指针
+    for (i = 0; i < GrayScale; i++)
+    {
+        pixelCount[i] = 0;
+        pixelPro[i] = 0;
+    }
+    uint32 gray_sum=0;
+    for (i = 0; i < height; i+=2)//统计灰度级中每个像素在整幅图像中的个数
+    {
+        for (j = 0; j <width; j+=2)
         {
-                pixelCount[i] = 0;pixelPro[i] = 0;
+            pixelCount[(int)data[i * width + j]]++;  //将当前的点的像素值作为计数数组的下标
+            gray_sum+=(int)data[i * width + j];       //灰度值总和
         }
-        for (i = row_start; i < height; i+=2)
-            for (j = col_start; j < width; j+=2)
-                {
-                    pixelCount[(int)data[i * width + j]]++;
-                    gray_sum+=(int)data[i * width + j];
-                }
-        for (i = 0; i < GrayScale; i++)
-        {
-            pixelPro[i] = (float)pixelCount[i] / pixelSum;
-        }
-        float w0, w1, u0tmp, u1tmp, u0, u1, u, deltaTmp, deltaMax = 0;
+    }
+    for (i = 0; i < GrayScale; i++) //计算每个像素值的点在整幅图像中的比例
+    {
+        pixelPro[i] = (float)pixelCount[i] / pixelSum;
+    }
+    float w0, w1, u0tmp, u1tmp, u0, u1, u, deltaTmp, deltaMax = 0;
+    w0 = w1 = u0tmp = u1tmp = u0 = u1 = u = deltaTmp = 0;
+    for (j = 0; j < GrayScale; j++)//遍历灰度级[0,255]
+    {
+        w0 += pixelPro[j];  //背景部分每个灰度值的像素点所占比例之和   即背景部分的比例
+        if(pixelPro[j] == 0)
+            continue;
 
-                w0 = w1 = u0tmp = u1tmp = u0 = u1 = u = deltaTmp = 0;
-                for (j = 0; j < GrayScale; j++)
-                {
-                    w0 += pixelPro[j];u0tmp += j * pixelPro[j];w1=1-w0;u1tmp=gray_sum/pixelSum-u0tmp;u0 = u0tmp / w0;
-                    u1 = u1tmp / w1;u = u0tmp + u1tmp;deltaTmp = w0 * (u0 - u) * (u0 - u) + w1 * (u1 - u) * (u1 - u);
-                    if (deltaTmp > deltaMax){deltaMax = deltaTmp;threshold = j;}
-                    if (deltaTmp < deltaMax){break;}
-                 }
-        return threshold;
+        u0tmp += j * pixelPro[j];  //背景部分 每个灰度值的点的比例 *灰度值
+        w1=1-w0;
+        u1tmp=gray_sum/pixelSum-u0tmp;
+        u0 = u0tmp / w0;              //背景平均灰度
+        u1 = u1tmp / w1;              //前景平均灰度
+        u = u0tmp + u1tmp;            //全局平均灰度
+        deltaTmp = w0 * pow((u0 - u), 2) + w1 * pow((u1 - u), 2);//平方
+        if (deltaTmp > deltaMax)
+        {
+            deltaMax = deltaTmp;//最大类间方差法
+            threshold = j;
+        }
+        if (deltaTmp < deltaMax)
+        {
+            break;
+        }
+    }
+    if(threshold>255)
+        threshold=255;
+    if(threshold<0)
+        threshold=0;
+  return threshold;
 }
+
+/**
+ * @brief 八领域扫线
+ * 
+ */
 #define range_line 10 //扫线范围
-void FindMidLine()
+void Camera_FindMidLine()
 {
     int16 Target_point = 0;
     int16 Limit_Broder[3];
     Limit_Broder[0]=0;Limit_Broder[1]=0;Limit_Broder[2]=0;
     int16 Limit_Broder_subtract=0;
     int16 Limit_Broder_add=0;
+
+    int16 i=0,j=0,w=0,p=0,z=0;
+
+    static int8 left_add_flag[imgRow],right_add_flag[imgRow]; //补线标志位
 
     for(i=0;i<imgRow;i++)
     {
@@ -372,9 +398,86 @@ void FindMidLine()
     }
 }
 
+/**
+ * @brief 双边最长白边界法
+ *          巡线策略1 弯道以外均用该巡线策略
+ * 
+*/
+int Longest_White_Column_Left[2];
+int Longest_White_Column_Right[2];
+int White_Column[IMAGE_COL];//每列白列长度
+int Center;
+void Camera_LongestWight(int8_t * my_image){
 
+    int start_column = 0;
+    int end_column = IMAGE_COL;
+    //从左到右，从下往上，遍历全图记录范围内的每一列白点数量
+		for(int j =start_column; j<=end_column; j++ ){
+				White_Column[j] = 0;
+		}
+	
+    for (int j =start_column; j<=end_column; j++)
+    {
+        for (int i = IMAGE_ROW - 1; i >= 0; i--)
+        {
+            if(my_image[i][j] == 0){
+                break;
+						}
+            else
+                White_Column[j]++;
+        }
+    }
+    //从左到右找左边最长白列
+    Longest_White_Column_Left[0] = 0;
+    for(int i=start_column;i<=end_column;i++)
+    {
+        if (Longest_White_Column_Left[0] < White_Column[i])//找最长的那一列
+        {
+            Longest_White_Column_Left[0] = White_Column[i];//【0】是白列长度
+            Longest_White_Column_Left[1] = i;              //【1】是下标，第j列
+        }
+    }
+    //从右到左找右左边最长白列
+    Longest_White_Column_Right[0] = 0;
+    for(int i=end_column;i>=start_column;i--)//从右往左，注意条件，找到左边最长白列位置就可以停了
+    {
+        if (Longest_White_Column_Right[0] < White_Column[i])//找最长的那一列
+        {
+            Longest_White_Column_Right[0] = White_Column[i];//【0】是白列长度
+            Longest_White_Column_Right[1] = i;              //【1】是下标，第j列
+        }
 
+    }
+    Center = (Longest_White_Column_Left[1]+Longest_White_Column_Right[1]) / 2;
+}
 
-//
-//@brief 获取特征点
-//
+/**
+ * @brief 上交大的自适应二值化算法
+ * 
+ * @param img_data 
+ * @param output_data 
+ * @param width 
+ * @param height 
+ * @param block 
+ * @param clip_value 
+ */
+void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int height, int block, uint8_t clip_value)
+{
+    assert(block % 2 == 1); // block必须为奇数
+    int half_block = block / 2;
+    for(int y=half_block; y<height-half_block; y++){
+        for(int x=half_block; x<width-half_block; x++){
+        // 计算局部阈值
+        int thres = 0;
+        for(int dy=-half_block; dy<=half_block; dy++){
+            for(int dx=-half_block; dx<=half_block; dx++){
+                thres += img_data[(x+dx)+(y+dy)*width];
+            }
+        }
+        thres = thres / (block * block) - clip_value;
+        // 进行二值化
+        output_data[x+y*width] = img_data[x+y*width]>thres ? 255 : 0;
+        }
+    }
+}
+

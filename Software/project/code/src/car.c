@@ -1,7 +1,7 @@
 #include "car.h"
 
 
-//	车的坐标示意�?
+//	����
 //	  	|||||||||	
 //		|		|	|
 //		|  �?	|	|
@@ -18,7 +18,7 @@ Pos_PID_t Car_Yaw_Controller;
 uint8_t Car_BootSwitch;//�����ܿ���
 
 //
-//用于将车的控制权的转�?
+//�����ٶȿ���Ȩ��
 Speed_Con_Right Car_Speed_ConRight;
 
 float speed1;
@@ -36,9 +36,9 @@ float minAngularSpeed = 300;
 /**
  * @brief 内部结算函数
  * 
- * @param xSpeed x轴方向速度
- * @param ySpeed y轴方向速度
- * @param aSpeed z轴方向速度
+ * @param xSpeed x轴方向��度
+ * @param ySpeed y轴方向��度
+ * @param aSpeed z轴方向��度
  */
 void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -75,10 +75,10 @@ void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 /**
  * @brief 对外改变速度的接�?
  * 
- * @param xSpeed x轴方向速度
- * @param ySpeed y轴方向速度
- * @param aSpeed 角速度
- * 			当使用角度闭环时，输入的角速度无效
+ * @param xSpeed x轴方向��度
+ * @param ySpeed y轴方向��度
+ * @param aSpeed 角��度
+ * 			当使用角度闭环时，输入的角��度无效
  */
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -86,7 +86,7 @@ void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 		Car_Speed.Vx = xSpeed;
 		Car_Speed.Vy = ySpeed;
 
-		//在并不使用角速度闭环的时候允许改变角速度
+		//��������Ƕ�
 		if(Car_Speed_ConRight != Con_By_AngleLoop)
 			Car_Speed.Omega = aSpeed;
 	}
@@ -106,9 +106,9 @@ void car_motion_run()
 
 	Att_GetYaw();
 	
-	//角速度闭环
+	//�Ƕȱջ� 
 	if(Car_Speed_ConRight == Con_By_AngleLoop)
-		Car_Change_Speed(0,0,Pos_PID_Controller(&Car_Yaw_Controller,Att.yaw));
+		Car_Change_Speed(Car_Speed.Vx,Car_Speed.Vy,Pos_PID_Controller(&Car_Yaw_Controller,Att.yaw));
 
 	//麦轮解算
 	mecanumRun(Car_Speed.Vx,Car_Speed.Vy,Car_Speed.Omega);
@@ -119,7 +119,7 @@ void car_motion_run()
 }
 
 /**
- * @brief 线程运行入口
+ * @brief ���������߳�
  * 
  */
 void car_motion_entry()
@@ -155,7 +155,7 @@ void car_motion_Init()
 	//电机初始�?
 		Motor_init();
 
-	//姿态解算初始化                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Att_Algo_Init();
+	//姿��解算初始化                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Att_Algo_Init();
 		Att_Algo_Init();
 	
 
@@ -211,6 +211,6 @@ void Car_Stop()
 */
 void Car_Start()
 {
-	Car_Switch(0);
+	Car_Switch(1);
 }
 

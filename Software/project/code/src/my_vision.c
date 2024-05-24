@@ -4,10 +4,9 @@
 int block = 7;
 int adaptivePara = 6;
 
-uint8 handle_image[IMAGE_ROW][IMAGE_COL];
-
 RoadSymbol_type Current_Road;
 
+//路况特征判断结构体
 struct{
     segment_t my_segment_L[10];
     point_t feature_p_L[5];
@@ -20,157 +19,122 @@ struct{
     int segment_n_R;
 }F;
 
-//将图片拷贝到自己的图像中来
-void Vision_GetMyImage()
+/**
+ * @brief 根据赛道元素选择处理
+ * 
+ */
+void Vision_RSHandle()
 {
-    for(int i=0;i<imgRow;i++){
-        for(int j=0;j<imgCol;j++)
-        {
-            handle_image[i][j] = mt9v03x_image[i][j];
-        }
-    }   
-}
+    switch (Current_Road)
+    {
+    case LoseRoads:
+        //Car_Stop();
+        //while(1){
+            //error handle 搜不到线 进入errorhandle
+       // }
+        break;
 
-//
-// @brief 大津法
-//
-int My_Adapt_Threshold(uint8*image,uint16 width, uint16 height)   //大津算法，注意计算阈值的一定要是原图像
-{
-    #define GrayScale 256
-    int pixelCount[GrayScale];
-    float pixelPro[GrayScale];
-    int i, j;
-    int pixelSum = width * height/4;
-    int  threshold = 0;
-    uint8* data = image;  //指向像素数据的指针
-    for (i = 0; i < GrayScale; i++)
-    {
-        pixelCount[i] = 0;
-        pixelPro[i] = 0;
-    }
-    uint32 gray_sum=0;
-    for (i = 0; i < height; i+=2)//统计灰度级中每个像素在整幅图像中的个数
-    {
-        for (j = 0; j <width; j+=2)
-        {
-            pixelCount[(int)data[i * width + j]]++;  //将当前的点的像素值作为计数数组的下标
-            gray_sum+=(int)data[i * width + j];       //灰度值总和
-        }
-    }
-    for (i = 0; i < GrayScale; i++) //计算每个像素值的点在整幅图像中的比例
-    {
-        pixelPro[i] = (float)pixelCount[i] / pixelSum;
-    }
-    float w0, w1, u0tmp, u1tmp, u0, u1, u, deltaTmp, deltaMax = 0;
-    w0 = w1 = u0tmp = u1tmp = u0 = u1 = u = deltaTmp = 0;
-    for (j = 0; j < GrayScale; j++)//遍历灰度级[0,255]
-    {
-        w0 += pixelPro[j];  //背景部分每个灰度值的像素点所占比例之和   即背景部分的比例
-        if(pixelPro[j] == 0)
-            continue;
+    case NormalRoads: 
 
-        u0tmp += j * pixelPro[j];  //背景部分 每个灰度值的点的比例 *灰度值
-        w1=1-w0;
-        u1tmp=gray_sum/pixelSum-u0tmp;
-        u0 = u0tmp / w0;              //背景平均灰度
-        u1 = u1tmp / w1;              //前景平均灰度
-        u = u0tmp + u1tmp;            //全局平均灰度
-        deltaTmp = w0 * pow((u0 - u), 2) + w1 * pow((u1 - u), 2);//平方
-        if (deltaTmp > deltaMax)
-        {
-            deltaMax = deltaTmp;//最大类间方差法
-            threshold = j;
-        }
-        if (deltaTmp < deltaMax)
-        {
-            break;
-        }
-    }
-    if(threshold>255)
-        threshold=255;
-    if(threshold<0)
-        threshold=0;
-  return threshold;
-}
+        break;
 
-void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int height, int block, uint8_t clip_value)
-{
-    assert(block % 2 == 1); // block必须为奇数
-    int half_block = block / 2;
-    for(int y=half_block; y<height-half_block; y++){
-        for(int x=half_block; x<width-half_block; x++){
-        // 计算局部阈值
-        int thres = 0;
-        for(int dy=-half_block; dy<=half_block; dy++){
-            for(int dx=-half_block; dx<=half_block; dx++){
-                thres += img_data[(x+dx)+(y+dy)*width];
-            }
-        }
-        thres = thres / (block * block) - clip_value;
-        // 进行二值化
-        output_data[x+y*width] = img_data[x+y*width]>thres ? 255 : 0;
-        }
+    case CrossRoads:
+        Vision_CrossHandle();
+        break;
+    
+    case CirculeRoads:
+        Vision_CirculeHandle();
+        break;
+
+    case CornerRoads:
+        Vision_CornerHandle();
+        break;
+
+    default:
+        break;
     }
+
 }
 
 /**
- * @brief 双边最长白边界法
- *  
+ * @brief 检测路段状况
  * 
-*/
-int Longest_White_Column_Left[2];
-int Longest_White_Column_Right[2];
-int White_Column[IMAGE_COL];//每列白列长度
-int Center;
-void Vision_FindBoundery(){
+ */
+void Vision_SymbolJudge()
+{
+    //获取边界分段信息
+    Vision_GetSegment(Image_S.leftBroder,1);
+    Vision_GetSegment(Image_S.rightBroder,0);
+    
+    //寻找特征点
+    Vision_BroderFindFP(Image_S.leftBroder);
+    Vision_BroderFindFP(Image_S.rightBroder);
 
-    int start_column = 0;
-    int end_column = IMAGE_COL;
-    //从左到右，从下往上，遍历全图记录范围内的每一列白点数量
-		for(int j =start_column; j<=end_column; j++ ){
-				White_Column[j] = 0;
-		}
-	
-    for (int j =start_column; j<=end_column; j++)
-    {
-        for (int i = IMAGE_ROW - 1; i >= 0; i--)
+    //只有当道路情况为正常道路时才需要进行判断
+    if(Current_Road == NormalRoads){
+        //根据特征点判断
+        int state_code = F.FP_n_L*10+F.FP_n_R;
+        switch (state_code)
         {
-            if(my_image[i][j] == 0){
-                break;
-						}
-            else
-                White_Column[j]++;
-        }
-    }
-    //从左到右找左边最长白列
-    Longest_White_Column_Left[0] = 0;
-    for(int i=start_column;i<=end_column;i++)
-    {
-        if (Longest_White_Column_Left[0] < White_Column[i])//找最长的那一列
-        {
-            Longest_White_Column_Left[0] = White_Column[i];//【0】是白列长度
-            Longest_White_Column_Left[1] = i;              //【1】是下标，第j列
-        }
-    }
-    //从右到左找右左边最长白列
-    Longest_White_Column_Right[0] = 0;
-    for(int i=end_column;i>=start_column;i--)//从右往左，注意条件，找到左边最长白列位置就可以停了
-    {
-        if (Longest_White_Column_Right[0] < White_Column[i])//找最长的那一列
-        {
-            Longest_White_Column_Right[0] = White_Column[i];//【0】是白列长度
-            Longest_White_Column_Right[1] = i;              //【1】是下标，第j列
-        }
+        case 0:
+            //两边都没间断点
+            //if(F.segment_n_L == 1)
+            break;
 
+        case 20:
+            if(F.my_segment_R[0].type == lose_segment)
+                Current_Road = CrossRoads;
+            else if(F.my_segment_R[0].type == straight_segment
+                    && F.segment_n_R == 1)
+                Current_Road = CirculeRoads;
+            break;
+
+        case 2:
+            if(F.my_segment_L[0].type == lose_segment)
+                Current_Road = CrossRoads;
+            else if(F.my_segment_L[0].type == straight_segment
+                    && F.segment_n_L == 1)
+                Current_Road = CirculeRoads;
+            break;
+
+        case 22:
+            Current_Road = CrossRoads;
+            break;
+
+        case 21:
+            Current_Road = CrossRoads;
+            break;
+
+        case 12:
+            Current_Road = CrossRoads;
+            break;
+
+        default:
+            if(F.segment_n_L == 1&&F.segment_n_R != 1){
+                if(F.my_segment_L[0].type  == straight_segment)
+                    Current_Road = CirculeRoads;
+                else if(F.my_segment_L[0].type == lose_segment)
+                    Current_Road = CornerRoads;
+            }
+            if(F.segment_n_R == 1&&F.segment_n_L != 1){
+                if(F.my_segment_R[0].type  == straight_segment)
+                    Current_Road = CirculeRoads;
+                else if(F.my_segment_R[0].type == lose_segment)
+                    Current_Road = CornerRoads;
+            }
+            break;
+        }
     }
-    Center = (Longest_White_Column_Left[1]+Longest_White_Column_Right[1]) / 2;
+        
 }
 
-
-//
-//@breif 将边界分割函数，将边界分割为
-//      LorR 1---L 0---R
-//
+/**
+ * @brief 将边界分割函数，将边界分割为
+ *          LorR 1---L 0---R
+ * 
+ * @param broder 目标边界
+ * @param LorR   左右边界 因为缺线的值不同
+ */
 void Vision_GetSegment(int16* broder,uint8_t LorR)
 {
     segment_t* target_segment = LorR? F.my_segment_L:F.my_segment_R;
@@ -298,20 +262,15 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
 
 }
 
-//
-//寻找弯道的特征点
-//
-point_t Vision_FindCornerFP(int16 *broder,int x1,int x2)
-{
-    int max = Tool_CmpMax(x1,x2);
-    int min = Tool_CmpMin(x1,x2);
 
-
-}
-
-//
-//寻找弧的特征点
-//
+/**
+ * @brief 寻找一段弧的特征点，或者说是单调性变化的
+ * 
+ * @param broder 
+ * @param x1 
+ * @param x2 
+ * @return point_t 
+ */
 point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
 {
     int max = Tool_CmpMax(x1,x2);
@@ -348,9 +307,11 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
     return (point_t){final_x,broder[final_x]};
 }
 
-//
-// 寻找边界特征点
-//
+/**
+ * @brief 寻找边界特征点
+ * 
+ * @param broder 
+ */
 void Vision_BroderFindFP(int16* broder)
 {
     segment_t *target_seg;
@@ -448,9 +409,10 @@ void Vision_BroderFindFP(int16* broder)
 
 }
 
-//
-//打印边界数组
-//
+/**
+ * @brief 打印边界数组
+ * 
+ */
 void Vision_BroderPrint()
 {
     rt_kprintf("left:\n");
@@ -463,9 +425,10 @@ void Vision_BroderPrint()
     }
 }
 
-//
-//@brief 意外状况 打印信息
-//
+/**
+ * @brief 意外情况打印信息
+ * 
+ */
 void Vision_ErrorLogin()
 {
     rt_kprintf("Judge Error\n");
@@ -538,9 +501,10 @@ void Vision_ErrorLogin()
 		rt_kprintf("\n");
 }
 
-//
-//@brief 检测路段状况
-//
+/**
+ * @brief 检测路段状况
+ * 
+ */
 void Vision_SymbolJudge()
 {
     //获取边界分段信息
@@ -548,7 +512,6 @@ void Vision_SymbolJudge()
     Vision_GetSegment(Image_S.rightBroder,0);
     
     //寻找特征点
-
     Vision_BroderFindFP(Image_S.leftBroder);
     Vision_BroderFindFP(Image_S.rightBroder);
 
@@ -645,12 +608,33 @@ void Vision_ExtendLine(int16 *broder,int x,int direction)
 
 }
 
+/**
+ * @brief 补线函数，告诉两个点的数组下表，将对应边界两点间的值补充为直线
+ * 
+ * @param p1 横坐标1
+ * @param p2 横坐标2
+ * @param broder 边界
+ */
+void Vision_set_AdditionalLine(int16 p1,int16 p2,int16 *broder)
+{
+		float slope = Point_CalSlope((point_t){p1,broder[p1]},(point_t){p2,broder[p2]});
+		
+		int pmin = p1>p2? p2:p1;
+		int pmax = p1>p2? p1:p2;
+		
+		for(int i = pmin ; i<=pmax ; i++)
+		{
+			broder[i] = (int16)((float)(i-pmin)*slope + (float)broder[pmin]);
+		}
+}
+
+/**
+ * @brief 十字赛道处理
+ * 
+ */
 #define Cross_State_1 1
 #define Cross_State_2 2
 #define Leave_Cross   3
-//
-//@breif 十字赛道解决
-//
 void Vision_CrossHandle()
 {
     static int state;
@@ -801,9 +785,10 @@ void Vision_CrossHandle()
    
 }
 
-//
-//@breif 弯道处理方式
-//
+/**
+ * @brief 弯道处理
+ * 
+ */
 void Vision_CornerHandle()
 {
     if(F.segment_n_L == 1 && F.segment_n_R == 1){
@@ -830,9 +815,10 @@ void Vision_CornerHandle()
     Current_Road = NormalRoads;
 }
 
-//
-// @brief 圆环处理方式
-//
+/**
+ * @brief 圆环处理
+ * 
+ */
 void Vision_CirculeHandle()
 {   
     if(F.segment_n_L == 1){
@@ -840,59 +826,6 @@ void Vision_CirculeHandle()
             Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
         }
     }
-}
-
-
-//
-//@brief 根据道路元素
-//
-void Vision_RSHandle()
-{
-    switch (Current_Road)
-    {
-    case LoseRoads:
-        //Car_Stop();
-        //while(1){
-            //error handle 搜不到线 进入errorhandle
-       // }
-        break;
-
-    case NormalRoads: 
-
-        break;
-
-    case CrossRoads:
-        Vision_CrossHandle();
-        break;
-    
-    case CirculeRoads:
-        Vision_CirculeHandle();
-        break;
-
-    case CornerRoads:
-        Vision_CornerHandle();
-        break;
-
-    default:
-        break;
-    }
-
-}
-
-//
-//@brief 补线函数，告诉两个点的数组下表，将对应边界两点间的值补充为直线
-//
-void Vision_set_AdditionalLine(int16 p1,int16 p2,int16 *broder)
-{
-		float slope = Point_CalSlope((point_t){p1,broder[p1]},(point_t){p2,broder[p2]});
-		
-		int pmin = p1>p2? p2:p1;
-		int pmax = p1>p2? p1:p2;
-		
-		for(int i = pmin ; i<=pmax ; i++)
-		{
-			broder[i] = (int16)((float)(i-pmin)*slope + (float)broder[pmin]);
-		}
 }
 
 

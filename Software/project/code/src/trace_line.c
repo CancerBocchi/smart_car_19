@@ -27,72 +27,48 @@ uint8_t row_begin = 20;
 //PID控制块
 Pos_PID_t TraceLine_Yaw_Con;
 Pos_PID_t TraceLine_Vx_Con;
+Pos_PID_t TraceLine_Normal_Con;
+
 int32 TraceLine_Aver_Offset;
 int32 TraceLine_Last_Offset;
 int32 TraceLine_Forward_V;
 
+//基础速度
 float speed_forward;
 
-//
-// @brief 大津法
-//
-// int My_Adapt_Threshold(uint8*image,uint16 width, uint16 height)   //大津算法，注意计算阈值的一定要是原图像
-// {
-//     #define GrayScale 256
-//     int pixelCount[GrayScale];
-//     float pixelPro[GrayScale];
-//     int i, j;
-//     int pixelSum = width * height/4;
-//     int  threshold = 0;
-//     uint8* data = image;  //指向像素数据的指针
-//     for (i = 0; i < GrayScale; i++)
-//     {
-//         pixelCount[i] = 0;
-//         pixelPro[i] = 0;
-//     }
-//     uint32 gray_sum=0;
-//     for (i = 0; i < height; i+=2)//统计灰度级中每个像素在整幅图像中的个数
-//     {
-//         for (j = 0; j <width; j+=2)
-//         {
-//             pixelCount[(int)data[i * width + j]]++;  //将当前的点的像素值作为计数数组的下标
-//             gray_sum+=(int)data[i * width + j];       //灰度值总和
-//         }
-//     }
-//     for (i = 0; i < GrayScale; i++) //计算每个像素值的点在整幅图像中的比例
-//     {
-//         pixelPro[i] = (float)pixelCount[i] / pixelSum;
-//     }
-//     float w0, w1, u0tmp, u1tmp, u0, u1, u, deltaTmp, deltaMax = 0;
-//     w0 = w1 = u0tmp = u1tmp = u0 = u1 = u = deltaTmp = 0;
-//     for (j = 0; j < GrayScale; j++)//遍历灰度级[0,255]
-//     {
-//         w0 += pixelPro[j];  //背景部分每个灰度值的像素点所占比例之和   即背景部分的比例
-// 				if(pixelPro[j] == 0)
-// 					continue;
-//         u0tmp += j * pixelPro[j];  //背景部分 每个灰度值的点的比例 *灰度值
-//         w1=1-w0;
-//         u1tmp=gray_sum/pixelSum-u0tmp;
-//         u0 = u0tmp / w0;              //背景平均灰度
-//         u1 = u1tmp / w1;              //前景平均灰度
-//         u = u0tmp + u1tmp;            //全局平均灰度
-//         deltaTmp = w0 * pow((u0 - u), 2) + w1 * pow((u1 - u), 2);//平方
-//         if (deltaTmp > deltaMax)
-//         {
-//             deltaMax = deltaTmp;//最大类间方差法
-//             threshold = j;
-//         }
-//         if (deltaTmp < deltaMax)
-//         {
-//             break;
-//         }
-//     }
-//     if(threshold>255)
-//         threshold=255;
-//     if(threshold<0)
-//         threshold=0;
-//   return threshold;
-// }
+/**
+ * @brief 巡线策略函数
+ * 
+ */
+void trace_line_method()
+{
+	//速度控制权判定
+	if(Car_Speed_ConRight == Con_By_TraceLine){
+		//策略1 常规巡线
+		//计算总偏差值
+
+		for(int i = imgRow-1; i>=row_begin;i--)
+			TraceLine_Aver_Offset += (imgCol/mid_offset - 1 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
+
+		TraceLine_Aver_Offset /= imgRow;
+
+		float yaw_now = Pos_PID_Controller(&TraceLine_Normal_Con,TraceLine_Aver_Offset);
+
+		if(TraceLine_Aver_Offset>50)
+			Car_Change_Speed(Car_Speed.Vx,speed_forward/2,yaw_now);
+		else
+			Car_Change_Speed(Car_Speed.Vx,speed_forward,yaw_now);
+		TraceLine_Aver_Offset = 0;	
+
+
+		//策略2 最长白线法
+		float vx = Pos_PID_Controller(&TraceLine_Vx_Con,Center);
+		float yaw = Pos_PID_Controller(&TraceLine_Yaw_Con,Center);
+		Car_Change_Speed(vx,speed_forward,yaw);
+
+		
+	}
+}
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      巡线初始化函数
@@ -141,6 +117,13 @@ void trace_line_init()
 	TraceLine_Vx_Con.Output_Min = -50;
 	TraceLine_Vx_Con.Value_I = 200;
 	TraceLine_Vx_Con.Ref = 96;
+
+	Pos_PID_Init(&TraceLine_Normal_Con,-10,0,-10);
+	TraceLine_Normal_Con.Output_Max = 200;
+	TraceLine_Normal_Con.Output_Min = -200;
+	TraceLine_Normal_Con.Value_I = 200;
+	TraceLine_Normal_Con.Ref = 0;
+
 	
 	//初始化信号量
 	trace_line_sem = rt_sem_create("trace_line_sem",0,RT_IPC_FLAG_FIFO);
@@ -170,7 +153,7 @@ void trace_line_entry()
 	{
 		if(mt9v03x_finish_flag)
 		{	
-			UseImage();
+			Vision_Handle();
 
 			//Vision_GetMyImage();
 			//adaptiveThreshold(handle_image,handle_image,IMAGE_COL,IMAGE_ROW,7,adaptivePara);
@@ -190,37 +173,9 @@ void trace_line_entry()
 			tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
 			tft180_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
 			
-			//计算最后一个块的偏差值
-//			for(int i = LAST_OFFSET_POINT_NUM-1; i>=0;i--)
-//			{
-//				TraceLine_Last_Offset += (imgCol/2 - 1 - Image_S.MID_Table[i]);
-//			}
-//			TraceLine_Last_Offset /= LAST_OFFSET_POINT_NUM;
-			//计算总偏差值
-			// for(int i = imgRow-1; i>=row_begin;i--)
-			// {
-			// 		TraceLine_Aver_Offset += (imgCol/mid_offset - 1 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
-			// }
-			// TraceLine_Aver_Offset /= imgRow;
-//			if(TraceLine_Aver_Offset>50)
-//			{
-//					Car_Change_Speed(Car_Speed.Vx,speed_forward/2,Car_Speed.Omega);
-//			}
-//			else{
-//					Car_Change_Speed(Car_Speed.Vx,speed_forward,Car_Speed.Omega);
-//			}
-//			
-//			//计算环路输出结果
-			// Car_Change_Yaw(Pos_PID_Controller(&TraceLine_Yaw_Con,TraceLine_Aver_Offset));
-			
-			//只有在有运行权限的时候才能运行环路
-			if(Car_Speed_ConRight == Con_By_TraceLine){
-				float vx = Pos_PID_Controller(&TraceLine_Vx_Con,Center);
-				float yaw = Pos_PID_Controller(&TraceLine_Yaw_Con,Center);
-				Car_Change_Speed(vx,speed_forward,yaw);
-			}
-	
-			//TraceLine_Aver_Offset = 0;
+
+			trace_line_method();
+
 			
 			//状态切换管理 若art模块发出了识别到图片的信号，则阻塞该线程，运行边沿检测线程
 			// if(Art1_Detection_Flag){
