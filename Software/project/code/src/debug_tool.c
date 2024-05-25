@@ -106,9 +106,9 @@ MSH_CMD_EXPORT(GetRS , Get Current RoadState);
  */
 arg_change arr_register[] ={
 
-		{"leftb",imgRow,&(Image_S.leftBroder)},
-		{"rightb",imgRow,&(Image_S.rightBroder)},
-		{"midl",imgRow,&(Image_S.MID_Table)},
+    {"leftb",imgRow,&(Image_S.leftBroder)},
+    {"rightb",imgRow,&(Image_S.rightBroder)},
+    {"midl",imgRow,&(Image_S.MID_Table)},
     {NULL,NULL,NULL}
 };
 
@@ -188,7 +188,6 @@ arg_change arg_register[] = {
 		{"YawKi",DEBUG_FLOAT,&(TraceLine_Yaw_Con.Ki)},
 		{"YawKd",DEBUG_FLOAT,&(TraceLine_Yaw_Con.Kd)},
 		{"TH",DEBUG_INT,&Threshold},
-		{"mid_off",DEBUG_FLOAT,&mid_offset},
 		{"AngleKp",DEBUG_FLOAT,&(Car_Yaw_Controller.Kp)},
 		{"AngleKd",DEBUG_FLOAT,&(Car_Yaw_Controller.Kd)},
         {"adPara",DEBUG_INT,&(adaptivePara)},

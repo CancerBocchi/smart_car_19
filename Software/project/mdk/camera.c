@@ -8,24 +8,46 @@ uint8 my_image[imgRow][imgCol];
 //二值化后的图像
 uint8 my_image_BW[imgRow][imgCol];
 
+
 int16 Threshold = 250;
 
 void Vision_Handle()
 {
-    //获取图像
+
+    //图像预处理
     Camera_PreProcess();
 
     Camera_FindMidLine();   //常规扫线
-    Camera_LongestWight(my_image_BW);  //最远线巡线
+    Camera_LongestWight();  //最远线巡线
 
     Vision_SymbolJudge();   //元素判断，但是会有问题
-    Vision_RSHandle();      //元素判断的解决方式
+    //Vision_RSHandle();      //元素判断的解决方式
 
     //获取中线
     for(int i=imgRow-1;i>=0;i--)
     {
        Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
     }
+
+
+    //图像debug
+    float mid_offset=1.65;
+    uint8_t row_begin = 20;
+    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+    for(int i=imgRow-1;i>=row_begin;i--)
+    {
+        // tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
+        tft180_draw_point(Image_S.leftBroder[i], 78-(imgRow-1)+i, RGB565_BLUE);
+        tft180_draw_point(Image_S.rightBroder[i], 78-(imgRow-1)+i, RGB565_BROWN);
+        //中线
+        tft180_draw_point((int)(160/1.65), 78-(imgRow-1)+i, RGB565_GREEN);
+    }
+
+    Vision_DrawFP();
+    //最长白线法
+    // tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
+    // tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
+    // tft180_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
 
 }
 
@@ -36,7 +58,7 @@ void Vision_Handle()
 void Camera_PreProcess()  
 {
 
-    Threshold = My_Adapt_Threshold(mt9v03x_image[0],IMAGE_COL,IMAGE_ROW);
+    Threshold = Camera_My_Adapt_Threshold(mt9v03x_image[0],IMAGE_COL,IMAGE_ROW);
 
     for(int i=0;i<imgRow;i++){
         for(int j=0;j<imgCol;j++)
@@ -407,20 +429,20 @@ int Longest_White_Column_Left[2];
 int Longest_White_Column_Right[2];
 int White_Column[IMAGE_COL];//每列白列长度
 int Center;
-void Camera_LongestWight(int8_t * my_image){
+void Camera_LongestWight(){
 
     int start_column = 0;
-    int end_column = IMAGE_COL;
+    int end_column = IMAGE_COL - 1;
     //从左到右，从下往上，遍历全图记录范围内的每一列白点数量
-		for(int j =start_column; j<=end_column; j++ ){
-				White_Column[j] = 0;
-		}
+    for(int j =start_column; j<=end_column; j++ ){
+            White_Column[j] = 0;
+    }
 	
     for (int j =start_column; j<=end_column; j++)
     {
         for (int i = IMAGE_ROW - 1; i >= 0; i--)
         {
-            if(my_image[i][j] == 0){
+            if(my_image_BW[i][j] == 0){
                 break;
 						}
             else

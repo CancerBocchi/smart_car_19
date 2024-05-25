@@ -3,6 +3,10 @@
 #include "zf_common_headfile.h"
 #include "user_math.h"
 
+#define START_X 1
+#define START_Y 10
+#define BLACK 0
+#define WHITE 255
 #define  imgRow          70      
 #define  imgCol          160
 #define MID_COL (imgCol>>1)
@@ -32,11 +36,16 @@ extern int Longest_White_Column_Right[2];
 extern int White_Column[imgCol];//每列白列长度
 extern int Center;
 
-//巡线策略方式一
-void Camera_LongestWight(int8_t * my_image);
-void Camera_PreProcess(void);
-void Camera_FindMidLine(void);
+//
 void Vision_Handle();
+//巡线策略方式一
+void Camera_LongestWight();
+//预处理
+void Camera_PreProcess(void);
+//八领域寻线
+void Camera_FindMidLine(void);
+//大津法
+int Camera_My_Adapt_Threshold(uint8*image,uint16 width, uint16 height);
 
 
 #endif

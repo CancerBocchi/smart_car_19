@@ -8,10 +8,6 @@
 
 #include "trace_line.h"
 #include "camera.h"
-#define START_X 1
-#define START_Y 10
-#define BLACK 0
-#define WHITE 255
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @data 数据部分
@@ -22,8 +18,7 @@ rt_thread_t trace_line_thread;
 rt_sem_t 		trace_line_sem;
 //原始图像
 uint8 frame[MT9V03X_W][MT9V03X_H];
-float mid_offset=1.65;
-uint8_t row_begin = 20;
+
 //PID控制块
 Pos_PID_t TraceLine_Yaw_Con;
 Pos_PID_t TraceLine_Vx_Con;
@@ -46,19 +41,18 @@ void trace_line_method()
 	if(Car_Speed_ConRight == Con_By_TraceLine){
 		//策略1 常规巡线
 		//计算总偏差值
+		// for(int i = imgRow-1; i>=row_begin;i--)
+		// 	TraceLine_Aver_Offset += (imgCol/mid_offset - 1 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
 
-		for(int i = imgRow-1; i>=row_begin;i--)
-			TraceLine_Aver_Offset += (imgCol/mid_offset - 1 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
+		// TraceLine_Aver_Offset /= imgRow;
 
-		TraceLine_Aver_Offset /= imgRow;
+		// float yaw_now = Pos_PID_Controller(&TraceLine_Normal_Con,TraceLine_Aver_Offset);
 
-		float yaw_now = Pos_PID_Controller(&TraceLine_Normal_Con,TraceLine_Aver_Offset);
-
-		if(TraceLine_Aver_Offset>50)
-			Car_Change_Speed(Car_Speed.Vx,speed_forward/2,yaw_now);
-		else
-			Car_Change_Speed(Car_Speed.Vx,speed_forward,yaw_now);
-		TraceLine_Aver_Offset = 0;	
+		// if(TraceLine_Aver_Offset>50)
+		// 	Car_Change_Speed(Car_Speed.Vx,speed_forward/2,yaw_now);
+		// else
+		// 	Car_Change_Speed(Car_Speed.Vx,speed_forward,yaw_now);
+		// TraceLine_Aver_Offset = 0;	
 
 
 		//策略2 最长白线法
@@ -154,24 +148,6 @@ void trace_line_entry()
 		if(mt9v03x_finish_flag)
 		{	
 			Vision_Handle();
-
-			//Vision_GetMyImage();
-			//adaptiveThreshold(handle_image,handle_image,IMAGE_COL,IMAGE_ROW,7,adaptivePara);
-			tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-			//tft180_show_gray_image(START_X, START_Y, (const uint8 *)handle_image, IMAGE_COL, IMAGE_ROW, 158, 70, 0);
-			//tft180_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
-			//tft180_clear();
-			for(int i=imgRow-1;i>=row_begin;i--)
-			{
-				// tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
-				// tft180_draw_point(Image_S.leftBroder[i], 78-(imgRow-1)+i, RGB565_BLUE);
-				// tft180_draw_point(Image_S.rightBroder[i], 78-(imgRow-1)+i, RGB565_BROWN);
-				tft180_draw_point((int)(160/1.65), 108-(imgRow-1)+i, RGB565_GREEN);
-				
-			}
-			tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
-			tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
-			tft180_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
 			
 
 			trace_line_method();

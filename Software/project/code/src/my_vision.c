@@ -1,4 +1,5 @@
 #include "my_vision.h"
+#include "zf_device_tft180.h"
 #include "string.h"
 
 int block = 7;
@@ -70,6 +71,7 @@ void Vision_SymbolJudge()
     Vision_BroderFindFP(Image_S.leftBroder);
     Vision_BroderFindFP(Image_S.rightBroder);
 
+
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
         //根据特征点判断
@@ -126,6 +128,36 @@ void Vision_SymbolJudge()
         }
     }
         
+}
+
+/**
+ * @brief 打印特征点
+*/
+void Vision_DrawFP(){
+    
+    for(int i = 0;i<F.FP_n_L;i++){
+        tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+        if(78-(imgRow-1)+F.feature_p_L[i].x+1 < 128)
+            tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x+1,RGB565_RED);
+        if(78-(imgRow-1)+F.feature_p_L[i].x-1 >= 0)
+            tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x-1,RGB565_RED);
+        if(F.feature_p_L[i].y+1 < 160)
+            tft180_draw_point(F.feature_p_L[i].y+1,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+        if(F.feature_p_L[i].y-1 >= 0)
+            tft180_draw_point(F.feature_p_L[i].y-1,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+    }
+
+    for(int i = 0;i<F.FP_n_R;i++){
+        tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+        if(78-(imgRow-1)+F.feature_p_R[i].x+1 < 128)
+            tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x+1,RGB565_RED);
+        if(78-(imgRow-1)+F.feature_p_R[i].x-1 >= 0)
+            tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x-1,RGB565_RED);
+        if(F.feature_p_R[i].y+1 < 160)
+            tft180_draw_point(F.feature_p_R[i].y+1,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+        if(F.feature_p_R[i].y-1 >= 0)
+            tft180_draw_point(F.feature_p_R[i].y-1,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+    }
 }
 
 /**
@@ -222,10 +254,14 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
     }
 
     //当第一个序列只有一个值的时候，将第一个序列和第二个合并
-    if(target_segment[0].begin == target_segment[0].end){
-        broder[target_segment[0].begin] = broder[target_segment[0].begin + 1];
+    if(target_segment[0].begin - target_segment[0].end <= 5){
+        for(int i = target_segment[0].begin;i>=target_segment[0].end;i--){
+            broder[i] = broder[target_segment[1].end];
+        }
+
         target_segment[0].end = target_segment[1].end;
-        for(int i = 1 ;i<segment_n;i++)
+				target_segment[0].type = target_segment[1].type;
+        for(int i = 1 ;i<=segment_n;i++)
         {
             target_segment[i].begin = target_segment[i+1].begin;
             target_segment[i].end = target_segment[i+1].end;
@@ -233,6 +269,8 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         }
         segment_n -= 1;
     }
+    //当第一个序列太短时，与第二个序列合并{}
+
     //记录数量
     if(LorR)
         F.segment_n_L = segment_n+1;
@@ -298,11 +336,19 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
         int low_x = (i-min)>=5?(i - 5):min;
         int high_x = (max - i)>=5?(i + 5):max;
 
-        //检测到cos小的时候更新坐标值
-        final_x = (cosvalue>Vector_AngleGet((point_t){low_x,broder[low_x]},
+        if(broder[i] == LEFT_LOSE_VALUE|| broder[i] == RIGHT_LOSE_VALUE)
+            broder[i] = broder[i-1];
+
+        //检测到 cosvalue 比现在点的 cosvalue 小的时候更新坐标值
+        float current_cos = Vector_AngleGet((point_t){low_x,broder[low_x]},
                                             (point_t){i,broder[i]},
-                                            (point_t){high_x,broder[high_x]}))?
-                                            i:final_x;
+                                            (point_t){high_x,broder[high_x]});
+        if(cosvalue < current_cos){
+            final_x =  i;    
+            cosvalue = current_cos;                     
+        }
+        
+                                           
     }
     return (point_t){final_x,broder[final_x]};
 }
@@ -347,18 +393,14 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0].y = broder[target_FP[0].x];
             (*target_n)++;
             //寻找远处的间断点
-            if(target_seg[2].type != NULL_segment){
+            if(target_seg[2].type != NULL_segment && target_seg[2].type != lose_segment){
+                point_t pf[2];
                 //边界点判断
-                if(fabs(broder[target_seg[2].begin] - lose_value) >= 15){
-                    target_FP[1].x = target_seg[2].begin;
-                    target_FP[1].y = broder[target_FP[1].x];
-                    (*target_n)++;
-                }
-                //通过角度寻找角点
-                else{
-                    target_FP[1] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
-                    (*target_n)++;
-                }
+
+                // //通过角度寻找角点
+                pf[1] = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+
+                (*target_n)++;
             }
         }
         //若边界点不是 则通过角度来寻找间断点
@@ -366,18 +408,18 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
             (*target_n)++;
             //寻找远处的间断点
-            if(target_seg[2].type != NULL_segment){
+            if(target_seg[2].type != NULL_segment && target_seg[2].type != lose_segment){
                 //边界点判断
-                if(fabs(broder[target_seg[2].begin] - lose_value) >= 15){
-                    target_FP[1].x = target_seg[2].begin;
-                    target_FP[1].y = broder[target_FP[1].x];
-                    (*target_n)++;
-                }
+                // if(fabs(broder[target_seg[2].begin] - lose_value) >= 15){
+                //     target_FP[1].x = target_seg[2].begin;
+                //     target_FP[1].y = broder[target_FP[1].x];
+                //     (*target_n)++;
+                // }
                 //通过角度寻找角点
-                else{
-                    target_FP[0] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
+                // else{
+                    target_FP[1] = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
                     (*target_n)++;
-                }
+                // }
             }
         }
         
@@ -501,78 +543,6 @@ void Vision_ErrorLogin()
 		rt_kprintf("\n");
 }
 
-/**
- * @brief 检测路段状况
- * 
- */
-void Vision_SymbolJudge()
-{
-    //获取边界分段信息
-    Vision_GetSegment(Image_S.leftBroder,1);
-    Vision_GetSegment(Image_S.rightBroder,0);
-    
-    //寻找特征点
-    Vision_BroderFindFP(Image_S.leftBroder);
-    Vision_BroderFindFP(Image_S.rightBroder);
-
-    //只有当道路情况为正常道路时才需要进行判断
-    if(Current_Road == NormalRoads){
-        //根据特征点判断
-        int state_code = F.FP_n_L*10+F.FP_n_R;
-        switch (state_code)
-        {
-        case 0:
-            //两边都没间断点
-            //if(F.segment_n_L == 1)
-            break;
-
-        case 20:
-            if(F.my_segment_R[0].type == lose_segment)
-                Current_Road = CrossRoads;
-            else if(F.my_segment_R[0].type == straight_segment
-                    && F.segment_n_R == 1)
-                Current_Road = CirculeRoads;
-            break;
-
-        case 2:
-            if(F.my_segment_L[0].type == lose_segment)
-                Current_Road = CrossRoads;
-            else if(F.my_segment_L[0].type == straight_segment
-                    && F.segment_n_L == 1)
-                Current_Road = CirculeRoads;
-            break;
-
-        case 22:
-            Current_Road = CrossRoads;
-            break;
-
-        case 21:
-            Current_Road = CrossRoads;
-            break;
-
-        case 12:
-            Current_Road = CrossRoads;
-            break;
-
-        default:
-            if(F.segment_n_L == 1&&F.segment_n_R != 1){
-                if(F.my_segment_L[0].type  == straight_segment)
-                    Current_Road = CirculeRoads;
-                else if(F.my_segment_L[0].type == lose_segment)
-                    Current_Road = CornerRoads;
-            }
-            if(F.segment_n_R == 1&&F.segment_n_L != 1){
-                if(F.my_segment_R[0].type  == straight_segment)
-                    Current_Road = CirculeRoads;
-                else if(F.my_segment_R[0].type == lose_segment)
-                    Current_Road = CornerRoads;
-            }
-            break;
-        }
-    }
-        
-}
-
 
 /**
  * @brief 延长线段到边界
@@ -643,10 +613,10 @@ void Vision_CrossHandle()
     switch (F.FP_n_L)
     {
     case 1:
-        //Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+        Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
         break;
     case 2:
-        //Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
+        Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
         break;
     default:
         break;
@@ -654,14 +624,15 @@ void Vision_CrossHandle()
     switch (F.FP_n_L)
     {
     case 1:
-        //Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+        Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
         break;
     case 2:
-        //Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
+        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
         break;
     default:
         break;
     }
+    //BUZZER_SPEAK;
     //如果此时两边都缺线
     if((F.my_segment_L[0].type == lose_segment && F.segment_n_L != 1)&&
         F.my_segment_R[0].type == lose_segment && F.segment_n_R != 1)
@@ -819,13 +790,76 @@ void Vision_CornerHandle()
  * @brief 圆环处理
  * 
  */
+#define Circule_Begin 0
+#define Circule_State1 1
+#define Circule_State2 2
+#define Circule_State3 3
+#define Circule_Stop   4
 void Vision_CirculeHandle()
 {   
-    if(F.segment_n_L == 1){
-        if(F.my_segment_R[0].type != lose_segment){
-            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+    static int state = Circule_Begin;
+    static int LorR;//1--L 0--R
+    if(!state){
+        BUZZER_SPEAK;
+        if(F.my_segment_L[0].type == straight_segment && F.segment_n_L == 1)
+            LorR = 1;
+        else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
+            LorR = 0;
+        state = Circule_State1;
+    }
+    if(LorR){
+				if(state == Circule_State1){
+            if(F.my_segment_R[0].type == lose_segment)
+                state = Circule_State2;
+        }
+        else if(state == Circule_State2){
+            if(F.my_segment_R[0].type != lose_segment)
+                state = Circule_State3;
+        }
+        else if(state == Circule_State3){
+            if(F.my_segment_R[0].type == lose_segment){
+                state = Circule_Stop;
+                BUZZER_SPEAK;
+                Car_Change_Speed(0,0,0);
+                rt_thread_delay(2000);
+            }    
+        }
+        else if(state == Circule_Stop){
+            if(F.my_segment_R[0].type != lose_segment){
+                state = Circule_Begin;
+                Current_Road = NormalRoads;
+            }
+                
+        }
+
+    }
+    else{
+        if(state == Circule_State1){
+            if(F.my_segment_L[0].type == lose_segment)
+                state = Circule_State2;
+        }
+        else if(state == Circule_State2){
+            if(F.my_segment_L[0].type != lose_segment)
+                state = Circule_State3;
+        }
+        else if(state == Circule_State3){
+            if(F.my_segment_L[0].type == lose_segment){
+                state = Circule_Stop;
+                BUZZER_SPEAK;
+                Car_Change_Speed(0,0,0);
+                rt_thread_delay(2000);
+            }    
+        }
+        else if(state == Circule_Stop){
+            if(F.my_segment_L[0].type != lose_segment){
+                state = Circule_Begin;
+                Current_Road = NormalRoads;
+            }
+                
         }
     }
+        
+
 }
 
 

@@ -63,6 +63,15 @@ void Vision_GetSegment(int16* broder,uint8_t LorR);
 void Vision_SymbolJudge();
 //解决道路元素
 void Vision_RSHandle();
-
+//识别图像特征点
+void Vision_BroderFindFP(int16* broder);
+//十字处理函数
+void Vision_CrossHandle();
+//圆环处理函数
+void Vision_CirculeHandle();
+//弯道处理
+void Vision_CornerHandle();
+//打印特征点
+void Vision_DrawFP();
 
 #endif
