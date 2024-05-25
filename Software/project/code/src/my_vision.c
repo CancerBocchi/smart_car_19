@@ -29,10 +29,7 @@ void Vision_RSHandle()
     switch (Current_Road)
     {
     case LoseRoads:
-        //Car_Stop();
-        //while(1){
-            //error handle 搜不到线 进入errorhandle
-       // }
+
         break;
 
     case NormalRoads: 
@@ -61,6 +58,16 @@ void Vision_RSHandle()
  * @brief 检测路段状况
  * 
  */
+//双边弧
+#define CornerState1    (IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])&&F.segment_n_L == 1&&F.segment_n_R == 1)
+//双边弧+缺陷
+#define CornerState2    ( IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])\
+                        &&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[1])\
+                        &&(fabs(F.my_segment_L[1].begin - F.my_segment_R[1].begin) > 15) ) 
+//单边缺线
+#define CornerState3    (IsArcCorner(F.my_segment_L[0])&&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[0])&&F.segment_n_R == 1\
+                       ||IsArcCorner(F.my_segment_R[0])&&IsLose(F.my_segment_R[1])&&IsLose(F.my_segment_L[0])&&F.my_segment_L == 1)
+
 void Vision_SymbolJudge()
 {
     //获取边界分段信息
@@ -74,58 +81,24 @@ void Vision_SymbolJudge()
 
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
-        //根据特征点判断
-        int state_code = F.FP_n_L*10+F.FP_n_R;
-        switch (state_code)
-        {
-        case 0:
-            //两边都没间断点
-            //if(F.segment_n_L == 1)
-            break;
+        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && F.segment_n_R > 1)&&
+            (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && F.segment_n_L > 1) )
+            Current_Road = CirculeRoads;
 
-        case 20:
-            if(F.my_segment_R[0].type == lose_segment)
-                Current_Road = CrossRoads;
-            else if(F.my_segment_R[0].type == straight_segment
-                    && F.segment_n_R == 1)
-                Current_Road = CirculeRoads;
-            break;
+        else if(CornerState1||CornerState2||CornerState3) 
+            Current_Road = CornerRoads;
 
-        case 2:
-            if(F.my_segment_L[0].type == lose_segment)
-                Current_Road = CrossRoads;
-            else if(F.my_segment_L[0].type == straight_segment
-                    && F.segment_n_L == 1)
-                Current_Road = CirculeRoads;
-            break;
-
-        case 22:
+        else if( (F.FP_n_L == 2 || F.FP_n_R == 2) )
             Current_Road = CrossRoads;
-            break;
+        
+        else if(F.segment_n_L == 1&&F.segment_n_R == 1 &&
+                IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[0]))
+            Current_Road = LoseRoads;
 
-        case 21:
-            Current_Road = CrossRoads;
-            break;
-
-        case 12:
-            Current_Road = CrossRoads;
-            break;
-
-        default:
-            if(F.segment_n_L == 1&&F.segment_n_R != 1){
-                if(F.my_segment_L[0].type  == straight_segment)
-                    Current_Road = CirculeRoads;
-                else if(F.my_segment_L[0].type == lose_segment)
-                    Current_Road = CornerRoads;
-            }
-            if(F.segment_n_R == 1&&F.segment_n_L != 1){
-                if(F.my_segment_R[0].type  == straight_segment)
-                    Current_Road = CirculeRoads;
-                else if(F.my_segment_R[0].type == lose_segment)
-                    Current_Road = CornerRoads;
-            }
-            break;
-        }
+        else 
+            Current_Road = NormalRoads;
+        
+        
     }
         
 }
@@ -300,14 +273,13 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
 
 }
 
-
 /**
- * @brief 寻找一段弧的特征点，或者说是单调性变化的
+ * @brief 寻找一段弧的第一个特征点，方向由大到小
  * 
- * @param broder 
- * @param x1 
- * @param x2 
- * @return point_t 
+ * @param broder 边界
+ * @param x1    上域
+ * @param x2    下区域
+ * @return point_t 返回第一个特征点的坐标 若返回值为-1，则没有发现特征点
  */
 point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
 {
@@ -315,42 +287,45 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
     int min = Tool_CmpMin(x1,x2);
 
     int how_many = max - min + 1;
-    int final_x;//存储最后的坐标
 
     int p_distance = 5;
+    float p_th = -0.4;//判定为角点的阈值
     float cosvalue;
 
     if(how_many >= p_distance + 2){
-        float cosvalue = Vector_AngleGet((point_t){min,broder[min]},
-                                (point_t){min+1,broder[min+1]},
-                                (point_t){min + p_distance,broder[min + p_distance]});
+        float cosvalue = Vector_AngleGet((point_t){max,broder[min]},
+                                (point_t){max-1,broder[max-1]},
+                                (point_t){max - p_distance,broder[max - p_distance]});
     }
     else{
-        float cosvalue = Vector_AngleGet((point_t){min,broder[min]},
-                                (point_t){min+1,broder[min+1]},
-                                (point_t){max,broder[max]});
+        float cosvalue = Vector_AngleGet((point_t){max,broder[max]},
+                                (point_t){max-1,broder[max-1]},
+                                (point_t){min,broder[min]});
     }
+
+    if(cosvalue > p_th)
+        return (point_t){max-1,broder[max-1]};
+
     //边界的点不考虑
-    for(int i = min+2; i<max - 2 ; i++)
+    for(int i = max - 2; i>min+1; i--)
     {
         int low_x = (i-min)>=5?(i - 5):min;
         int high_x = (max - i)>=5?(i + 5):max;
 
+        //滤去突变量
         if(broder[i] == LEFT_LOSE_VALUE|| broder[i] == RIGHT_LOSE_VALUE)
             broder[i] = broder[i-1];
 
-        //检测到 cosvalue 比现在点的 cosvalue 小的时候更新坐标值
-        float current_cos = Vector_AngleGet((point_t){low_x,broder[low_x]},
+        cosvalue = Vector_AngleGet((point_t){low_x,broder[low_x]},
                                             (point_t){i,broder[i]},
                                             (point_t){high_x,broder[high_x]});
-        if(cosvalue < current_cos){
-            final_x =  i;    
-            cosvalue = current_cos;                     
-        }
         
+        if(cosvalue > p_th)
+            return (point_t){i,broder[i]};
                                            
     }
-    return (point_t){final_x,broder[final_x]};
+    //未找到特征点
+    return (point_t){-1,-1};
 }
 
 /**
@@ -385,67 +360,51 @@ void Vision_BroderFindFP(int16* broder)
         target_FP[0].y = 0;
     }
 
-    //针对常见情况的寻找特征点
+    /*                      角点检测                    */
+    point_t pf;
+    //中间缺线
     if(target_seg[1].type == lose_segment){
-        //首先判断边界点是否是间断点
-        if(fabs(broder[target_seg[0].end] - lose_value) > 15){
+
+        //检测近处序列的角点
+        pf = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
+        //若没有发现角点
+        if((pf.x == -1 && pf.y == -1)){
             target_FP[0].x = target_seg[0].end;
-            target_FP[0].y = broder[target_FP[0].x];
+            target_FP[0].y = broder[target_seg[0].end];
             (*target_n)++;
-            //寻找远处的间断点
-            if(target_seg[2].type != NULL_segment && target_seg[2].type != lose_segment){
-                point_t pf[2];
-                //边界点判断
-
-                // //通过角度寻找角点
-                pf[1] = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
-
-                (*target_n)++;
-            }
-        }
-        //若边界点不是 则通过角度来寻找间断点
+        }//发现了角点
         else{
-            target_FP[0] = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
+            target_FP[0] = pf;
             (*target_n)++;
-            //寻找远处的间断点
-            if(target_seg[2].type != NULL_segment && target_seg[2].type != lose_segment){
-                //边界点判断
-                // if(fabs(broder[target_seg[2].begin] - lose_value) >= 15){
-                //     target_FP[1].x = target_seg[2].begin;
-                //     target_FP[1].y = broder[target_FP[1].x];
-                //     (*target_n)++;
-                // }
-                //通过角度寻找角点
-                // else{
-                    target_FP[1] = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
-                    (*target_n)++;
-                // }
-            }
-        }
-        
-    }
-    //针对斜着进入十字 只能找到一个间断点
-    //并且针对十字中间的状态，也只能找到一个间断点
-    else if(target_seg[0].type == lose_segment){
-        if(target_seg[1].type == arc_segment){
-            target_FP[0] = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
-            (*target_n)++;
-        }
-        else if(target_seg[1].type == straight_segment){
-            target_FP[0].x = target_seg[1].begin;
-            target_FP[0].y = broder[target_FP[1].x]; 
-            (*target_n)++;
-        }
-        else if(target_seg[1].type == corner_segment){
-            if(fabs(broder[target_seg[1].begin] - broder[target_seg[0].end]) > 15){
-                target_FP[0].x = target_seg[1].begin;
-                target_FP[0].y = broder[target_FP[1].x]; 
+
+            //检测远处序列的角点
+            pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+            //当未发现角点，或者远处序列的角点非常远的时候(距离序列开头)
+            if((pf.x == -1 && pf.y == -1)||(target_seg[2].begin - pf.x > 15)){
+                target_FP[0].x = target_seg[0].end;
+                target_FP[0].y = broder[target_seg[0].end];
                 (*target_n)++;
             }
             else{
-                target_FP[0] = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
+                target_FP[1] = pf;
                 (*target_n)++;
             }
+        }
+    }
+
+    //开头缺线
+    else if(target_seg[0].type == lose_segment){
+        //检测远处序列的角点
+        pf = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
+        //当未发现角点，或者远处序列的角点非常远的时候(距离序列开头)
+        if((pf.x == -1 && pf.y == -1)||(target_seg[1].begin - pf.x > 15)){
+            target_FP[1].x = target_seg[1].end;
+            target_FP[1].y = broder[target_seg[1].end];
+            (*target_n)++;
+        }
+        else{
+            target_FP[1] = pf;
+            (*target_n)++;
         }
     }
 
@@ -602,157 +561,35 @@ void Vision_set_AdditionalLine(int16 p1,int16 p2,int16 *broder)
  * @brief 十字赛道处理
  * 
  */
+#define Cross_Begin   0
 #define Cross_State_1 1
-#define Cross_State_2 2
-#define Leave_Cross   3
 void Vision_CrossHandle()
 {
-    static int state;
-    //一个角点向近处补线
-    //两个角点连线
-    switch (F.FP_n_L)
-    {
-    case 1:
-        Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
-        break;
-    case 2:
+    static int state = Cross_Begin;
+    //补线
+    if(F.FP_n_L == 2)
         Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
-        break;
-    default:
-        break;
-    }
-    switch (F.FP_n_L)
-    {
-    case 1:
+    else if(F.FP_n_L == 1)
+        Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+
+    if(F.FP_n_R == 2)
+        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.leftBroder);
+    else if(F.FP_n_R == 1)
         Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
-        break;
-    case 2:
-        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
-        break;
-    default:
-        break;
-    }
-    //BUZZER_SPEAK;
-    //如果此时两边都缺线
-    if((F.my_segment_L[0].type == lose_segment && F.segment_n_L != 1)&&
-        F.my_segment_R[0].type == lose_segment && F.segment_n_R != 1)
-        state = Cross_State_2;
-    //若此时缺线后重新出现线
-    if(state == Cross_State_2 && 
-        F.my_segment_L[0].type != lose_segment && 
-        F.my_segment_R[0].type != lose_segment){
-            Current_Road = NormalRoads;
+
+    //状态切换
+    if(state == Cross_Begin){
+        if(IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[1]))
             state = Cross_State_1;
+    }
+    else if(state == Cross_State_1){
+        if(!IsLose(F.my_segment_L[0])&&!IsLose(F.my_segment_R[1])){
+            BUZZER_SPEAK;
+            state = Cross_Begin;
+            Current_Road = NormalRoads;
         }
+    }
 
-
-    // if(F.segment_n_L == 2 && F.segment_n_R == 2){
-    //     //情况3 十字第三阶段 不存在+存在
-    //     if(F.my_segment_L[0].type == lose_segment && F.my_segment_R[0].type == lose_segment){
-    //         //向近处补线
-    //         Vision_ExtendLine(Image_S.leftBroder,F.my_segment_L[1].begin,0);
-    //         Vision_ExtendLine(Image_S.rightBroder,F.my_segment_R[1].begin,0);
-    //     }
-    //     //情况1 十字第一阶段，存在+不存在线
-    //     else if(F.my_segment_L[1].type == lose_segment && F.my_segment_R[1].type == lose_segment){
-    //         //向远处补线
-    //         Vision_ExtendLine(Image_S.leftBroder,F.my_segment_L[0].end,1);
-    //         Vision_ExtendLine(Image_S.rightBroder,F.my_segment_R[0].end,1);
-    //     }
-    //     //情况4 斜着进入
-    //     else if(F.my_segment_L[0].type == arc_segment){
-    //         //找到突变点
-    //         int maxpoint = Line_FindMaxPoint(Image_S.leftBroder,F.my_segment_L[0].begin,F.my_segment_L[0].end);
-    //         //突变点补线
-    //         Vision_ExtendLine(Image_S.leftBroder,maxpoint,1);
-    //     }
-    //     else if(F.my_segment_R[0].type == arc_segment){
-    //         //找到突变点
-    //         int maxpoint = Line_FindMaxPoint(Image_S.rightBroder,F.my_segment_R[0].begin,F.my_segment_R[0].end);
-    //         //突变点补线
-    //         Vision_ExtendLine(Image_S.rightBroder,maxpoint,1);
-    //     }
-    // }
-
-    // //情况2 十字第二阶段，存在+不存在+存在 或者是斜着进入
-    // else if(F.segment_n_L == 3 && F.segment_n_R == 3){
-    //     if(F.my_segment_L[0].type == arc_segment && F.my_segment_R[0].type == lose_segment)
-    //     {
-    //         //找到突变点
-    //         int maxpoint = Line_FindMaxPoint(Image_S.leftBroder,F.my_segment_L[0].begin,F.my_segment_L[0].end);
-    //         //突变点补线
-    //         Vision_ExtendLine(Image_S.leftBroder,maxpoint,1);
-    //     }
-    //     else if(F.my_segment_R[0].type == arc_segment && F.my_segment_L[0].type == lose_segment)
-    //     {
-    //         //找到突变点
-    //         int maxpoint = Line_FindMaxPoint(Image_S.rightBroder,F.my_segment_R[0].begin,F.my_segment_R[0].end);
-    //         //突变点补线
-    //         Vision_ExtendLine(Image_S.rightBroder,maxpoint,1);
-    //     }
-    //     else
-    //     {
-    //         //有时候十字表现可能不是瞬间缺线
-    //         int begin = F.my_segment_L[0].end;
-    //         int end = F.my_segment_L[2].begin;
-    //         //当该点的斜率过于大时，认定为该点为悬崖上的一点，且将该点前移
-    //         while(fabs(Image_S.leftBroder[begin] - Image_S.leftBroder[begin+1])>15){
-    //             begin = begin+1;//begin 前移
-    //         }
-
-    //         while((fabs(Image_S.leftBroder[end] - Image_S.leftBroder[end-1])>15)){
-    //             end = end - 1;//end 后移
-    //         }
-    //         //进行补线
-    //         Vision_set_AdditionalLine(begin,end,Image_S.leftBroder);
-
-    //         begin = F.my_segment_R[0].end;
-    //         end = F.my_segment_R[2].begin;
-    //         //当该点的斜率过于大时，认定为该点为悬崖上的一点，且将该点前移
-    //         while(fabs(Image_S.rightBroder[begin] - Image_S.rightBroder[begin+1])>15){
-    //             begin = begin+1;//begin 前移
-    //         }
-
-    //         while((fabs(Image_S.rightBroder[end] - Image_S.rightBroder[end-1])>15)){
-    //             end = end - 1;//end 后移
-    //         }
-    //         Vision_set_AdditionalLine(begin,end,Image_S.rightBroder);
-    //     }
-    // }
-    // //情况：十字前面接了弯道，
-    // else if(F.segment_n_L == 3 && F.segment_n_R == 2){
-    //     if((F.my_segment_L[0].type == lose_segment && F.my_segment_L[2].type == lose_segment &&
-    //         F.my_segment_R[0].type == lose_segment) ){
-    //             Vision_ExtendLine(Image_S.leftBroder,F.my_segment_L[1].begin,0);
-    //             Vision_ExtendLine(Image_S.rightBroder,F.my_segment_R[1].begin,0);
-    //         }
-    // }
-    // else if(F.segment_n_L == 2 && F.segment_n_R == 3){
-    //     if((F.my_segment_R[0].type == lose_segment && F.my_segment_R[2].type == lose_segment &&
-    //         F.my_segment_L[0].type == lose_segment) ){
-    //             Vision_ExtendLine(Image_S.leftBroder,F.my_segment_L[1].begin,0);
-    //             Vision_ExtendLine(Image_S.rightBroder,F.my_segment_R[1].begin,0);
-    //         }
-    // }
-    // //斜着进入十字
-    // else if(F.my_segment_L[0].type == arc_segment){
-    //     //找到突变点
-    //     int maxpoint = Line_FindMaxPoint(Image_S.leftBroder,F.my_segment_L[0].begin,F.my_segment_L[0].end);
-    //     //突变点补线
-    //     Vision_ExtendLine(Image_S.leftBroder,maxpoint,1);
-    // }
-    
-    // else if(F.my_segment_R[0].type == arc_segment){
-    //     //找到突变点
-    //     int maxpoint = Line_FindMaxPoint(Image_S.rightBroder,F.my_segment_R[0].begin,F.my_segment_R[0].end);
-    //     //突变点补线
-    //     Vision_ExtendLine(Image_S.rightBroder,maxpoint,1);
-    // }
-
-    // else{
-    //     Vision_ErrorLogin();
-    //     Vision_BroderPrint();
-    // }
    
 }
 
@@ -762,25 +599,35 @@ void Vision_CrossHandle()
  */
 void Vision_CornerHandle()
 {
-    if(F.segment_n_L == 1 && F.segment_n_R == 1){
+    if(CornerState1){
         //暂时认为如果两边都是1的话不需要处理
         //就算单边全丢线 ，但是另一边仍然能够使得中线偏离
     }
-    else if(F.segment_n_L == 2 && F.segment_n_R == 1){
-        if(F.my_segment_R[0].type == lose_segment&&F.my_segment_L[1].type == lose_segment){
-            //右边弯道缺失，将左边缺失段的值右移
-            for(int i = F.my_segment_L[1].begin;i>F.my_segment_L[1].end;i--){
-                Image_S.leftBroder[i] = RIGHT_LOSE_VALUE;
-            }
-        }
-    }
-    else if(F.segment_n_R == 2 && F.segment_n_L == 1){
-            if(F.my_segment_L[0].type == lose_segment&&F.my_segment_R[1].type == lose_segment){
-            //左边弯道缺失，将右边缺失段的值左移
+    else if(CornerState2){
+        if(F.my_segment_L[1].end - F.my_segment_L[1].begin > F.my_segment_R[1].end - F.my_segment_R[1].begin){
+            //右边缺的少 左转 
             for(int i = F.my_segment_R[1].begin;i>F.my_segment_R[1].end;i--){
                 Image_S.rightBroder[i] = LEFT_LOSE_VALUE;
             }
         }
+        else if(F.my_segment_L[1].end - F.my_segment_L[1].begin < F.my_segment_R[1].end - F.my_segment_R[1].begin){
+            //左边缺的少 右边转 
+            for(int i = F.my_segment_L[1].begin;i>F.my_segment_L[1].end;i--){
+                Image_S.leftBroder[i] = LEFT_LOSE_VALUE;
+            }
+        }
+    }
+    else if(CornerState3){
+        //左边缺线 将右边部分向左移
+        if(IsLose(F.my_segment_L[0]))
+            for(int i = F.my_segment_R[1].begin;i>F.my_segment_R[1].end;i--){
+                Image_S.rightBroder[i] = LEFT_LOSE_VALUE;
+            }
+        //右边缺线 将左边部分向右移
+        else if(IsLose(F.my_segment_R[0]))
+            for(int i = F.my_segment_L[1].begin;i>F.my_segment_L[1].end;i--){
+                Image_S.leftBroder[i] = LEFT_LOSE_VALUE;
+            }
     }
 
     Current_Road = NormalRoads;
@@ -858,8 +705,6 @@ void Vision_CirculeHandle()
                 
         }
     }
-        
-
 }
 
 

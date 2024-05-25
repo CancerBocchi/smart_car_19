@@ -24,15 +24,18 @@ typedef enum segment_type{
 
 }segment_type;
 
+#define IsArcCorner(seg)   (seg.type == arc_segment||seg.type == corner_segment)
+#define IsLose(seg)          (seg.type == lose_segment)
+#define IsStrai(seg)         (seg.type == straight_segment)
+
 //路况判断
 typedef enum{  
     NormalRoads,    //正常赛道
     LoseRoads,      //丢失赛道
-    // StraightRoads,  //直道
     CrossRoads,     //十字
     CirculeRoads,   //圆环
     CornerRoads,    //弯道
-    // Error_type,     //错误类别
+
 }RoadSymbol_type;
 
 //线段判断

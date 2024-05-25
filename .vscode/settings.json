@@ -5,6 +5,7 @@
         "user_math.h": "c",
         "car.h": "c",
         "trace_line.h": "c",
-        "camera.h": "c"
+        "camera.h": "c",
+        "complex": "c"
     }
 }
