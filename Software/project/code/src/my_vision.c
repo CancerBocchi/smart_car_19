@@ -61,7 +61,7 @@ void Vision_RSHandle()
 //双边弧
 #define CornerState1    (IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])&&F.segment_n_L == 1&&F.segment_n_R == 1)
 //双边弧+缺陷
-#define CornerState2    ( IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])\
+#define CornerState2    (IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])\
                         &&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[1])\
                         &&(fabs(F.my_segment_L[1].begin - F.my_segment_R[1].begin) > 15) ) 
 //单边缺线
@@ -287,24 +287,22 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
     int min = Tool_CmpMin(x1,x2);
 
     int how_many = max - min + 1;
+    int final_x;
 
-    int p_distance = 5;
+    int p_distance = 5;//检测区域
     float p_th = -0.4;//判定为角点的阈值
     float cosvalue;
 
     if(how_many >= p_distance + 2){
-        float cosvalue = Vector_AngleGet((point_t){max,broder[min]},
+        cosvalue = Vector_AngleGet((point_t){max,broder[max]},
                                 (point_t){max-1,broder[max-1]},
                                 (point_t){max - p_distance,broder[max - p_distance]});
     }
     else{
-        float cosvalue = Vector_AngleGet((point_t){max,broder[max]},
+        cosvalue = Vector_AngleGet((point_t){max,broder[max]},
                                 (point_t){max-1,broder[max-1]},
                                 (point_t){min,broder[min]});
     }
-
-    if(cosvalue > p_th)
-        return (point_t){max-1,broder[max-1]};
 
     //边界的点不考虑
     for(int i = max - 2; i>min+1; i--)
@@ -316,16 +314,22 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
         if(broder[i] == LEFT_LOSE_VALUE|| broder[i] == RIGHT_LOSE_VALUE)
             broder[i] = broder[i-1];
 
-        cosvalue = Vector_AngleGet((point_t){low_x,broder[low_x]},
+        float currentcos = Vector_AngleGet((point_t){low_x,broder[low_x]},
                                             (point_t){i,broder[i]},
                                             (point_t){high_x,broder[high_x]});
         
-        if(cosvalue > p_th)
-            return (point_t){i,broder[i]};
+        if(currentcos > cosvalue){
+            final_x = i;
+            cosvalue = currentcos;
+        }
                                            
     }
+    //找到特征点
+    if(cosvalue > p_th)
+        return (point_t){final_x,broder[final_x]};
     //未找到特征点
-    return (point_t){-1,-1};
+    else
+        return (point_t){-1,-1};
 }
 
 /**
@@ -360,11 +364,10 @@ void Vision_BroderFindFP(int16* broder)
         target_FP[0].y = 0;
     }
 
-    /*                      角点检测                    */
+    /*---------------角点检测---------------*/
     point_t pf;
     //中间缺线
-    if(target_seg[1].type == lose_segment){
-
+    if(IsLose(target_seg[1])){
         //检测近处序列的角点
         pf = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
         //若没有发现角点
@@ -377,34 +380,56 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0] = pf;
             (*target_n)++;
 
-            //检测远处序列的角点
-            pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
-            //当未发现角点，或者远处序列的角点非常远的时候(距离序列开头)
-            if((pf.x == -1 && pf.y == -1)||(target_seg[2].begin - pf.x > 15)){
-                target_FP[0].x = target_seg[0].end;
-                target_FP[0].y = broder[target_seg[0].end];
-                (*target_n)++;
-            }
-            else{
-                target_FP[1] = pf;
-                (*target_n)++;
+            //检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点
+            if(!IsNull(target_seg[2])){
+                pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+                //当未发现角点
+                if((pf.x == -1 && pf.y == -1)){
+                    target_FP[1].x = target_seg[2].begin;
+                    target_FP[1].y = broder[target_seg[2].begin];
+                    (*target_n)++;
+                }
+                else{
+                    //当过于远处序列检测到的角点太远的时候
+                    while(target_seg[2].begin - pf.x > 15){
+                        pf =  Vision_FindArcFP(broder,target_seg[2].begin,pf.x);
+                        //滤去远处的角点之后发现不存在角点
+                        if(pf.x == -1&&pf.y == -1)
+                            break;
+                    }
+                    //存在角点记录角点，不存在记录边界点
+                    target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
+                    target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : broder[pf.y];
+                    (*target_n)++;
+                }
             }
         }
     }
 
     //开头缺线
     else if(target_seg[0].type == lose_segment){
-        //检测远处序列的角点
-        pf = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
-        //当未发现角点，或者远处序列的角点非常远的时候(距离序列开头)
-        if((pf.x == -1 && pf.y == -1)||(target_seg[1].begin - pf.x > 15)){
-            target_FP[1].x = target_seg[1].end;
-            target_FP[1].y = broder[target_seg[1].end];
-            (*target_n)++;
-        }
-        else{
-            target_FP[1] = pf;
-            (*target_n)++;
+        //检测远处序列的角点  当远处序列有值的时候检测
+        if(!IsNull(target_seg[1])){
+            pf = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
+            //当未发现角点
+            if((pf.x == -1 && pf.y == -1)){
+                target_FP[0].x = target_seg[1].begin;
+                target_FP[0].y = broder[target_seg[1].begin];
+                (*target_n)++;
+            }
+            else{
+                //当过于远处序列检测到的角点太远的时候
+                while(target_seg[1].begin - pf.x > 15){
+                    pf =  Vision_FindArcFP(broder,target_seg[1].begin,pf.x);
+                    //滤去远处的角点之后发现不存在角点
+                    if(pf.x == -1&&pf.y == -1)
+                        break;
+                }
+                //存在角点记录角点，不存在记录边界点
+                target_FP[0].x = (pf.x == -1) ? target_seg[1].begin : pf.x ;
+                target_FP[0].y = (pf.y == -1) ? broder[target_seg[1].begin] : broder[pf.y];
+                (*target_n)++;
+            }
         }
     }
 
@@ -655,11 +680,14 @@ void Vision_CirculeHandle()
         state = Circule_State1;
     }
     if(LorR){
-				if(state == Circule_State1){
+        if(state == Circule_State1){
+            if(F.FP_n_L)
+                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
             if(F.my_segment_R[0].type == lose_segment)
                 state = Circule_State2;
         }
         else if(state == Circule_State2){
+            
             if(F.my_segment_R[0].type != lose_segment)
                 state = Circule_State3;
         }
