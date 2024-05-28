@@ -21,11 +21,20 @@ int main()
 	debug_tool_init();
 	
 	rt_kprintf("\nSystem_Init:\n");
-	Step_Motor_Init();
+
+	//Step_Motor_Init();
 	buzzer_init();
-	//car_motion_Init();
-	trace_line_init();
-	//side_catch_init();
 	//ART1_UART_Init();
+
+	car_motion_Init();
+	trace_line_init();
+	side_catch_init();
+	//locate_pic_init();
+
+	// while(1){
+	// 	uart_write_byte(ART1_UART,'R');
+	// 	uart_write_string(ART1_UART,"this is uart\n");
+	// 	rt_thread_delay(100);
+	// }
 
 }

@@ -15,7 +15,7 @@ float Vector_AngleGet(point_t p1,point_t p2,point_t p3)
 	vector vec2 = {p3.x - p2.x,p3.y - p2.y};
 	
 	float cos_value = Vector_Dot_Product(vec1,vec2)/(Vector_Module(vec1)*Vector_Module(vec2));//¼ÆËãcosµÄÖµ		
-
+	//float cos_value = 0;
 	return cos_value;
 }
 

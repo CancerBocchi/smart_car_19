@@ -18,20 +18,21 @@ void side_catch_entry()
 		// rt_thread_delay(1000);
 		BUZZER_SPEAK;
 		
-		if(center_x > 80){
+		if(center_x > 125){
 			Car_Rotate(-90);
 			rt_thread_delay(2000);
 			Car_Rotate(90);
 			rt_thread_delay(2000);
 		}
-		else if(center_x < 80){
+		else if(center_x < 125){
 			Car_Rotate(90);
 			rt_thread_delay(2000);
 			Car_Rotate(-90);
 			rt_thread_delay(2000);
 		}
 
-
+		uart_write_byte(ART1_UART,'R');
+		rt_kprintf("handle success\n");
 		// rt_thread_delay(1000);
 		Car_Speed_ConRight = Con_By_TraceLine;
 		

@@ -18,33 +18,33 @@ void Vision_Handle()
     Camera_PreProcess();
 
     Camera_FindMidLine();   //常规扫线
-    Camera_LongestWight();  //最远线巡线
+    // Camera_LongestWight();  //最远线巡线
 
     Vision_SymbolJudge();   //元素判断，但是会有问题
     //Vision_RSHandle();      //元素判断的解决方式
 
-    //获取中线
-    for(int i=imgRow-1;i>=0;i--)
-    {
-       Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
-    }
+   //获取中线
+   for(int i=imgRow-1;i>=0;i--)
+   {
+      Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
+   }
 
 
-    //图像debug
+//    //图像debug
     float mid_offset=1.65;
     uint8_t row_begin = 20;
     tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
     for(int i=imgRow-1;i>=row_begin;i--)
     {
-        // tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
+        tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
         tft180_draw_point(Image_S.leftBroder[i], 78-(imgRow-1)+i, RGB565_BLUE);
         tft180_draw_point(Image_S.rightBroder[i], 78-(imgRow-1)+i, RGB565_BROWN);
         //中线
-        tft180_draw_point((int)(160/1.65), 78-(imgRow-1)+i, RGB565_GREEN);
+        // tft180_draw_point((int)(160/1.65), 78-(imgRow-1)+i, RGB565_GREEN);
     }
 
-    Vision_DrawFP();
-    //最长白线法
+    //Vision_DrawFP();
+        //最长白线法
     // tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
     // tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
     // tft180_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);

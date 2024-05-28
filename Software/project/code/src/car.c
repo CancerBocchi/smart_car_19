@@ -36,9 +36,9 @@ float minAngularSpeed = 300;
 /**
  * @brief 内部结算函数
  * 
- * @param xSpeed x轴方向��度
- * @param ySpeed y轴方向��度
- * @param aSpeed z轴方向��度
+ * @param xSpeed x轴方向速度
+ * @param ySpeed y轴方向速度
+ * @param aSpeed z轴方向速度
  */
 void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -75,10 +75,10 @@ void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 /**
  * @brief 对外改变速度的接�?
  * 
- * @param xSpeed x轴方向��度
- * @param ySpeed y轴方向��度
- * @param aSpeed 角��度
- * 			当使用角度闭环时，输入的角��度无效
+ * @param xSpeed x轴方向速度
+ * @param ySpeed y轴方向速度
+ * @param aSpeed 角速度
+ * 			当使用角度闭环时，输入的角速度无效
  */
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -86,7 +86,6 @@ void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 		Car_Speed.Vx = xSpeed;
 		Car_Speed.Vy = ySpeed;
 
-		//��������Ƕ�
 		if(Car_Speed_ConRight != Con_By_AngleLoop)
 			Car_Speed.Omega = aSpeed;
 	}
@@ -108,7 +107,7 @@ void car_motion_run()
 	
 	//�Ƕȱջ� 
 	if(Car_Speed_ConRight == Con_By_AngleLoop)
-		Car_Change_Speed(Car_Speed.Vx,Car_Speed.Vy,Pos_PID_Controller(&Car_Yaw_Controller,Att.yaw));
+		Car_Speed.Omega = Pos_PID_Controller(&Car_Yaw_Controller,Att.yaw);
 
 	//麦轮解算
 	mecanumRun(Car_Speed.Vx,Car_Speed.Vy,Car_Speed.Omega);
@@ -155,7 +154,7 @@ void car_motion_Init()
 	//电机初始�?
 		Motor_init();
 
-	//姿��解算初始化                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Att_Algo_Init();
+	//姿态解算初始化                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Att_Algo_Init();
 		Att_Algo_Init();
 	
 

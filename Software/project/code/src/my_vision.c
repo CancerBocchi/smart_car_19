@@ -164,30 +164,27 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         //对第一个点进行处理
         if(begin_flag){
             target_segment[segment_n].begin = i == imgRow-1? i:i+1;
-            switch(segment_n){
-                case 0:
-                    target_segment[segment_n].position = NEAR;
-                    break;
-                case 1:
-                    target_segment[segment_n].position = MEDIUM;
-                    break;
-                default:
-                    target_segment[segment_n].position = FAR;
-                    break;
-            }
            
            //标定结果
            //丢线判定：三个像素均判定为丢线则认为为丢线
            //不是丢线则标记为未定位
             if(LorR){ //左边
-                if(broder[i]<=3&&broder[i-1]<=3&&broder[i-2]<=3)
+                if((i-2>=0)&&broder[i]<=3&&broder[i-1]<=3&&broder[i-2]<=3){
                     target_segment[segment_n].type = lose_segment;
+                    broder[i] = LEFT_LOSE_VALUE;
+                    broder[i-1] = LEFT_LOSE_VALUE;
+                    broder[i-2] = LEFT_LOSE_VALUE;
+                }
                 else
                     target_segment[segment_n].type = NULL_segment;
             }
             else if((!LorR)){//右边
-                if(broder[i]>=156&&broder[i-1]>=156&&broder[i-2]>=156)
+                if((i-2>=0)&&broder[i]>=156&&broder[i-1]>=156&&broder[i-2]>=156){
                     target_segment[segment_n].type = lose_segment;
+                    broder[i] = RIGHT_LOSE_VALUE;
+                    broder[i-1] = RIGHT_LOSE_VALUE;
+                    broder[i-2] = RIGHT_LOSE_VALUE;
+                }
                 else
                     target_segment[segment_n].type = NULL_segment;
             }
@@ -225,14 +222,14 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         }
     }
 
-    //当第一个序列只有一个值的时候，将第一个序列和第二个合并
+    // 当第一个序列太短时，与第二个序列合并
     if(target_segment[0].begin - target_segment[0].end <= 5){
         for(int i = target_segment[0].begin;i>=target_segment[0].end;i--){
             broder[i] = broder[target_segment[1].end];
         }
 
         target_segment[0].end = target_segment[1].end;
-				target_segment[0].type = target_segment[1].type;
+		target_segment[0].type = target_segment[1].type;
         for(int i = 1 ;i<=segment_n;i++)
         {
             target_segment[i].begin = target_segment[i+1].begin;
@@ -241,7 +238,7 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         }
         segment_n -= 1;
     }
-    //当第一个序列太短时，与第二个序列合并{}
+
 
     //记录数量
     if(LorR)
@@ -289,7 +286,7 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
     int final_x;
 
     int p_distance = 5;//检测区域
-    float p_th = -0.4;//判定为角点的阈值
+    float p_th = -0.3;//判定为角点的阈值
     float cosvalue;
 
     if(how_many >= p_distance + 2){
@@ -358,9 +355,9 @@ void Vision_BroderFindFP(int16* broder)
 
     //清空数据
     (*target_n) = 0;
-    for(int i = 0;i<4;i++){
-        target_FP[0].x = 0;
-        target_FP[0].y = 0;
+    for(int i = 0;i<3;i++){
+        target_FP[i].x = 0;
+        target_FP[i].y = 0;
     }
 
     /*---------------角点检测---------------*/
@@ -374,11 +371,7 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0].x = target_seg[0].end;
             target_FP[0].y = broder[target_seg[0].end];
             (*target_n)++;
-        }//发现了角点
-        else{
-            target_FP[0] = pf;
-            (*target_n)++;
-
+        
             //检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点
             if(!IsNull(target_seg[2])){
                 pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
@@ -402,6 +395,35 @@ void Vision_BroderFindFP(int16* broder)
                     (*target_n)++;
                 }
             }
+
+        }//发现了角点
+        else{
+            target_FP[0] = pf;
+            (*target_n)++;
+
+            //检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点
+            if(!IsNull(target_seg[2])){
+                pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+                //当未发现角点
+                if((pf.x == -1 && pf.y == -1)){
+                    target_FP[1].x = target_seg[2].begin;
+                    target_FP[1].y = broder[target_seg[2].begin];
+                    (*target_n)++;
+                }
+                else{
+                    //当过于远处序列检测到的角点太远的时候
+                    // while(target_seg[2].begin - pf.x > 15){
+                    //     pf =  Vision_FindArcFP(broder,target_seg[2].begin,pf.x);
+                    //     //滤去远处的角点之后发现不存在角点
+                    //     if(pf.x == -1&&pf.y == -1)
+                    //         break;
+                    // }
+                    //存在角点记录角点，不存在记录边界点
+                    target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
+                    target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : broder[pf.y];
+                    (*target_n)++;
+                }
+            }
         }
     }
 
@@ -418,12 +440,12 @@ void Vision_BroderFindFP(int16* broder)
             }
             else{
                 //当过于远处序列检测到的角点太远的时候
-                while(target_seg[1].begin - pf.x > 15){
-                    pf =  Vision_FindArcFP(broder,target_seg[1].begin,pf.x);
-                    //滤去远处的角点之后发现不存在角点
-                    if(pf.x == -1&&pf.y == -1)
-                        break;
-                }
+                // while(target_seg[1].begin - pf.x > 15){
+                //     pf =  Vision_FindArcFP(broder,target_seg[1].begin,pf.x);
+                //     //滤去远处的角点之后发现不存在角点
+                //     if(pf.x == -1&&pf.y == -1)
+                //         break;
+                // }
                 //存在角点记录角点，不存在记录边界点
                 target_FP[0].x = (pf.x == -1) ? target_seg[1].begin : pf.x ;
                 target_FP[0].y = (pf.y == -1) ? broder[target_seg[1].begin] : broder[pf.y];
@@ -597,7 +619,7 @@ void Vision_CrossHandle()
         Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
 
     if(F.FP_n_R == 2)
-        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.leftBroder);
+        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
     else if(F.FP_n_R == 1)
         Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
 

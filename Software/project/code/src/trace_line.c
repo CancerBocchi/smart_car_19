@@ -148,19 +148,16 @@ void trace_line_entry()
 		if(mt9v03x_finish_flag)
 		{	
 			Vision_Handle();
-			
-
 			trace_line_method();
-
 			
 			//状态切换管理 若art模块发出了识别到图片的信号，则阻塞该线程，运行边沿检测线程
-			// if(Art1_Detection_Flag){
-			// 	// Car_Stop();
-			// 	rt_kprintf("found picture!x:%d,y:%d\n",center_x,center_y);
-			// 	rt_sem_release(side_catch_sem);
-			// 	rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-			// 	Art1_Detection_Flag = 0;
-			// }
+			if(Art1_Detection_Flag){
+				// Car_Stop();
+				rt_kprintf("found picture!x:%d,y:%d\n",center_x,center_y);
+				rt_sem_release(side_catch_sem);
+				rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+				Art1_Detection_Flag = 0;
+			}
 			
 		}
 		rt_thread_delay(1);

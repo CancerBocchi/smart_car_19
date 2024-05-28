@@ -1,4 +1,5 @@
 #include "debug_tool.h"
+#include "zf_common_headfile.h""
 
 float a = 1.3f;
 int c = 1923;
@@ -190,9 +191,17 @@ arg_change arg_register[] = {
 		{"TH",DEBUG_INT,&Threshold},
 		{"AngleKp",DEBUG_FLOAT,&(Car_Yaw_Controller.Kp)},
 		{"AngleKd",DEBUG_FLOAT,&(Car_Yaw_Controller.Kd)},
-        {"adPara",DEBUG_INT,&(adaptivePara)},
-        {"Car_Switch",DEBUG_INT,&(Car_BootSwitch)}, 
-        {NULL,NULL,NULL}
+		{"adPara",DEBUG_INT,&(adaptivePara)},
+		{"Car_Switch",DEBUG_INT,&(Car_BootSwitch)}, 
+		{"LoVxKp",DEBUG_FLOAT,&(center_x_con.Kp)},
+		{"LoVxKi",DEBUG_FLOAT,&(center_x_con.Ki)},
+		{"LoVxKd",DEBUG_FLOAT,&(center_x_con.Kd)},
+		{"LoVyKp",DEBUG_FLOAT,&(center_y_con.Kp)},
+		{"LoVyKi",DEBUG_FLOAT,&(center_y_con.Ki)},
+		{"LoVyKd",DEBUG_FLOAT,&(center_y_con.Ki)},
+		{"xv",DEBUG_FLOAT,&(center_x_con.Ref)},
+		{"yv",DEBUG_FLOAT,&(center_y_con.Ref)},
+		{NULL,NULL,NULL}
 };
 
 static void setarg(int argc, char**argv)

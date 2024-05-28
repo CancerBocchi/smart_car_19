@@ -143,6 +143,7 @@
 #include "openart.h"
 #include "side_catch.h"
 #include "my_vision.h"
+#include "locate_picture.h"
 //===================================================用户自定义文件===================================================
 
 #endif

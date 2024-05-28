@@ -2,11 +2,13 @@
 
 //art1 负责定位图片
 
-//包头'A' 包尾'E' 
+//包头0x0A 包尾0 
 
 lpuart_transfer_t ART1_receivexfer;
 lpuart_handle_t ART1_g_lpuartHandle;
 uint8_t ART1_uart_rx_buffer;
+
+fifo_struct ART1_FIFO;
 
 //此变量用于切换寻线和编写采集线程
 uint8_t Art1_Detection_Flag;
@@ -37,7 +39,7 @@ void ART1_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t sta
 				center_x = ART1_rx_buffer[2];
 				center_y = ART1_rx_buffer[3];
 				Art1_Detection_Flag = 1;
-				//rt_kprintf("ART1:picture found!  x:%d,y:%d\n",center_x,center_y);
+//				uart_write_byte(ART1_UART,'E');
 			}
 			else{
 				center_x = 0;
@@ -76,7 +78,6 @@ void ART1_UART_Init(void)
 	uart_init(ART1_UART, 115200, ART1_UART_TX, ART1_UART_RX);
 	NVIC_SetPriority(ART1_UART_IRQn, 1); // 设置串口中断优先级 范围0-15 越小优先级越高
 	uart_rx_interrupt(ART1_UART, 1);
-	//uart_tx_interrupt(ART1_UART, 1);
 	// 配置串口接收的缓冲区及缓冲区长度
 	ART1_receivexfer.dataSize = 1;
 	ART1_receivexfer.data = &ART1_uart_rx_buffer;

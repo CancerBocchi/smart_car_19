@@ -6,6 +6,10 @@
         "car.h": "c",
         "trace_line.h": "c",
         "camera.h": "c",
-        "complex": "c"
+        "complex": "c",
+        "openart.h": "c",
+        "zf_driver_uart.h": "c",
+        "locate_picture.h": "c",
+        "pid.h": "c"
     }
 }
