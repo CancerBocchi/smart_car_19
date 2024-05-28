@@ -78,7 +78,6 @@ void Vision_SymbolJudge()
     Vision_BroderFindFP(Image_S.leftBroder);
     Vision_BroderFindFP(Image_S.rightBroder);
 
-
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
         if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && F.segment_n_R > 1)&&

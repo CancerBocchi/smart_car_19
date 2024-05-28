@@ -39,6 +39,7 @@ float Vector_AngleGet(point_t p1,point_t p2,point_t p3);
 float Point_CalSlope(point_t p1,point_t p2);
 //判断单调性
 uint8_t Line_IsMonotonous(int16* broder,int16 x1,int16 x2);
+uint8_t Line_IsStraight(int16* broder,int16 x1,int16 x2);
 //寻找极值点
 int16 Line_FindMaxPoint(int16* broder,int x1,int x2);
 int16 Line_FindMinPoint(int16* broder,int x1,int x2);

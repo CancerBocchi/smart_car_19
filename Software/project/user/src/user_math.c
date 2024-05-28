@@ -97,7 +97,7 @@ uint8_t Line_IsMonotonous(int16* broder,int16 x1,int16 x2)
 	for(int i = 0 ; i < howmany_point-1;i++)
 	{
 		df[i] = broder[max-i] - broder[max-i-1];
-		aver_df += df; 
+		aver_df += df[i]; 
 		//因为寻线的点有时候不稳定，所以当单调性突然很大时，不予置信
 		if(fabs(df[i]) >= fabs(aver_df/(i+1))+20) //累加平均滤波
 			df[i] = df[i-1];
