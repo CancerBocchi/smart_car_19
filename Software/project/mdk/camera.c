@@ -13,15 +13,14 @@ int16 Threshold = 250;
 
 void Vision_Handle()
 {
-
+	static int handle = 0;
     //图像预处理
     Camera_PreProcess();
 
-    Camera_FindMidLine();   //常规扫线
-    // Camera_LongestWight();  //最远线巡线
-
-    Vision_SymbolJudge();   //元素判断，但是会有问题
-    //Vision_RSHandle();      //元素判断的解决方式
+    // Camera_FindMidLine();   //常规扫线
+    Camera_LongestWight();  //最远线巡线    
+    //Vision_SymbolJudge();   //元素判断，但是会有问题	
+    // Vision_RSHandle();      //元素判断的解决方式
 
    //获取中线
    for(int i=imgRow-1;i>=0;i--)
@@ -33,7 +32,8 @@ void Vision_Handle()
 //    //图像debug
     float mid_offset=1.65;
     uint8_t row_begin = 20;
-    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+    //tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+	tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image_BW, imgCol, imgRow, 158, 70, 0);
     for(int i=imgRow-1;i>=row_begin;i--)
     {
         tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
@@ -43,7 +43,7 @@ void Vision_Handle()
         // tft180_draw_point((int)(160/1.65), 78-(imgRow-1)+i, RGB565_GREEN);
     }
 
-    //Vision_DrawFP();
+    Vision_DrawFP();
         //最长白线法
     // tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
     // tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
@@ -171,12 +171,12 @@ void Camera_FindMidLine()
         {
             if(i==imgRow-1)
             {
-                if(my_image[i][MID_COL-1]>=Threshold)  //中间为白色像素点
+                if(my_image_BW[i][MID_COL-1]>=Threshold)  //中间为白色像素点
                 {
                     //左侧
                     for(j=MID_COL-1;j>0;j--)
                     {
-                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
+                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;
@@ -191,7 +191,7 @@ void Camera_FindMidLine()
                     //右侧
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image[i][j]<Threshold && my_image[i][j-1]>Threshold)
+                        if(my_image_BW[i][j]<Threshold && my_image_BW[i][j-1]>Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;
@@ -209,7 +209,7 @@ void Camera_FindMidLine()
                     //向右扫
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
+                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             break;
@@ -221,7 +221,7 @@ void Camera_FindMidLine()
                     {
                         for(w=Image_S.leftBroder[i]+1;w<imgCol;w++)
                         {
-                            if(my_image[i][w]<Threshold && my_image[i][w-1]>Threshold)
+                            if(my_image_BW[i][w]<Threshold && my_image_BW[i][w-1]>Threshold)
                             {
                                 Image_S.rightBroder[i]=(int16)w;
                                 break;
@@ -234,7 +234,7 @@ void Camera_FindMidLine()
 //                    {
                         for(z=MID_COL-1;z>0;z--)
                         {
-                            if(my_image[i][z-1]>Threshold && my_image[i][z]<Threshold)
+                            if(my_image_BW[i][z-1]>Threshold && my_image_BW[i][z]<Threshold)
                             {
                                 Image_S.rightBroder[i]=(int16)z;
                                 break;
@@ -246,7 +246,7 @@ void Camera_FindMidLine()
                         {
                             for(w=Image_S.rightBroder[i]-1;w>0;w--)
                             {
-                                if(my_image[i][w]>Threshold && my_image[i][w-1]<Threshold)
+                                if(my_image_BW[i][w]>Threshold && my_image_BW[i][w-1]<Threshold)
                                 {
                                     Image_S.leftBroder[i]=(int16)w;
                                     break;
@@ -273,7 +273,7 @@ void Camera_FindMidLine()
 
                     for(j=Limit_Broder_add ; j>0; j--)
                     {
-                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
+                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -294,7 +294,7 @@ void Camera_FindMidLine()
                 {
                     for(j=Image_S.rightBroder[i+1];j>0;j--)
                     {
-                        if(my_image[i][j] > Threshold && my_image[i][j-1] < Threshold)
+                        if(my_image_BW[i][j] > Threshold && my_image_BW[i][j-1] < Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -311,7 +311,7 @@ void Camera_FindMidLine()
                 {
                     for(j=MID_COL-1;j>0;j--)
                     {
-                        if(my_image[i][j] > Threshold && my_image[i][j-1] < Threshold)
+                        if(my_image_BW[i][j] > Threshold && my_image_BW[i][j-1] < Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -337,7 +337,7 @@ void Camera_FindMidLine()
 
                     for(j = Limit_Broder_subtract ; j < imgCol-1 ; j++)
                     {
-                        if(my_image[i][j-1]>Threshold && my_image[i][j]<Threshold)
+                        if(my_image_BW[i][j-1]>Threshold && my_image_BW[i][j]<Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -357,7 +357,7 @@ void Camera_FindMidLine()
                 {
                     for(j=Image_S.leftBroder[i+1];j<imgCol;j++)
                     {
-                        if(my_image[i][j] < Threshold && my_image[i][j-1] > Threshold)
+                        if(my_image_BW[i][j] < Threshold && my_image_BW[i][j-1] > Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -374,7 +374,7 @@ void Camera_FindMidLine()
                 {
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image[i][j-1] > Threshold && my_image[i][j] < Threshold)
+                        if(my_image_BW[i][j-1] > Threshold && my_image_BW[i][j] < Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -391,7 +391,7 @@ void Camera_FindMidLine()
 
             if(Image_S.leftBroder[i]<=Image_S.rightBroder[i] && Image_S.rightBroder[i]<=10 && Limit_Broder[0]==0)      Limit_Broder[0]=i;
             else if(Image_S.rightBroder[i]>=Image_S.leftBroder[i] && Image_S.leftBroder[i]>=150 && Limit_Broder[1]==0) Limit_Broder[1]=i;
-            else if((left_add_flag[i] == 1 && right_add_flag[i] == 1 && my_image[i][25] == 0 && my_image[i][135] == 0) || (Image_S.leftBroder[i] > Image_S.rightBroder[i]-6))  Limit_Broder[2]=i;
+            else if((left_add_flag[i] == 1 && right_add_flag[i] == 1 && my_image_BW[i][25] == 0 && my_image_BW[i][135] == 0) || (Image_S.leftBroder[i] > Image_S.rightBroder[i]-6))  Limit_Broder[2]=i;
         }
         else
         {
@@ -504,26 +504,26 @@ void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int h
 }
 
 /**
- * @brief 将单个点二��化,如果是白色则置为255，否则置丄1�70
+ * @brief 将单个点二?1?7?1?7化,如果是白色则置为255，否则置丄1?1?770
  *
  * @param src raw image
  * @param x x
  * @param y y
  * @return uint8_t
  */
-uint8_t VadaptiveTH(uint8_t src[VIMGH][VIMGW], uint8_t x, uint8_t y)
-{
-    int half_block = BLOCK / 2;
-    int thres = 0;
-    if (y < half_block || y >= VIMGH - half_block || x < half_block || x >= VIMGW - half_block)
-        return 0;
-    for (int dy = -half_block; dy <= half_block; dy++)
-        for (int dx = -half_block; dx <= half_block; dx++)
-            thres += src[y + dy][x + dx];
-    thres = thres / (BLOCK * BLOCK) - CLIP_VAL;
+// uint8_t VadaptiveTH(uint8_t src[VIMGH][VIMGW], uint8_t x, uint8_t y)
+// {
+//     int half_block = BLOCK / 2;
+//     int thres = 0;
+//     if (y < half_block || y >= VIMGH - half_block || x < half_block || x >= VIMGW - half_block)
+//         return 0;
+//     for (int dy = -half_block; dy <= half_block; dy++)
+//         for (int dx = -half_block; dx <= half_block; dx++)
+//             thres += src[y + dy][x + dx];
+//     thres = thres / (BLOCK * BLOCK) - CLIP_VAL;
 
-    return src[y][x] > thres ? 255 : 0;
-}
+//     return src[y][x] > thres ? 255 : 0;
+// }
 
 /* TAG there is the logic below*/
 
@@ -531,133 +531,133 @@ uint8_t VadaptiveTH(uint8_t src[VIMGH][VIMGW], uint8_t x, uint8_t y)
  * @brief 直道时的扫线策略
  *
  */
-void VscanStraight(void)
-{
-    for (uint8_t i = VIMGW / 2 - 20; i >= BLOCK / 2 - 1; i--)
-    {
-        if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
-        {
-            Veight_neighborhood(SRCIMG, F.Lp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 0);
-            break;
-        }
-    }
-    for (uint8_t i = VIMGW / 2 + 20; i < VIMGW - BLOCK / 2 + 1; i++)
-    {
-        if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
-        {
-            Veight_neighborhood(SRCIMG, F.Rp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 1);
-            break;
-        }
-    }
-}
+// void VscanStraight(void)
+// {
+//     for (uint8_t i = VIMGW / 2 - 20; i >= BLOCK / 2 - 1; i--)
+//     {
+//         if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
+//         {
+//             Veight_neighborhood(SRCIMG, F.Lp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 0);
+//             break;
+//         }
+//     }
+//     for (uint8_t i = VIMGW / 2 + 20; i < VIMGW - BLOCK / 2 + 1; i++)
+//     {
+//         if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
+//         {
+//             Veight_neighborhood(SRCIMG, F.Rp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 1);
+//             break;
+//         }
+//     }
+// }
 
-/**
- * @brief
- *
- * @param p 数组中某个的地址,p只允许为F.Lp或��F.Rp
- * @param seed seed
- * @param LorR 0表示逆时针，1表示顺时钄1�7
- */
-void Veight_neighborhood(uint8_t src[VIMGH][VIMGW], point_t *p, point_t seed, uint8_t LorR)
-{
-    point_t **pp;
-    if (p == F.Lp)
-        pp = &F.Lpp;
-    else if (p == F.Rp)
-        pp = &F.Rpp;
-    else
-        while (1)
-            ;
+// /**
+//  * @brief
+//  *
+//  * @param p 数组中某个的地址,p只允许为F.Lp或?1?7?1?7F.Rp
+//  * @param seed seed
+//  * @param LorR 0表示逆时针，1表示顺时钄1?1?77
+//  */
+// void Veight_neighborhood(uint8_t src[VIMGH][VIMGW], point_t *p, point_t seed, uint8_t LorR)
+// {
+//     point_t **pp;
+//     if (p == F.Lp)
+//         pp = &F.Lpp;
+//     else if (p == F.Rp)
+//         pp = &F.Rpp;
+//     else
+//         while (1)
+//             ;
 
-    uint8_t dirindex = 0;
-    uint8_t arrayindex;
-    uint8_t breakflag = 0;
-    point_t *orip = p;
-    point_t *stackbottom = NULL;
-    uint8_t stacksize = 0;
-    point_t newp;
+//     uint8_t dirindex = 0;
+//     uint8_t arrayindex;
+//     uint8_t breakflag = 0;
+//     point_t *orip = p;
+//     point_t *stackbottom = NULL;
+//     uint8_t stacksize = 0;
+//     point_t newp;
 
-    while (!breakflag)
-    {
-        uint8_t i = 0;
-        for (i = 0; i < 8; i++)
-        {
-            arrayindex = dirindex + i;
-            if (arrayindex > 7)
-                arrayindex -= 8;
-            newp = (point_t){seed.x + Pointdirection[LorR][arrayindex].x, seed.y + Pointdirection[LorR][arrayindex].y};
-            if (!VadaptiveTH(src, newp.x, newp.y)) //找到了下丢�个点
-            {
-                if (!checkPexists(orip, newp))
-                {
-                    if (arrayindex >= 2)
-                        dirindex = arrayindex - 2;
-                    else
-                        dirindex = arrayindex + 6;
+//     while (!breakflag)
+//     {
+//         uint8_t i = 0;
+//         for (i = 0; i < 8; i++)
+//         {
+//             arrayindex = dirindex + i;
+//             if (arrayindex > 7)
+//                 arrayindex -= 8;
+//             newp = (point_t){seed.x + Pointdirection[LorR][arrayindex].x, seed.y + Pointdirection[LorR][arrayindex].y};
+//             if (!VadaptiveTH(src, newp.x, newp.y)) //找到了下丢?1?7个点
+//             {
+//                 if (!checkPexists(orip, newp))
+//                 {
+//                     if (arrayindex >= 2)
+//                         dirindex = arrayindex - 2;
+//                     else
+//                         dirindex = arrayindex + 6;
 
-                    if (LorR == SCANFORLEFT && newp.x > VIMGW - 10)
-                    {
-                        breakflag = 1;
-                        break;
-                    }
-                    if (LorR == SCANFORRIGHT && newp.x < 10)
-                    {
-                        breakflag = 1;
-                        break;
-                    }
-                    if ((arrayindex == 7 || arrayindex == 6) && stackbottom == NULL) //栈底初始匄1�7
-                        stackbottom = *pp;
-                    if (stackbottom != NULL)
-                        stacksize++;
-                    if (stacksize == 16) //当栈满，弢�始检验栈的内宄1�7
-                    {
-                        int dx = 0, dy = 0;
-                        for (point_t *sp = *pp - 1; sp >= stackbottom; sp--)
-                        {
-                            dx += (sp + 1)->x - sp->x;
-                            dy += (sp + 1)->y - sp->y;
-                        }
-                        if (LorR == 0 && dx >= 0 && dy > dx / 2) //左边畄1�7
-                        {
-                            *pp = stackbottom;
-                            breakflag = 1;
-                            break;
-                        }
-                        else if (LorR == 1 && dx <= 0 && dy >= -dx / 2) //右边畄1�7
-                        {
-                            *pp = stackbottom;
-                            breakflag = 1;
-                            break;
-                        }
-                        else //如果不满足���出条件则将栈初始匄1�7
-                        {
-                            stacksize = 0;
-                            stackbottom = NULL;
-                        }
-                    }
+//                     if (LorR == SCANFORLEFT && newp.x > VIMGW - 10)
+//                     {
+//                         breakflag = 1;
+//                         break;
+//                     }
+//                     if (LorR == SCANFORRIGHT && newp.x < 10)
+//                     {
+//                         breakflag = 1;
+//                         break;
+//                     }
+//                     if ((arrayindex == 7 || arrayindex == 6) && stackbottom == NULL) //栈底初始匄1?1?77
+//                         stackbottom = *pp;
+//                     if (stackbottom != NULL)
+//                         stacksize++;
+//                     if (stacksize == 16) //当栈满，弢?1?7始检验栈的内宄1?1?77
+//                     {
+//                         int dx = 0, dy = 0;
+//                         for (point_t *sp = *pp - 1; sp >= stackbottom; sp--)
+//                         {
+//                             dx += (sp + 1)->x - sp->x;
+//                             dy += (sp + 1)->y - sp->y;
+//                         }
+//                         if (LorR == 0 && dx >= 0 && dy > dx / 2) //左边畄1?1?77
+//                         {
+//                             *pp = stackbottom;
+//                             breakflag = 1;
+//                             break;
+//                         }
+//                         else if (LorR == 1 && dx <= 0 && dy >= -dx / 2) //右边畄1?1?77
+//                         {
+//                             *pp = stackbottom;
+//                             breakflag = 1;
+//                             break;
+//                         }
+//                         else //如果不满足?1?7?1?7?1?7出条件则将栈初始匄1?1?77
+//                         {
+//                             stacksize = 0;
+//                             stackbottom = NULL;
+//                         }
+//                     }
 
-                    **pp = newp;
-                    seed = newp;
+//                     **pp = newp;
+//                     seed = newp;
 
-                    (*pp)++;
-                    if (*pp - p >= VIMGH * 5)
-                    {
-                        breakflag = 1;
-                        break;
-                    }
-                    break;
-                }
-                else
-                {
-                    breakflag = 1;
-                    // break;
-                }
-            }
-        }
-        if (i == 8)
-            breakflag = 1;
-    }
-}
+//                     (*pp)++;
+//                     if (*pp - p >= VIMGH * 5)
+//                     {
+//                         breakflag = 1;
+//                         break;
+//                     }
+//                     break;
+//                 }
+//                 else
+//                 {
+//                     breakflag = 1;
+//                     // break;
+//                 }
+//             }
+//         }
+//         if (i == 8)
+//             breakflag = 1;
+//     }
+// }
 
 void Camera_and_Screen_Init(){
 	//初始化屏幕

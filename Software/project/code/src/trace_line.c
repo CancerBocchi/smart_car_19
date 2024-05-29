@@ -37,6 +37,8 @@ float speed_forward;
  */
 void trace_line_method()
 {
+	uint8_t row_begin = 20;
+	float mid_offset=1.65;
 	//速度控制权判定
 	if(Car_Speed_ConRight == Con_By_TraceLine){
 		//策略1 常规巡线
@@ -98,6 +100,10 @@ void trace_line_init()
 	
 	//初始化信号量
 	trace_line_sem = rt_sem_create("trace_line_sem",0,RT_IPC_FLAG_FIFO);
+	if(trace_line_sem == RT_NULL){
+		rt_kprintf("trace_line_sem created failed\n");
+		while(1);
+	}
 	//初始化线程
 	trace_line_thread = rt_thread_create("trace line",trace_line_entry,NULL,4096,2,1000);
 
@@ -108,7 +114,6 @@ void trace_line_init()
 	else 
 		rt_kprintf("trace line thread created successfully!\n");
 
-	interrupt_global_enable(0);
 }
 
 

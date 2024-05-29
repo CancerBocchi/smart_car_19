@@ -26,7 +26,6 @@ int main()
 	//基础外设初始化
 	Step_Motor_Init();
 	buzzer_init();
-	ART1_UART_Init();
 	car_motion_Init();
 	Camera_and_Screen_Init();
 
@@ -35,6 +34,8 @@ int main()
 	trace_line_init();
 	side_catch_init();
 	locate_pic_init();
+	ART1_UART_Init();
+
 	rt_kprintf("--------- init end ----------\n");
 
 }

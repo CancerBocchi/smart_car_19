@@ -81,7 +81,7 @@ void Step_Motor_Catch()
 		rt_thread_delay(100);
 		gpio_set_level(B10,0);
 		rt_thread_delay(100);
-		//Step_Motor_Reset();
+		Step_Motor_Reset();
 		
 }
 

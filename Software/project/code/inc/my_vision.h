@@ -28,6 +28,8 @@ typedef enum segment_type{
 #define IsLose(seg)             (seg.type == lose_segment)
 #define IsStrai(seg)            (seg.type == straight_segment)
 #define IsNull(seg)             (seg.type == NULL_segment)
+#define IsArc(seg)              (seg.type == arc_segment)
+#define IsCorner(seg)           (seg.type == corner_segment)
 
 //Â·¿öÅÐ¶Ï
 typedef enum{  

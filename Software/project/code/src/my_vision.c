@@ -29,7 +29,7 @@ void Vision_RSHandle()
     switch (Current_Road)
     {
     case LoseRoads:
-
+        Current_Road = NormalRoads;
         break;
 
     case NormalRoads: 
@@ -37,7 +37,8 @@ void Vision_RSHandle()
         break;
 
     case CrossRoads:
-        Vision_CrossHandle();
+        // Vision_CrossHandle();
+        Current_Road = NormalRoads;
         break;
     
     case CirculeRoads:
@@ -63,10 +64,17 @@ void Vision_RSHandle()
 //双边弧+缺陷
 #define CornerState2    (IsArcCorner(F.my_segment_L[0])&&IsArcCorner(F.my_segment_L[0])\
                         &&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[1])\
-                        &&(fabs(F.my_segment_L[1].begin - F.my_segment_R[1].begin) > 15) ) 
+                        && F.segment_n_L == 2 && F.my_segment_R == 2) 
 //单边缺线
 #define CornerState3    (IsArcCorner(F.my_segment_L[0])&&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[0])&&F.segment_n_R == 1\
                        ||IsArcCorner(F.my_segment_R[0])&&IsLose(F.my_segment_R[1])&&IsLose(F.my_segment_L[0])&&F.my_segment_L == 1)
+
+#define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2)
+#define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2)||(F.FP_n_R == 1&&F.FP_n_L == 2))
+#define CrossCon3       ((IsLose(F.my_segment_L[1])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
+                         (IsLose(F.my_segment_R[1])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
+//十字特殊情况：识别到了圆环的弯道
+#define CrossCon4       (IsLose(F.my_segment_R[0])&&IsArcCorner(F.my_segment_R[1]))
 
 void Vision_SymbolJudge()
 {
@@ -87,7 +95,7 @@ void Vision_SymbolJudge()
         else if(CornerState1||CornerState2||CornerState3) 
             Current_Road = CornerRoads;
 
-        else if( (F.FP_n_L == 2 || F.FP_n_R == 2) )
+        else if(CrossCon1||CrossCon2||CrossCon3)
             Current_Road = CrossRoads;
         
         else if(F.segment_n_L == 1&&F.segment_n_R == 1 &&
@@ -283,7 +291,7 @@ point_t Vision_FindArcFP(int16 *broder,int x1,int x2)
     int min = Tool_CmpMin(x1,x2);
 
     int how_many = max - min + 1;
-    int final_x;
+    int final_x = max - 1;
 
     int p_distance = 5;//检测区域
     float p_th = -0.3;//判定为角点的阈值
@@ -339,17 +347,20 @@ void Vision_BroderFindFP(int16* broder)
     int* target_n;
     point_t* target_FP;
     int lose_value;
+    int segment_n;
 
     if(broder == Image_S.leftBroder){
         target_seg = F.my_segment_L;
         target_n = &(F.FP_n_L);
         target_FP = F.feature_p_L;
+        segment_n = F.segment_n_L;
         lose_value = LEFT_LOSE_VALUE;
     }
     else if(broder == Image_S.rightBroder){
         target_seg = F.my_segment_R;
         target_n = &(F.FP_n_R);
         target_FP = F.feature_p_R;
+        segment_n = F.segment_n_R;
         lose_value = RIGHT_LOSE_VALUE;
     }
 
@@ -416,7 +427,12 @@ void Vision_BroderFindFP(int16* broder)
             (*target_n)++;
         }
     }
-
+    //斜入十字特殊情况（十字接环岛）
+    else if(IsArc(target_seg[0])&&segment_n == 1){
+        pf = Vision_FindArcFP(broder,target_seg[0].begin,30);
+        if(pf.x != -1&&pf.y != -1)
+            target_FP[0] = pf;
+    }
 }
 
 /**
@@ -588,11 +604,11 @@ void Vision_CrossHandle()
 
     //状态切换
     if(state == Cross_Begin){
-        if(IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[1]))
+        if(IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[0]))
             state = Cross_State_1;
     }
     else if(state == Cross_State_1){
-        if(!IsLose(F.my_segment_L[0])&&!IsLose(F.my_segment_R[1])){
+        if(!IsLose(!F.my_segment_L[0])&&!IsLose(F.my_segment_R[0])){
             BUZZER_SPEAK;
             state = Cross_Begin;
             Current_Road = NormalRoads;
