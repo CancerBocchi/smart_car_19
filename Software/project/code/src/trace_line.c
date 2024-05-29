@@ -74,29 +74,6 @@ void trace_line_init()
 {
 	rt_kprintf("trace line module init:\n");
 	
-	//初始化屏幕
-	tft180_set_dir(TFT180_CROSSWISE);                                           // 需要先横屏 不然显示不下
-	tft180_init();
-	tft180_show_string(0, 0, "mt9v03x init.");
-	
-	//初始化摄像头
-	while(1)
-	{
-			if(mt9v03x_init())
-			{
-					tft180_show_string(0, 16, "mt9v03x reinit.");
-					rt_kprintf("mt9v03x failed try to reinit\n");
-			}
-			else
-			{
-					rt_kprintf("mt9v03x init successfully\n");
-					break;
-			}
-			system_delay_ms(1000);                                                  // 闪灯表示异常
-	}
-	tft180_show_string(0, 16, "init success.");
-	tft180_clear();
-	
 	//初始化PID控制块 
 	// Pos_PID_Init(&TraceLine_Yaw_Con,-10,0,-10);//八邻 时的参数
 
@@ -152,8 +129,8 @@ void trace_line_entry()
 			
 			//状态切换管理 若art模块发出了识别到图片的信号，则阻塞该线程，运行边沿检测线程
 			if(Art1_Detection_Flag){
-				// Car_Stop();
 				rt_kprintf("found picture!x:%d,y:%d\n",center_x,center_y);
+				//启动边线处理线程
 				rt_sem_release(side_catch_sem);
 				rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
 				Art1_Detection_Flag = 0;

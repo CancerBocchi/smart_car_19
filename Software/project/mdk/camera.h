@@ -46,6 +46,8 @@ void Camera_PreProcess(void);
 void Camera_FindMidLine(void);
 //大津法
 int Camera_My_Adapt_Threshold(uint8*image,uint16 width, uint16 height);
+//初始化摄像头硬件
+void Camera_and_Screen_Init();
 
 
 #endif

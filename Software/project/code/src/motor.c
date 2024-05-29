@@ -1,6 +1,6 @@
 #include "motor.h"
 
-//  电机位置如图所示
+//  电机位置如图扢�礄1�7
 //			 |
 //	 1	 |   2
 //----------------
@@ -8,7 +8,7 @@
 //	 3	 |   4
 
 
-// 电机结构体
+// 电机结构佄1�7
 Motor_S Motor_1;
 Motor_S Motor_2;
 Motor_S Motor_3;
@@ -89,20 +89,22 @@ void motor_pit_init()
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      电机驱动初始化
+//  @brief      电机驱动初始匄1�7
 //  @param      void
 //  @return     void
 //  @e.g.       
 //-------------------------------------------------------------------------------------------------------------------
 void Motor_init()
 {
-	//编码器初始化
+	//��������ʼ��
+	rt_kprintf("Motor Init\n");
+
 	encoder_init();
 
-	//pwm初始化
+	//pwm初始匄1�7
 	// m1
 	pwm_init(PWM1_MODULE3_CHA_D0, 20000, 0);      				
-  pwm_init(PWM1_MODULE3_CHB_D1, 20000, 0);
+  	pwm_init(PWM1_MODULE3_CHB_D1, 20000, 0);
 	
 	Pos_PID_Init(&Motor_PID_1,20,0.15,0);
 	Motor_PID_1.Ref = 0;
@@ -120,7 +122,7 @@ void Motor_init()
 	Motor_PID_2.Value_I_Max = 4000;
 	// m3
 	pwm_init(PWM1_MODULE1_CHA_D14, 20000, 0);      				
-  pwm_init(PWM1_MODULE1_CHB_D15, 20000, 0);
+  	pwm_init(PWM1_MODULE1_CHB_D15, 20000, 0);
 	Pos_PID_Init(&Motor_PID_3,20,0.15,0);
 	
 	Motor_PID_3.Ref = 0;
@@ -129,7 +131,7 @@ void Motor_init()
 	Motor_PID_3.Value_I_Max = 4000;
 	// m4
 	pwm_init(PWM1_MODULE2_CHA_D16, 20000, 0);      				
-  pwm_init(PWM1_MODULE2_CHB_D17, 20000, 0);
+  	pwm_init(PWM1_MODULE2_CHB_D17, 20000, 0);
 	
 	Pos_PID_Init(&Motor_PID_4,20,0.15,0);
 	Motor_PID_4.Ref = 0;
@@ -137,8 +139,8 @@ void Motor_init()
 	Motor_PID_4.Output_Min = -4000;
 	Motor_PID_4.Value_I_Max = 4000;
 
-	//环路初始化运行环境初始化 有上层于运行时不运行此函数
-//自定义不同的初始化
+	//环路初始化运行环境初始化 有上层于运行时不运行此函敄1�7
+//自定义不同的初始匄1�7
 #if MOTOR_LOOP_METHOD == MOTOR_THREAD
 
 	motor_thread_init();
@@ -155,7 +157,7 @@ void Motor_init()
 //  @brief      电机驱动定时调用
 //  @param      void
 //  @return     void
-//  @e.g.       放置在定时器中断中调用 或者频率为 1k 的线程中
+//  @e.g.       放置在定时器中断中调甄1�7 或��频率为 1k 的线程中
 //-------------------------------------------------------------------------------------------------------------------
 void Motor_Pwm_cb()
 {

@@ -36,9 +36,9 @@ float minAngularSpeed = 300;
 /**
  * @brief 内部结算函数
  * 
- * @param xSpeed x轴方向速度
- * @param ySpeed y轴方向速度
- * @param aSpeed z轴方向速度
+ * @param xSpeed x轴方向��度
+ * @param ySpeed y轴方向��度
+ * @param aSpeed z轴方向��度
  */
 void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -75,10 +75,10 @@ void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 /**
  * @brief 对外改变速度的接�?
  * 
- * @param xSpeed x轴方向速度
- * @param ySpeed y轴方向速度
- * @param aSpeed 角速度
- * 			当使用角度闭环时，输入的角速度无效
+ * @param xSpeed x轴方向��度
+ * @param ySpeed y轴方向��度
+ * @param aSpeed 角��度
+ * 			当使用角度闭环时，输入的角��度无效
  */
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -150,15 +150,14 @@ rt_thread_t car_motion_thread;
 
 void car_motion_Init()
 {
-	rt_kprintf("Car init\n");
-	//电机初始�?
-		Motor_init();
+	rt_kprintf("Car Hardware init\n");
+	//�����ʼ��
+	Motor_init();
 
-	//姿态解算初始化                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Att_Algo_Init();
-		Att_Algo_Init();
+	//��̬�����ʼ��                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Att_Algo_Init();
+	Att_Algo_Init();
 	
-
-	//角度闭环初始�?
+	//�������ƿ��ʼ��
 		Car_Speed_ConRight = Con_By_TraceLine;
 		Pos_PID_Init(&Car_Yaw_Controller,5,0,0);
 		Car_Yaw_Controller.Ref = 0;
@@ -167,7 +166,7 @@ void car_motion_Init()
 		Car_Yaw_Controller.Value_I_Max = 1000;
 
 
-	//环路运行初始�?
+	//�̳߳�ʼ��
 #if MOTOR_LOOP_METHOD == MOTOR_USE_CAR_LOOP
 	#if CAR_LOOP_METHOD == CAR_USE_THREAD
 	

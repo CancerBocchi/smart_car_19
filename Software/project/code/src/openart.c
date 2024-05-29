@@ -75,6 +75,8 @@ void ART1_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t sta
 
 void ART1_UART_Init(void)
 {
+	rt_kprintf("Location and Find Camera Uart Init\n");
+
 	uart_init(ART1_UART, 115200, ART1_UART_TX, ART1_UART_RX);
 	NVIC_SetPriority(ART1_UART_IRQn, 1); // 设置串口中断优先级 范围0-15 越小优先级越高
 	uart_rx_interrupt(ART1_UART, 1);

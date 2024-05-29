@@ -38,14 +38,15 @@ void Catch_Entry()
 
 void Step_Motor_Init()
 {
-		pwm_init(DOWN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(DOWN_MOTOR_INIT_ANGLE));   
-    pwm_init(UP_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(UP_MOTOR_INIT_ANGLE));
+	rt_kprintf("Catch Arm Init\n");
+	pwm_init(DOWN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(DOWN_MOTOR_INIT_ANGLE));   
+	pwm_init(UP_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(UP_MOTOR_INIT_ANGLE));
 	
-		gpio_init(B10, GPO, 0, GPO_PUSH_PULL);
+	gpio_init(B10, GPO, 0, GPO_PUSH_PULL);
 	
-		servo1_duty = UP_MOTOR_INIT_ANGLE;servo2_duty = DOWN_MOTOR_INIT_ANGLE;
+	servo1_duty = UP_MOTOR_INIT_ANGLE;servo2_duty = DOWN_MOTOR_INIT_ANGLE;
 	
-		S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
+	S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
 	
 	
 #if ARM_DEBUG_SWITCH == 1

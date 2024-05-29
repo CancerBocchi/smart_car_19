@@ -22,19 +22,19 @@ int main()
 	
 	rt_kprintf("\nSystem_Init:\n");
 
-	//Step_Motor_Init();
+	rt_kprintf("----------  Basic Hardware Init ----------\n");
+	//基础外设初始化
+	Step_Motor_Init();
 	buzzer_init();
-	//ART1_UART_Init();
-
+	ART1_UART_Init();
 	car_motion_Init();
+	Camera_and_Screen_Init();
+
+	rt_kprintf("---------- task init ----------\n");
+	//任务初始化
 	trace_line_init();
 	side_catch_init();
-	//locate_pic_init();
-
-	// while(1){
-	// 	uart_write_byte(ART1_UART,'R');
-	// 	uart_write_string(ART1_UART,"this is uart\n");
-	// 	rt_thread_delay(100);
-	// }
+	locate_pic_init();
+	rt_kprintf("--------- init end ----------\n");
 
 }

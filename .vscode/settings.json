@@ -10,6 +10,10 @@
         "openart.h": "c",
         "zf_driver_uart.h": "c",
         "locate_picture.h": "c",
-        "pid.h": "c"
+        "pid.h": "c",
+        "buzzer.h": "c",
+        "motor.h": "c",
+        "attitude_algorithm.h": "c",
+        "zf_device_icm20602.h": "c"
     }
 }

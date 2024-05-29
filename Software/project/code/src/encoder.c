@@ -56,6 +56,7 @@ RC_Filter_pt RC_Encoder4 = &Encoder4_Para;
 //-------------------------------------------------------------------------------------------------------------------
 void encoder_init()
 {
+  rt_kprintf("Encoder Init\n");
 	qtimer_quad_init(QTIMER_1,QTIMER1_TIMER0_C0,QTIMER1_TIMER1_C1);
 	qtimer_quad_init(QTIMER_2,QTIMER2_TIMER1_C4,QTIMER2_TIMER2_C5);
 	qtimer_quad_init(QTIMER_3,QTIMER3_TIMER1_C7,QTIMER3_TIMER2_C8);

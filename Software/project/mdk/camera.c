@@ -503,3 +503,183 @@ void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int h
     }
 }
 
+/**
+ * @brief 将单个点二��化,如果是白色则置为255，否则置丄1�70
+ *
+ * @param src raw image
+ * @param x x
+ * @param y y
+ * @return uint8_t
+ */
+uint8_t VadaptiveTH(uint8_t src[VIMGH][VIMGW], uint8_t x, uint8_t y)
+{
+    int half_block = BLOCK / 2;
+    int thres = 0;
+    if (y < half_block || y >= VIMGH - half_block || x < half_block || x >= VIMGW - half_block)
+        return 0;
+    for (int dy = -half_block; dy <= half_block; dy++)
+        for (int dx = -half_block; dx <= half_block; dx++)
+            thres += src[y + dy][x + dx];
+    thres = thres / (BLOCK * BLOCK) - CLIP_VAL;
+
+    return src[y][x] > thres ? 255 : 0;
+}
+
+/* TAG there is the logic below*/
+
+/**
+ * @brief 直道时的扫线策略
+ *
+ */
+void VscanStraight(void)
+{
+    for (uint8_t i = VIMGW / 2 - 20; i >= BLOCK / 2 - 1; i--)
+    {
+        if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
+        {
+            Veight_neighborhood(SRCIMG, F.Lp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 0);
+            break;
+        }
+    }
+    for (uint8_t i = VIMGW / 2 + 20; i < VIMGW - BLOCK / 2 + 1; i++)
+    {
+        if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
+        {
+            Veight_neighborhood(SRCIMG, F.Rp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 1);
+            break;
+        }
+    }
+}
+
+/**
+ * @brief
+ *
+ * @param p 数组中某个的地址,p只允许为F.Lp或��F.Rp
+ * @param seed seed
+ * @param LorR 0表示逆时针，1表示顺时钄1�7
+ */
+void Veight_neighborhood(uint8_t src[VIMGH][VIMGW], point_t *p, point_t seed, uint8_t LorR)
+{
+    point_t **pp;
+    if (p == F.Lp)
+        pp = &F.Lpp;
+    else if (p == F.Rp)
+        pp = &F.Rpp;
+    else
+        while (1)
+            ;
+
+    uint8_t dirindex = 0;
+    uint8_t arrayindex;
+    uint8_t breakflag = 0;
+    point_t *orip = p;
+    point_t *stackbottom = NULL;
+    uint8_t stacksize = 0;
+    point_t newp;
+
+    while (!breakflag)
+    {
+        uint8_t i = 0;
+        for (i = 0; i < 8; i++)
+        {
+            arrayindex = dirindex + i;
+            if (arrayindex > 7)
+                arrayindex -= 8;
+            newp = (point_t){seed.x + Pointdirection[LorR][arrayindex].x, seed.y + Pointdirection[LorR][arrayindex].y};
+            if (!VadaptiveTH(src, newp.x, newp.y)) //找到了下丢�个点
+            {
+                if (!checkPexists(orip, newp))
+                {
+                    if (arrayindex >= 2)
+                        dirindex = arrayindex - 2;
+                    else
+                        dirindex = arrayindex + 6;
+
+                    if (LorR == SCANFORLEFT && newp.x > VIMGW - 10)
+                    {
+                        breakflag = 1;
+                        break;
+                    }
+                    if (LorR == SCANFORRIGHT && newp.x < 10)
+                    {
+                        breakflag = 1;
+                        break;
+                    }
+                    if ((arrayindex == 7 || arrayindex == 6) && stackbottom == NULL) //栈底初始匄1�7
+                        stackbottom = *pp;
+                    if (stackbottom != NULL)
+                        stacksize++;
+                    if (stacksize == 16) //当栈满，弢�始检验栈的内宄1�7
+                    {
+                        int dx = 0, dy = 0;
+                        for (point_t *sp = *pp - 1; sp >= stackbottom; sp--)
+                        {
+                            dx += (sp + 1)->x - sp->x;
+                            dy += (sp + 1)->y - sp->y;
+                        }
+                        if (LorR == 0 && dx >= 0 && dy > dx / 2) //左边畄1�7
+                        {
+                            *pp = stackbottom;
+                            breakflag = 1;
+                            break;
+                        }
+                        else if (LorR == 1 && dx <= 0 && dy >= -dx / 2) //右边畄1�7
+                        {
+                            *pp = stackbottom;
+                            breakflag = 1;
+                            break;
+                        }
+                        else //如果不满足���出条件则将栈初始匄1�7
+                        {
+                            stacksize = 0;
+                            stackbottom = NULL;
+                        }
+                    }
+
+                    **pp = newp;
+                    seed = newp;
+
+                    (*pp)++;
+                    if (*pp - p >= VIMGH * 5)
+                    {
+                        breakflag = 1;
+                        break;
+                    }
+                    break;
+                }
+                else
+                {
+                    breakflag = 1;
+                    // break;
+                }
+            }
+        }
+        if (i == 8)
+            breakflag = 1;
+    }
+}
+
+void Camera_and_Screen_Init(){
+	//初始化屏幕
+	tft180_set_dir(TFT180_CROSSWISE);                                           // 需要先横屏 不然显示不下
+	tft180_init();
+	tft180_show_string(0, 0, "mt9v03x init.");
+	
+	//初始化摄像头
+	while(1)
+	{
+			if(mt9v03x_init())
+			{
+					tft180_show_string(0, 16, "mt9v03x reinit.");
+					rt_kprintf("mt9v03x failed try to reinit\n");
+			}
+			else
+			{
+					rt_kprintf("mt9v03x init successfully\n");
+					break;
+			}
+			system_delay_ms(1000);                                                  // 闪灯表示异常
+	}
+	tft180_show_string(0, 16, "init success.");
+	tft180_clear();
+}

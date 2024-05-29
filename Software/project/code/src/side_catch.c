@@ -18,22 +18,29 @@ void side_catch_entry()
 		// rt_thread_delay(1000);
 		BUZZER_SPEAK;
 		
-		if(center_x > 125){
+		if(center_x > 125)
 			Car_Rotate(-90);
-			rt_thread_delay(2000);
+		else if(center_x < 125)
 			Car_Rotate(90);
-			rt_thread_delay(2000);
-		}
-		else if(center_x < 125){
+
+		//延迟是的车辆转弯完成
+		rt_thread_delay(1000);
+
+		//启动定位抓取线程 挂起边线线程
+		rt_sem_release(locate_picture_sem);
+		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
+		
+		if(center_x > 125)
 			Car_Rotate(90);
-			rt_thread_delay(2000);
+		else if(center_x < 125)
 			Car_Rotate(-90);
-			rt_thread_delay(2000);
-		}
+		
+		rt_thread_delay(1000);
 
 		uart_write_byte(ART1_UART,'R');
 		rt_kprintf("handle success\n");
-		// rt_thread_delay(1000);
+		//将角速度控制权归还给巡线
+		
 		Car_Speed_ConRight = Con_By_TraceLine;
 		
 		rt_sem_release(trace_line_sem);

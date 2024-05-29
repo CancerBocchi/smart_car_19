@@ -25,17 +25,17 @@ void buzzer_entry(void *parameter)
 
 void buzzer_init(void)
 {
-    rt_thread_t tid;
-    
+
+    rt_kprintf("Buzzer Init\n");
     //初始化蜂鸣器所使用的GPIO
     gpio_init(BUZZER_PIN, GPO, 0, GPIO_PIN_CONFIG);			// 初始化为GPIO浮空输入 默认上拉高电平
     
     //创建邮箱
     buzzer_mailbox = rt_mb_create("buzzer", 5, RT_IPC_FLAG_FIFO);
     
+    rt_thread_t tid;
     //创建蜂鸣器的线程
     tid = rt_thread_create("buzzer", buzzer_entry, RT_NULL, 1024, 20, 2);
-    
     //启动线程
     if(RT_NULL != tid)
     {
