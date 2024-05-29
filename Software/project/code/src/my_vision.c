@@ -372,28 +372,16 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0].y = broder[target_seg[0].end];
             (*target_n)++;
         
-            //检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点
+            //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
             if(!IsNull(target_seg[2])){
-                pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
-                //当未发现角点
-                if((pf.x == -1 && pf.y == -1)){
-                    target_FP[1].x = target_seg[2].begin;
-                    target_FP[1].y = broder[target_seg[2].begin];
-                    (*target_n)++;
-                }
-                else{
-                    //当过于远处序列检测到的角点太远的时候
-                    while(target_seg[2].begin - pf.x > 15){
-                        pf =  Vision_FindArcFP(broder,target_seg[2].begin,pf.x);
-                        //滤去远处的角点之后发现不存在角点
-                        if(pf.x == -1&&pf.y == -1)
-                            break;
-                    }
-                    //存在角点记录角点，不存在记录边界点
-                    target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
-                    target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : broder[pf.y];
-                    (*target_n)++;
-                }
+                    //只寻找较近序列的特征点
+                pf = (target_seg[2].begin - target_seg[2].end >= 15)?
+                    Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].begin - 15) :
+                    Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+                    //*存在角点记录角点，不存在记录边界点*
+                target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
+                target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : pf.y;
+                (*target_n)++;
             }
 
         }//发现了角点
@@ -401,28 +389,16 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0] = pf;
             (*target_n)++;
 
-            //检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点
-            if(!IsNull(target_seg[2])){
-                pf = Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
-                //当未发现角点
-                if((pf.x == -1 && pf.y == -1)){
-                    target_FP[1].x = target_seg[2].begin;
-                    target_FP[1].y = broder[target_seg[2].begin];
-                    (*target_n)++;
-                }
-                else{
-                    //当过于远处序列检测到的角点太远的时候
-                    // while(target_seg[2].begin - pf.x > 15){
-                    //     pf =  Vision_FindArcFP(broder,target_seg[2].begin,pf.x);
-                    //     //滤去远处的角点之后发现不存在角点
-                    //     if(pf.x == -1&&pf.y == -1)
-                    //         break;
-                    // }
-                    //存在角点记录角点，不存在记录边界点
-                    target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
-                    target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : broder[pf.y];
-                    (*target_n)++;
-                }
+           //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
+          if(!IsNull(target_seg[2])){
+                //只寻找较近序列的特征点
+                pf = (target_seg[2].begin - target_seg[2].end >= 15)?
+                    Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].begin - 15) :
+                    Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
+                //*存在角点记录角点，不存在记录边界点*
+                target_FP[1].x = (pf.x == -1) ? target_seg[2].begin : pf.x ;
+                target_FP[1].y = (pf.y == -1) ? broder[target_seg[2].begin] : pf.y;
+                (*target_n)++;
             }
         }
     }
@@ -431,26 +407,13 @@ void Vision_BroderFindFP(int16* broder)
     else if(target_seg[0].type == lose_segment){
         //检测远处序列的角点  当远处序列有值的时候检测
         if(!IsNull(target_seg[1])){
-            pf = Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
+            pf = (target_seg[1].begin - target_seg[1].end >= 15)?
+                Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].begin - 15) :
+                Vision_FindArcFP(broder,target_seg[1].begin,target_seg[1].end);
             //当未发现角点
-            if((pf.x == -1 && pf.y == -1)){
-                target_FP[0].x = target_seg[1].begin;
-                target_FP[0].y = broder[target_seg[1].begin];
-                (*target_n)++;
-            }
-            else{
-                //当过于远处序列检测到的角点太远的时候
-                // while(target_seg[1].begin - pf.x > 15){
-                //     pf =  Vision_FindArcFP(broder,target_seg[1].begin,pf.x);
-                //     //滤去远处的角点之后发现不存在角点
-                //     if(pf.x == -1&&pf.y == -1)
-                //         break;
-                // }
-                //存在角点记录角点，不存在记录边界点
-                target_FP[0].x = (pf.x == -1) ? target_seg[1].begin : pf.x ;
-                target_FP[0].y = (pf.y == -1) ? broder[target_seg[1].begin] : broder[pf.y];
-                (*target_n)++;
-            }
+            target_FP[0].x = (pf.x == -1) ? target_seg[1].begin : pf.x ;
+            target_FP[0].y = (pf.y == -1) ? broder[target_seg[1].begin] : pf.y;
+            (*target_n)++;
         }
     }
 
