@@ -53,6 +53,7 @@ void locate_picture_entry()
 
 void locate_pic_init()
 {
+	rt_kprintf("locate_pic task init\n");
 	locate_picture_sem = rt_sem_create("locate",0,RT_IPC_FLAG_FIFO);
 	if(locate_picture_sem == RT_NULL){
 		rt_kprintf("locate_picture_sem created failed\n");

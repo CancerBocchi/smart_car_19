@@ -74,7 +74,7 @@ void Vision_RSHandle()
 #define CrossCon3       ((IsLose(F.my_segment_L[1])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
                          (IsLose(F.my_segment_R[1])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
 //十字特殊情况：识别到了圆环的弯道
-#define CrossCon4       (IsLose(F.my_segment_R[0])&&IsArcCorner(F.my_segment_R[1]))
+#define CrossCon4       (IsLose(F.my_segment_R[0])&&IsArcCorner(F.my_segment_R[1])&&F.segment_n_R == 1)
 
 void Vision_SymbolJudge()
 {
@@ -95,7 +95,7 @@ void Vision_SymbolJudge()
         else if(CornerState1||CornerState2||CornerState3) 
             Current_Road = CornerRoads;
 
-        else if(CrossCon1||CrossCon2||CrossCon3)
+        else if(CrossCon1||CrossCon2||CrossCon3||CrossCon4)
             Current_Road = CrossRoads;
         
         else if(F.segment_n_L == 1&&F.segment_n_R == 1 &&
@@ -427,7 +427,7 @@ void Vision_BroderFindFP(int16* broder)
             (*target_n)++;
         }
     }
-    //斜入十字特殊情况（十字接环岛）
+    //斜入十字特殊情况（十字接环岛） 只寻找近处的角点
     else if(IsArc(target_seg[0])&&segment_n == 1){
         pf = Vision_FindArcFP(broder,target_seg[0].begin,30);
         if(pf.x != -1&&pf.y != -1)
@@ -527,6 +527,45 @@ void Vision_ErrorLogin()
 		rt_kprintf("\n");
 }
 
+/**
+ * @brief 延长线段到边界 但是固定K值
+ *          direction --- 补线方向
+ *          1---向远处补线 0---向近处补线
+ * 
+ * @param broder 边界数组
+ * @param x 起始点
+ * @param direction 补线方向
+ * @param slope 斜率
+ */
+#define FAR_Extend 1
+#define NEAR_Extend 0
+void Vision_ExtendLineK(int16 *broder,int x,int direction,float slope){
+    //向远处补线
+    if(direction){
+        for(int i = x-1 ; i > 0 ; i--)
+        {
+            broder[i] = broder[x] - slope * (x - i);
+
+            broder[i] = broder[i]<0? 0:broder[i];
+            broder[i] = broder[i]>159?159:broder[i];
+            
+            broder[i] = broder[i]>imgCol-1? imgCol-1:broder[i];
+        }
+    }
+    //向近处补线
+    else{
+        for(int i = 0 ; i < imgRow-1-x ; i++)
+        {
+            broder[x+i] = broder[x] + slope * i;
+
+            broder[x+i] = broder[x+i]<0? 0:broder[x+i];
+            broder[x+i] = broder[x+i]>159? 159:broder[x+i];
+
+            broder[x+i] = broder[x+i]>imgCol-1? imgCol-1:broder[x+i];
+        }
+    }
+
+}
 
 /**
  * @brief 延长线段到边界
@@ -549,9 +588,7 @@ void Vision_ExtendLine(int16 *broder,int x,int direction)
     }
     //向近处补线
     else{
-        
         this_K = (x-5 >= 0)?(float)(broder[x] - broder[x - 5])/5.0f:(float)(broder[x] - broder[0])/(float)x;
-
         for(int i = 0 ; i < imgRow-1-x ; i++)
         {
             broder[x+i] = broder[x] + this_K * i;
@@ -583,6 +620,22 @@ void Vision_set_AdditionalLine(int16 p1,int16 p2,int16 *broder)
 }
 
 /**
+ * @brief 将边界对应段置于缺陷状态
+ * 
+ * @param broder 边界
+ * @param x1 段首
+ * @param x2 段尾
+ */
+void Vision_SetLose(int16* broder,int16 x1,int16 x2){
+    int max = Tool_CmpMax(x1,x2);
+    int min = Tool_CmpMin(x1,x2);
+
+    for(int i = min;i<max;i++){
+        broder[i] = (broder == Image_S.leftBroder)? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
+    }
+}
+
+/**
  * @brief 十字赛道处理
  * 
  */
@@ -601,6 +654,20 @@ void Vision_CrossHandle()
         Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
     else if(F.FP_n_R == 1)
         Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+    //斜入十字
+    if(CrossCon4){
+        //左边
+        if (IsArc(F.my_segment_L[0])&&F.segment_n_L == 1){
+            //此时应当左边找到一个特征点 计算特征点到另一边角点的斜率
+            float slope = Point_CalSlope({point_t}(F.my_segment_L[1].begin,Image_S.leftBroder[F.my_segment_L[1].begin]),F.feature_p_L[0]);
+            Vision_ExtendLineK(Image_S.leftBroder,F.feature_p_L[0].x,1,slope);
+        }
+        //右边
+        else if(IsArc(F.my_segment_R[0])&&F.segment_n_R == 1){
+            float slope = Point_CalSlope({point_t}(F.my_segment_L[1].begin,Image_S.leftBroder[F.my_segment_L[1].begin]),F.feature_p_L[0]);
+            Vision_ExtendLineK(Image_S.rightBroder,F.feature_p_R[0].x,1,slope);
+        }
+    }
 
     //状态切换
     if(state == Cross_Begin){

@@ -34,6 +34,9 @@ int main()
 	trace_line_init();
 	side_catch_init();
 	locate_pic_init();
+
+	rt_kprintf("---------- camera init ----------\n");
+	
 	ART1_UART_Init();
 
 	rt_kprintf("--------- init end ----------\n");

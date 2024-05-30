@@ -59,6 +59,7 @@ void side_catch_entry()
 //³õÊ¼»¯º¯Êý
 void side_catch_init()
 {
+	rt_kprintf("side catch task init\n");
 	side_catch_sem = rt_sem_create("side_catch_sem",0,RT_IPC_FLAG_FIFO);
 	
 	if(side_catch_sem == RT_NULL){
