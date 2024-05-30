@@ -8,7 +8,7 @@
 #define BLACK 0
 #define WHITE 255
 #define  imgRow          70      
-#define  imgCol          160
+#define  imgCol          188
 #define MID_COL (imgCol>>1)
 
 typedef enum LineState{

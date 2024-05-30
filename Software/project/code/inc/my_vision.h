@@ -4,7 +4,7 @@
 #include "zf_common_headfile.h"
 #include "user_math.h"
 
-#define IMAGE_COL 160
+#define IMAGE_COL 188
 #define IMAGE_ROW 70
 
 #define NEAR    0
@@ -12,7 +12,7 @@
 #define FAR     2
 
 #define LEFT_LOSE_VALUE     0
-#define RIGHT_LOSE_VALUE    159
+#define RIGHT_LOSE_VALUE    187
 
 //线段类型判断
 typedef enum segment_type{
@@ -53,6 +53,8 @@ extern int adaptivePara;
 extern uint8 handle_image[IMAGE_ROW][IMAGE_COL];
 extern RoadSymbol_type Current_Road;
 
+//判断序列是否足够长
+#define Vision_IsLone(seg) (seg.begin - seg.end>=25)
 
 //预处理自己的摸索（不一定用得上
 void Vision_GetMyImage();

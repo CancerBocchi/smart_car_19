@@ -43,24 +43,24 @@ void trace_line_method()
 	if(Car_Speed_ConRight == Con_By_TraceLine){
 		//策略1 常规巡线
 		//计算总偏差值
-		// for(int i = imgRow-1; i>=row_begin;i--)
-		// 	TraceLine_Aver_Offset += (imgCol/mid_offset - 1 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
+		for(int i = imgRow-1; i>=row_begin;i--)
+			TraceLine_Aver_Offset += (imgCol/2 - Image_S.MID_Table[i])*(i+1)*(i+1)/imgRow/imgRow;
 
-		// TraceLine_Aver_Offset /= imgRow;
+		TraceLine_Aver_Offset /= imgRow;
 
-		// float yaw_now = Pos_PID_Controller(&TraceLine_Normal_Con,TraceLine_Aver_Offset);
+		float yaw_now = Pos_PID_Controller(&TraceLine_Normal_Con,TraceLine_Aver_Offset);
 
-		// if(TraceLine_Aver_Offset>50)
-		// 	Car_Change_Speed(Car_Speed.Vx,speed_forward/2,yaw_now);
-		// else
-		// 	Car_Change_Speed(Car_Speed.Vx,speed_forward,yaw_now);
-		// TraceLine_Aver_Offset = 0;	
+		if(TraceLine_Aver_Offset>50)
+			Car_Change_Speed(Car_Speed.Vx,speed_forward/2,yaw_now);
+		else
+			Car_Change_Speed(Car_Speed.Vx,speed_forward,yaw_now);
+		TraceLine_Aver_Offset = 0;	
 
 
 		//策略2 最长白线法
-		float vx = Pos_PID_Controller(&TraceLine_Vx_Con,Center);
-		float yaw = Pos_PID_Controller(&TraceLine_Yaw_Con,Center);
-		Car_Change_Speed(vx,speed_forward,yaw);
+		// float vx = Pos_PID_Controller(&TraceLine_Vx_Con,Center);
+		// float yaw = Pos_PID_Controller(&TraceLine_Yaw_Con,Center);
+		// Car_Change_Speed(vx,speed_forward,yaw);
 
 		
 	}

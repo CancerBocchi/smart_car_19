@@ -37,8 +37,7 @@ void Vision_RSHandle()
         break;
 
     case CrossRoads:
-        // Vision_CrossHandle();
-        Current_Road = NormalRoads;
+        Vision_CrossHandle();
         break;
     
     case CirculeRoads:
@@ -69,12 +68,13 @@ void Vision_RSHandle()
 #define CornerState3    (IsArcCorner(F.my_segment_L[0])&&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[0])&&F.segment_n_R == 1\
                        ||IsArcCorner(F.my_segment_R[0])&&IsLose(F.my_segment_R[1])&&IsLose(F.my_segment_L[0])&&F.my_segment_L == 1)
 
-#define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2)
+#define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2&&Vision_IsLone(F.my_segment_L[1])&&Vision_IsLone(F.my_segment_R[1]))
 #define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2)||(F.FP_n_R == 1&&F.FP_n_L == 2))
-#define CrossCon3       ((IsLose(F.my_segment_L[1])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
-                         (IsLose(F.my_segment_R[1])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
+#define CrossCon3       ((IsLose(F.my_segment_L[0])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
+                         (IsLose(F.my_segment_R[0])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
 //十字特殊情况：识别到了圆环的弯道
-#define CrossCon4       (IsLose(F.my_segment_R[0])&&IsArcCorner(F.my_segment_R[1])&&F.segment_n_R == 1)
+#define CrossCon4       (((IsLose(F.my_segment_R[0])&&!IsNull(F.my_segment_R[1]))&&(F.segment_n_L <= 2&&IsArc(F.my_segment_L[0])))||\
+                         ((IsLose(F.my_segment_L[0])&&!IsNull(F.my_segment_L[1]))&&(F.segment_n_R <= 2&&IsArc(F.my_segment_R[0]))))
 
 void Vision_SymbolJudge()
 {
@@ -88,7 +88,7 @@ void Vision_SymbolJudge()
 
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
-        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && F.segment_n_R > 1)&&
+        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && F.segment_n_R > 1)||
             (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && F.segment_n_L > 1) )
             Current_Road = CirculeRoads;
 
@@ -116,27 +116,27 @@ void Vision_SymbolJudge()
 void Vision_DrawFP(){
     
     for(int i = 0;i<F.FP_n_L;i++){
-        tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
-        if(78-(imgRow-1)+F.feature_p_L[i].x+1 < 128)
-            tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x+1,RGB565_RED);
-        if(78-(imgRow-1)+F.feature_p_L[i].x-1 >= 0)
-            tft180_draw_point(F.feature_p_L[i].y,78-(imgRow-1)+F.feature_p_L[i].x-1,RGB565_RED);
-        if(F.feature_p_L[i].y+1 < 160)
-            tft180_draw_point(F.feature_p_L[i].y+1,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
-        if(F.feature_p_L[i].y-1 >= 0)
-            tft180_draw_point(F.feature_p_L[i].y-1,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//        tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//        if(78-(imgRow-1)+F.feature_p_L[i].x+1 < 128)
+//            tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x+1,RGB565_RED);
+//        if(78-(imgRow-1)+F.feature_p_L[i].x-1 >= 0)
+//            tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x-1,RGB565_RED);
+//        if((F.feature_p_L[i].y+1)*158/188 < 160)
+//            tft180_draw_point((F.feature_p_L[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//        if((F.feature_p_L[i].y+1)*158/188 >= 0)
+//            tft180_draw_point((F.feature_p_L[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
     }
 
     for(int i = 0;i<F.FP_n_R;i++){
-        tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
-        if(78-(imgRow-1)+F.feature_p_R[i].x+1 < 128)
-            tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x+1,RGB565_RED);
-        if(78-(imgRow-1)+F.feature_p_R[i].x-1 >= 0)
-            tft180_draw_point(F.feature_p_R[i].y,78-(imgRow-1)+F.feature_p_R[i].x-1,RGB565_RED);
-        if(F.feature_p_R[i].y+1 < 160)
-            tft180_draw_point(F.feature_p_R[i].y+1,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
-        if(F.feature_p_R[i].y-1 >= 0)
-            tft180_draw_point(F.feature_p_R[i].y-1,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//        tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//        if(78-(imgRow-1)+F.feature_p_R[i].x+1 < 128)
+//            tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x+1,RGB565_RED);
+//        if(78-(imgRow-1)+F.feature_p_R[i].x-1 >= 0)
+//            tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x-1,RGB565_RED);
+//        if((F.feature_p_R[i].y+1)*158/188 < 160)
+//            tft180_draw_point((F.feature_p_R[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//        if((F.feature_p_R[i].y-1)*158/188 >= 0)
+//            tft180_draw_point((F.feature_p_R[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
     }
 }
 
@@ -187,7 +187,7 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
                     target_segment[segment_n].type = NULL_segment;
             }
             else if((!LorR)){//右边
-                if((i-2>=0)&&broder[i]>=156&&broder[i-1]>=156&&broder[i-2]>=156){
+                if((i-2>=0)&&broder[i]>=RIGHT_LOSE_VALUE-3&&broder[i-1]>=RIGHT_LOSE_VALUE-3&&broder[i-2]>=RIGHT_LOSE_VALUE-3){
                     target_segment[segment_n].type = lose_segment;
                     broder[i] = RIGHT_LOSE_VALUE;
                     broder[i-1] = RIGHT_LOSE_VALUE;
@@ -204,13 +204,16 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         //
         if(target_segment[segment_n].type == lose_segment){
             //对于最后几个点不做判断
-            if(i>=2){
-                if((LorR && broder[i]>3 && broder[i-1]>3 && broder[i-2]>3)||    //左边
-                    ((!LorR) && broder[i]<156 && broder[i-1]<156 && broder[i-2]<156)){ //右边
+            if(i>=3){
+                //防止突变 连续三个量都离边界较远时认为是lose
+                if((LorR && broder[i]>3 && broder[i-1]>3 && broder[i-2]>3 && broder[i-3]>3)||    //左边
+                    ((!LorR) && broder[i]<RIGHT_LOSE_VALUE-3 && broder[i-1]<RIGHT_LOSE_VALUE-3 && broder[i-2]<RIGHT_LOSE_VALUE-3 && broder[i-3]<RIGHT_LOSE_VALUE-3)){ //右边
                     target_segment[segment_n].end = i+1;//记录结尾
                     segment_n++;
                     begin_flag = 1;
                 }
+                else 
+                    broder[i] = (LorR)? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
             }
             else
             ;
@@ -218,12 +221,18 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         //若第一次检测到的不为丢失，则丢线后记录为下一段开始
         else if(target_segment[segment_n].type == NULL_segment){
             if(i>=2){
+                //防止突变 连续三个量很小认为是lose
                 if((LorR && broder[i]<=3 && broder[i-1]<=3 && broder[i-2]<=3)||    //左边
-                    ((!LorR) && broder[i]>=156 && broder[i-1]>=156 && broder[i-2]>=156)){ //右边
+                    ((!LorR) && broder[i]>=RIGHT_LOSE_VALUE-3 && broder[i-1]>=RIGHT_LOSE_VALUE-3 && broder[i-2]>=RIGHT_LOSE_VALUE-3)){ //右边
+                    broder[i] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
+                    broder[i-1] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
+                    broder[i-2] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
                     target_segment[segment_n].end = i+1;//记录结尾
                     segment_n++;
                     begin_flag = 1;
                 }
+                else 
+                    broder[i] = (broder[i]<=LEFT_LOSE_VALUE+3||broder[i]>=RIGHT_LOSE_VALUE - 3)? broder[i+1]:broder[i];
             }
             else
             ;
@@ -429,9 +438,12 @@ void Vision_BroderFindFP(int16* broder)
     }
     //斜入十字特殊情况（十字接环岛） 只寻找近处的角点
     else if(IsArc(target_seg[0])&&segment_n == 1){
-        pf = Vision_FindArcFP(broder,target_seg[0].begin,30);
-        if(pf.x != -1&&pf.y != -1)
-            target_FP[0] = pf;
+        pf = Vision_FindArcFP(broder,target_seg[0].begin,25);
+        if(pf.x != -1&&pf.y != -1){
+					target_FP[0] = pf;
+					(*target_n)++;
+        }
+            
     }
 }
 
@@ -636,6 +648,24 @@ void Vision_SetLose(int16* broder,int16 x1,int16 x2){
 }
 
 /**
+ * @brief 基于一个点和一个固定的斜率画直线
+ * 
+ * @param broder 边界
+ * @param seed   某一点坐标坐标
+ * @param slope  斜率
+ * @param x1     直线范围1
+ * @param x2     直线范围2
+*/
+void Vision_SetLineWithPointK(int16* broder,int seed,float slope,int x1,int x2){
+    int max = Tool_CmpMax(x1,x2);
+    int min = Tool_CmpMin(x1,x2);
+
+    for(int i = min; i<=max ;i++){
+        broder[i] = broder[seed] + (i - seed)*slope;
+    }
+}
+
+/**
  * @brief 十字赛道处理
  * 
  */
@@ -645,28 +675,39 @@ void Vision_CrossHandle()
 {
     static int state = Cross_Begin;
     //补线
-    if(F.FP_n_L == 2)
-        Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
-    else if(F.FP_n_L == 1)
-        Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
-
-    if(F.FP_n_R == 2)
-        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
-    else if(F.FP_n_R == 1)
-        Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
     //斜入十字
     if(CrossCon4){
         //左边
         if (IsArc(F.my_segment_L[0])&&F.segment_n_L == 1){
             //此时应当左边找到一个特征点 计算特征点到另一边角点的斜率
-            float slope = Point_CalSlope({point_t}(F.my_segment_L[1].begin,Image_S.leftBroder[F.my_segment_L[1].begin]),F.feature_p_L[0]);
-            Vision_ExtendLineK(Image_S.leftBroder,F.feature_p_L[0].x,1,slope);
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
         }
         //右边
         else if(IsArc(F.my_segment_R[0])&&F.segment_n_R == 1){
-            float slope = Point_CalSlope({point_t}(F.my_segment_L[1].begin,Image_S.leftBroder[F.my_segment_L[1].begin]),F.feature_p_L[0]);
-            Vision_ExtendLineK(Image_S.rightBroder,F.feature_p_R[0].x,1,slope);
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
         }
+    }
+    else{
+    if(F.FP_n_L == 2)
+        Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
+    else if(F.FP_n_L == 1){
+        if(IsLose(F.my_segment_L[0]))
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+        else
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+    }
+
+    if(F.FP_n_R == 2)
+        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
+    else if(F.FP_n_R == 1){
+        if(IsLose(F.my_segment_R[0]))
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+        else
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+    }
+        
     }
 
     //状态切换
@@ -737,67 +778,98 @@ void Vision_CornerHandle()
 void Vision_CirculeHandle()
 {   
     static int state = Circule_Begin;
-    static int LorR;//1--L 0--R
+    static int LorR;//1--R 0--L
     if(!state){
         BUZZER_SPEAK;
         if(F.my_segment_L[0].type == straight_segment && F.segment_n_L == 1)
-            LorR = 1;
+            LorR = 1;//左边直道 右边圆环
         else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
-            LorR = 0;
+            LorR = 0; //右边直道 左边圆环
         state = Circule_State1;
     }
-    if(LorR){
+
+    if(LorR){//右边圆环
         if(state == Circule_State1){
-            if(F.FP_n_L)
-                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
-            if(F.my_segment_R[0].type == lose_segment)
+            if(F.FP_n_R && !IsLose(F.my_segment_R[0]))
+                Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+            if(IsLose(F.my_segment_R[0]))
                 state = Circule_State2;
         }
         else if(state == Circule_State2){
-            
-            if(F.my_segment_R[0].type != lose_segment)
+            //做直线
+            if(IsLose(F.my_segment_R[0])){
+                //计算直线的平均斜率
+                float slope = Point_CalSlope((point_t){0,Image_S.leftBroder[0]},(point_t){69,Image_S.leftBroder[69]});
+                //得到圆弧的最小点
+                int seed = Line_FindMinPoint(Image_S.rightBroder,F.my_segment_R[1].begin,F.my_segment_R[1].end);
+                //负的斜率因为没做透视变换
+                Vision_SetLineWithPointK(Image_S.rightBroder,seed,-slope,0,69);
+            }
+                
+            else if(!IsLose(F.my_segment_R[0]))
                 state = Circule_State3;
         }
         else if(state == Circule_State3){
-            if(F.my_segment_R[0].type == lose_segment){
+            if(!IsLose(F.my_segment_R[0])){
+                //计算直线的平均斜率
+                float slope = Point_CalSlope((point_t){0,Image_S.leftBroder[0]},(point_t){69,Image_S.leftBroder[69]});
+                //根据远处的角点进行补线
+                Vision_SetLineWithPointK(Image_S.rightBroder,F.feature_p_R[1].x,-slope,0,69);
+            }
+            else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
                 Car_Change_Speed(0,0,0);
                 rt_thread_delay(2000);
-            }    
+            }
         }
         else if(state == Circule_Stop){
-            if(F.my_segment_R[0].type != lose_segment){
+            if(!IsLose(F.my_segment_R[0])){
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
             }
-                
         }
 
     }
-    else{
-        if(state == Circule_State1){
-            if(F.my_segment_L[0].type == lose_segment)
+    else{//左边圆环
+         if(state == Circule_State1){
+            if(F.FP_n_L && !IsLose(F.my_segment_L[0]))
+                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+            if(IsLose(F.my_segment_L[0]))
                 state = Circule_State2;
         }
         else if(state == Circule_State2){
-            if(F.my_segment_L[0].type != lose_segment)
+            //做直线
+            if(IsLose(F.my_segment_L[0])){
+                //计算直线的平均斜率
+                float slope = Point_CalSlope((point_t){0,Image_S.rightBroder[0]},(point_t){69,Image_S.rightBroder[69]});
+                //得到圆弧的最小点 
+                int seed = Line_FindMaxPoint(Image_S.leftBroder,F.my_segment_L[1].begin,F.my_segment_L[1].end);
+                Vision_SetLineWithPointK(Image_S.leftBroder,seed,-slope,0,69);
+            }
+                
+            else if(!IsLose(F.my_segment_L[0]))
                 state = Circule_State3;
         }
         else if(state == Circule_State3){
-            if(F.my_segment_L[0].type == lose_segment){
+            if(!IsLose(F.my_segment_L[0])){
+                //计算直线的平均斜率
+                float slope = Point_CalSlope((point_t){0,Image_S.rightBroder[0]},(point_t){69,Image_S.rightBroder[69]});
+                //根据远处的角点进行补线
+                Vision_SetLineWithPointK(Image_S.leftBroder,F.feature_p_L[1].x,-slope,0,69);
+            }
+            else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
                 Car_Change_Speed(0,0,0);
                 rt_thread_delay(2000);
-            }    
+            }
         }
         else if(state == Circule_Stop){
-            if(F.my_segment_L[0].type != lose_segment){
+            if(!IsLose(F.my_segment_L[0])){
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
             }
-                
         }
     }
 }

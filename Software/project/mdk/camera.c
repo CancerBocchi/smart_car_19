@@ -17,10 +17,10 @@ void Vision_Handle()
     //图像预处理
     Camera_PreProcess();
 
-    // Camera_FindMidLine();   //常规扫线
-    Camera_LongestWight();  //最远线巡线    
-    //Vision_SymbolJudge();   //元素判断，但是会有问题	
-    // Vision_RSHandle();      //元素判断的解决方式
+    Camera_FindMidLine();   //常规扫线
+    // Camera_LongestWight();  //最远线巡线    
+    Vision_SymbolJudge();   //元素判断，但是会有问题	
+    Vision_RSHandle();      //元素判断的解决方式
 
    //获取中线
    for(int i=imgRow-1;i>=0;i--)
@@ -30,17 +30,34 @@ void Vision_Handle()
 
 
 //    //图像debug
-    float mid_offset=1.65;
+    // float mid_offset=1.65;
     uint8_t row_begin = 20;
     //tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-	tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image_BW, imgCol, imgRow, 158, 70, 0);
-    for(int i=imgRow-1;i>=row_begin;i--)
+    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+
+    int16 MID_Table[imgRow];
+    int16 leftBroder[imgRow];//左边边界
+    int16 rightBroder[imgRow];//右边边界
+    for(int i=imgRow-1;i>=0;i--){
+        MID_Table[i] = Image_S.MID_Table[i]*158/188;
+        leftBroder[i] = Image_S.leftBroder[i]*158/188;
+        rightBroder[i] = Image_S.rightBroder[i]*158/188;
+    }
+
+    for(int i=imgRow-1;i>0;i--)
     {
-        tft180_draw_point(Image_S.MID_Table[i], 78-(imgRow-1)+i, RGB565_RED);
-        tft180_draw_point(Image_S.leftBroder[i], 78-(imgRow-1)+i, RGB565_BLUE);
-        tft180_draw_point(Image_S.rightBroder[i], 78-(imgRow-1)+i, RGB565_BROWN);
-        //中线
-        // tft180_draw_point((int)(160/1.65), 78-(imgRow-1)+i, RGB565_GREEN);
+        if(MID_Table[i]>=160)
+            MID_Table[i] = 159;
+        if(leftBroder[i]>=160)
+            leftBroder[i] = 159;
+        if(rightBroder[i]>=160)
+            rightBroder[i] = 159;
+				
+				tft180_draw_point(MID_Table[i], i+20, RGB565_RED);
+        //tft180_draw_point(leftBroder[i], i+20, RGB565_BLUE);
+        tft180_draw_point(rightBroder[i], i+20, RGB565_BROWN);
+//        //中线
+        tft180_draw_point((int)(80), i+20, RGB565_GREEN);
     }
 
     Vision_DrawFP();
@@ -171,12 +188,12 @@ void Camera_FindMidLine()
         {
             if(i==imgRow-1)
             {
-                if(my_image_BW[i][MID_COL-1]>=Threshold)  //中间为白色像素点
+                if(my_image[i][MID_COL-1]>=Threshold)  //中间为白色像素点
                 {
                     //左侧
                     for(j=MID_COL-1;j>0;j--)
                     {
-                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
+                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;
@@ -191,7 +208,7 @@ void Camera_FindMidLine()
                     //右侧
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image_BW[i][j]<Threshold && my_image_BW[i][j-1]>Threshold)
+                        if(my_image[i][j]<Threshold && my_image[i][j-1]>Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;
@@ -209,7 +226,7 @@ void Camera_FindMidLine()
                     //向右扫
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
+                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             break;
@@ -221,7 +238,7 @@ void Camera_FindMidLine()
                     {
                         for(w=Image_S.leftBroder[i]+1;w<imgCol;w++)
                         {
-                            if(my_image_BW[i][w]<Threshold && my_image_BW[i][w-1]>Threshold)
+                            if(my_image[i][w]<Threshold && my_image[i][w-1]>Threshold)
                             {
                                 Image_S.rightBroder[i]=(int16)w;
                                 break;
@@ -234,7 +251,7 @@ void Camera_FindMidLine()
 //                    {
                         for(z=MID_COL-1;z>0;z--)
                         {
-                            if(my_image_BW[i][z-1]>Threshold && my_image_BW[i][z]<Threshold)
+                            if(my_image[i][z-1]>Threshold && my_image[i][z]<Threshold)
                             {
                                 Image_S.rightBroder[i]=(int16)z;
                                 break;
@@ -246,7 +263,7 @@ void Camera_FindMidLine()
                         {
                             for(w=Image_S.rightBroder[i]-1;w>0;w--)
                             {
-                                if(my_image_BW[i][w]>Threshold && my_image_BW[i][w-1]<Threshold)
+                                if(my_image[i][w]>Threshold && my_image[i][w-1]<Threshold)
                                 {
                                     Image_S.leftBroder[i]=(int16)w;
                                     break;
@@ -273,7 +290,7 @@ void Camera_FindMidLine()
 
                     for(j=Limit_Broder_add ; j>0; j--)
                     {
-                        if(my_image_BW[i][j]>Threshold && my_image_BW[i][j-1]<Threshold)
+                        if(my_image[i][j]>Threshold && my_image[i][j-1]<Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -294,7 +311,7 @@ void Camera_FindMidLine()
                 {
                     for(j=Image_S.rightBroder[i+1];j>0;j--)
                     {
-                        if(my_image_BW[i][j] > Threshold && my_image_BW[i][j-1] < Threshold)
+                        if(my_image[i][j] > Threshold && my_image[i][j-1] < Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -311,7 +328,7 @@ void Camera_FindMidLine()
                 {
                     for(j=MID_COL-1;j>0;j--)
                     {
-                        if(my_image_BW[i][j] > Threshold && my_image_BW[i][j-1] < Threshold)
+                        if(my_image[i][j] > Threshold && my_image[i][j-1] < Threshold)
                         {
                             Image_S.leftBroder[i]=(int16)j-1;
                             left_add_flag[i]=0;//左侧
@@ -337,7 +354,7 @@ void Camera_FindMidLine()
 
                     for(j = Limit_Broder_subtract ; j < imgCol-1 ; j++)
                     {
-                        if(my_image_BW[i][j-1]>Threshold && my_image_BW[i][j]<Threshold)
+                        if(my_image[i][j-1]>Threshold && my_image[i][j]<Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -357,7 +374,7 @@ void Camera_FindMidLine()
                 {
                     for(j=Image_S.leftBroder[i+1];j<imgCol;j++)
                     {
-                        if(my_image_BW[i][j] < Threshold && my_image_BW[i][j-1] > Threshold)
+                        if(my_image[i][j] < Threshold && my_image[i][j-1] > Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -374,7 +391,7 @@ void Camera_FindMidLine()
                 {
                     for(j=MID_COL-1;j<imgCol;j++)
                     {
-                        if(my_image_BW[i][j-1] > Threshold && my_image_BW[i][j] < Threshold)
+                        if(my_image[i][j-1] > Threshold && my_image[i][j] < Threshold)
                         {
                             Image_S.rightBroder[i]=(int16)j;
                             right_add_flag[i]=0;//右侧
@@ -391,7 +408,7 @@ void Camera_FindMidLine()
 
             if(Image_S.leftBroder[i]<=Image_S.rightBroder[i] && Image_S.rightBroder[i]<=10 && Limit_Broder[0]==0)      Limit_Broder[0]=i;
             else if(Image_S.rightBroder[i]>=Image_S.leftBroder[i] && Image_S.leftBroder[i]>=150 && Limit_Broder[1]==0) Limit_Broder[1]=i;
-            else if((left_add_flag[i] == 1 && right_add_flag[i] == 1 && my_image_BW[i][25] == 0 && my_image_BW[i][135] == 0) || (Image_S.leftBroder[i] > Image_S.rightBroder[i]-6))  Limit_Broder[2]=i;
+            else if((left_add_flag[i] == 1 && right_add_flag[i] == 1 && my_image[i][25] == 0 && my_image[i][135] == 0) || (Image_S.leftBroder[i] > Image_S.rightBroder[i]-6))  Limit_Broder[2]=i;
         }
         else
         {
@@ -427,12 +444,12 @@ void Camera_FindMidLine()
 */
 int Longest_White_Column_Left[2];
 int Longest_White_Column_Right[2];
-int White_Column[IMAGE_COL];//每列白列长度
+int White_Column[imgCol];//每列白列长度
 int Center;
 void Camera_LongestWight(){
 
     int start_column = 0;
-    int end_column = IMAGE_COL - 1;
+    int end_column = imgCol - 1;
     //从左到右，从下往上，遍历全图记录范围内的每一列白点数量
     for(int j =start_column; j<=end_column; j++ ){
             White_Column[j] = 0;
