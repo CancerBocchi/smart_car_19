@@ -144,6 +144,7 @@
 #include "side_catch.h"
 #include "my_vision.h"
 #include "locate_picture.h"
+#include "circule_handle.h"
 //===================================================用户自定义文件===================================================
 
 #endif

@@ -34,11 +34,11 @@ float minLinearSpeed = 100;
 float minAngularSpeed = 300;
 
 /**
- * @brief 鍐呴儴缁撶畻鍑芥暟
+ * @brief 麦轮结算
  * 
- * @param xSpeed x杞存柟鍚戦€熷害
- * @param ySpeed y杞存柟鍚戦€熷害
- * @param aSpeed z杞存柟鍚戦€熷害
+ * @param xSpeed x方向速度
+ * @param ySpeed y方向速度
+ * @param aSpeed z方向速度
  */
 void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -73,12 +73,12 @@ void mecanumRun(float xSpeed, float ySpeed, float aSpeed)
 }
 
 /**
- * @brief 瀵瑰鏀瑰彉閫熷害鐨勬帴鍙?
+ * @brief 车辆速度改变接口
  * 
- * @param xSpeed x杞存柟鍚戦€熷害
- * @param ySpeed y杞存柟鍚戦€熷害
- * @param aSpeed 瑙掗€熷害
- * 			褰撲娇鐢ㄨ搴﹂棴鐜椂锛岃緭鍏ョ殑瑙掗€熷害鏃犳晥
+ * @param xSpeed x方向速度
+ * @param ySpeed y方向速度
+ * @param aSpeed 角速度
+ * 			
  */
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed)
 {
@@ -131,19 +131,40 @@ void car_motion_entry()
 }
 
 /**
- *	@brief 杞︽棆杞搴﹀嚱鏁?
- *				璋冪敤璇ュ嚱鏁拌兘澶熶娇寰楄溅鍩轰簬鐜板湪鐨勮搴︽棆杞竴涓搴?
+ *	@brief 车辆转弯函数
+ *			
+ *	@param angle 转向角度 负值右转 正数左转
  */
 void Car_Rotate(float angle)
 {
 	Car_Speed_ConRight = Con_By_AngleLoop;
 	
 	Car_Change_Yaw(Att.yaw + angle);
-	
+}
+
+/**
+ * @brief 车辆运行函数
+ * 
+ * @param dx x轴确定的距离
+ * @param dy y轴确定的距离
+ * @param dt 达到距离的时间 单位s
+ */
+void Car_DistanceMotion(float dx,float dy,float dt){
+	float Vx = dx/dt;
+	float Vy = dy/dt;
+	Vx = Vx>Car_Max_Speed? Car_Max_Speed/5:Vx;
+	Vy = Vy>Car_Max_Speed? Car_Max_Speed/5:Vy;
+
+	Car_Change_Speed(Vx,Vy,Car_Speed.Omega);
+	//延时
+	rt_thread_delay((int)(dt*1000));
+	//恢复速度
+	Car_Change_Speed(0,0,Car_Speed.Omega);
+	rt_thread_delay(5);
 }
 	
 /**
- * @brief 鍒濆鍖栧嚱鏁?
+ * @brief 车辆控制初始化
  * 
  */
 rt_thread_t car_motion_thread;

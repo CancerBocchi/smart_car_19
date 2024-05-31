@@ -2,8 +2,8 @@
 
 rt_sem_t side_catch_sem;
 rt_thread_t side_catch_thread;
-
-
+//告诉定位线程返回side catch线程
+uint8_t side_catch_flag;
 
 //线程运行函数
 void side_catch_entry()
@@ -20,11 +20,11 @@ void side_catch_entry()
 		BUZZER_SPEAK;
 		
 		if(center_x > 125){
-			Car_Rotate(-90);
+			Car_Rotate(-90);//右转
 			LorR = 1;
 		}
 		else if(center_x < 125){
-			Car_Rotate(90);
+			Car_Rotate(90);//左转
 			LorR = 0;
 		}
 
@@ -32,6 +32,7 @@ void side_catch_entry()
 		rt_thread_delay(1000);
 
 		//启动定位抓取线程 挂起边线线程
+		side_catch_flag = 1;
 		rt_sem_release(locate_picture_sem);
 		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
 		

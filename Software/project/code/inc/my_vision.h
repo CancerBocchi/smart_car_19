@@ -14,6 +14,9 @@
 #define LEFT_LOSE_VALUE     0
 #define RIGHT_LOSE_VALUE    187
 
+#define LEFT_CIRCULE        0
+#define RIGHT_CIRCULE       1
+
 //线段类型判断
 typedef enum segment_type{
     NULL_segment        = 0,   //未标记状态
@@ -52,6 +55,7 @@ typedef struct segment{
 extern int adaptivePara;
 extern uint8 handle_image[IMAGE_ROW][IMAGE_COL];
 extern RoadSymbol_type Current_Road;
+extern uint8_t Cirule_LorR;
 
 //判断序列是否足够长
 #define Vision_IsLone(seg) (seg.begin - seg.end>=25)

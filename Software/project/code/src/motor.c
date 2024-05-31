@@ -1,38 +1,40 @@
 #include "motor.h"
 
-//  鐢垫満浣嶇疆濡傚浘鎵€绀�
+//  
 //			 |
 //	 1	 |   2
 //----------------
 //			 |
 //	 3	 |   4
 
+//电机减速比为70/14，编码器速度和轮子速度的比例为70:30
 
-// 鐢垫満缁撴瀯浣�
+
+// 电机控制块
 Motor_S Motor_1;
 Motor_S Motor_2;
 Motor_S Motor_3;
 Motor_S Motor_4;
 
 
-// 鐢垫満閫熷害鐜痯id
+// 电机PID控制块
 Pos_PID_t Motor_PID_1;
 Pos_PID_t Motor_PID_2;
 Pos_PID_t Motor_PID_3;
 Pos_PID_t Motor_PID_4;
 
 
-// 澶栭儴璋冪敤鍙橀噺
+// 电机目标速度
 float M1_target_speed;
 float M2_target_speed;
 float M3_target_speed;
 float M4_target_speed;
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      鐢垫満鎺у埗鍏ュ彛鍑芥暟
+//  @brief      电机运行函数
 //  @param      void
 //  @return     void
-//  @e.g.       瀹氭椂鍣ㄤ腑鏂垨鑰呯嚎绋嬮兘搴斿綋璋冪敤璇ュ嚱鏁版潵鎺у埗鐢垫満
+//  @e.g.       定频1k
 //-------------------------------------------------------------------------------------------------------------------
 void motor_run()
 {
@@ -43,22 +45,22 @@ void motor_run()
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      鐢垫満鎺у埗鍏ュ彛鍑芥暟
+//  @brief      电机线程入口
 //  @param      void
 //  @return     void
-//  @e.g.       瀹氭椂鍣ㄤ腑鏂垨鑰呯嚎绋嬮兘搴斿綋璋冪敤璇ュ嚱鏁版潵鎺у埗鐢垫満
+//  @e.g.       仅供调试时候使用
 //-------------------------------------------------------------------------------------------------------------------
 void motor_entry()
 {
     while(1)
     {
         motor_run();
-				rt_thread_delay(1);
+		rt_thread_delay(1);
     }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      鐢垫満绾跨▼鍑芥暟锛岀數鏈虹嚎绋嬪簲褰撴嫢鏈夊仛楂樹紭鍏堢骇
+//  @brief      电机线程初始化
 //  @param      void
 //  @return     void
 //  @e.g.       
@@ -71,7 +73,7 @@ void motor_thread_init()
     if(motor_thread!=NULL)
     {
 		//rt_kprintf("motor_thread created successful!");
-    rt_thread_startup(motor_thread);
+    	rt_thread_startup(motor_thread);
     }
 }
 
@@ -89,19 +91,19 @@ void motor_pit_init()
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      鐢垫満椹卞姩鍒濆鍖�
+//  @brief      电机初始化
 //  @param      void
 //  @return     void
 //  @e.g.       
 //-------------------------------------------------------------------------------------------------------------------
 void Motor_init()
 {
-	//编码器初始化
+
 	rt_kprintf("Motor Init\n");
 
 	encoder_init();
 
-	//pwm鍒濆鍖�
+	//pwm初始化
 	// m1
 	pwm_init(PWM1_MODULE3_CHA_D0, 20000, 0);      				
   	pwm_init(PWM1_MODULE3_CHB_D1, 20000, 0);
@@ -113,7 +115,7 @@ void Motor_init()
 	Motor_PID_1.Value_I_Max = 4000;
 	// m2
 	pwm_init(PWM2_MODULE3_CHA_D2, 20000, 0);      				
-  pwm_init(PWM2_MODULE3_CHB_D3, 20000, 0);
+  	pwm_init(PWM2_MODULE3_CHB_D3, 20000, 0);
 	
 	Pos_PID_Init(&Motor_PID_2,20,0.15,0);
 	Motor_PID_2.Ref = 0;
@@ -139,8 +141,7 @@ void Motor_init()
 	Motor_PID_4.Output_Min = -4000;
 	Motor_PID_4.Value_I_Max = 4000;
 
-	//鐜矾鍒濆鍖栬繍琛岀幆澧冨垵濮嬪寲 鏈変笂灞備簬杩愯鏃朵笉杩愯姝ゅ嚱鏁�
-//鑷畾涔変笉鍚岀殑鍒濆鍖�
+
 #if MOTOR_LOOP_METHOD == MOTOR_THREAD
 
 	motor_thread_init();
@@ -154,13 +155,14 @@ void Motor_init()
 
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      鐢垫満椹卞姩瀹氭椂璋冪敤
+//  @brief      电机闭环
 //  @param      void
 //  @return     void
-//  @e.g.       鏀剧疆鍦ㄥ畾鏃跺櫒涓柇涓皟鐢� 鎴栬€呴鐜囦负 1k 鐨勭嚎绋嬩腑
+//  @e.g.       频率1k运行
 //-------------------------------------------------------------------------------------------------------------------
 void Motor_Pwm_cb()
 {
+	//乘以1000为每秒运行的速度
 	Motor_1.Act_Speed = RC_encoder1 * 1000 / 1024 * 3.14  * 6.1;
 	Motor_2.Act_Speed = RC_encoder2 * 1000 / 1024 * 3.14  * 6.1;
 	Motor_3.Act_Speed = RC_encoder3 * 1000 / 1024 * 3.14  * 6.1;

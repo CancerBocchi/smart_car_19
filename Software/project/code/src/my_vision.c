@@ -7,6 +7,9 @@ int adaptivePara = 6;
 
 RoadSymbol_type Current_Road;
 
+// 圆环左右标识位
+uint8_t Cirule_LorR;
+
 //路况特征判断结构体
 struct{
     segment_t my_segment_L[10];
@@ -778,17 +781,16 @@ void Vision_CornerHandle()
 void Vision_CirculeHandle()
 {   
     static int state = Circule_Begin;
-    static int LorR;//1--R 0--L
     if(!state){
         BUZZER_SPEAK;
         if(F.my_segment_L[0].type == straight_segment && F.segment_n_L == 1)
-            LorR = 1;//左边直道 右边圆环
+            Cirule_LorR = LEFT_CIRCULE;
         else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
-            LorR = 0; //右边直道 左边圆环
+            Cirule_LorR = RIGHT_CIRCULE;
         state = Circule_State1;
     }
 
-    if(LorR){//右边圆环
+    if(Cirule_LorR == RIGHT_CIRCULE){//右边圆环
         if(state == Circule_State1){
             if(F.FP_n_R && !IsLose(F.my_segment_R[0]))
                 Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
@@ -820,6 +822,7 @@ void Vision_CirculeHandle()
                 state = Circule_Stop;
                 BUZZER_SPEAK;
                 Car_Change_Speed(0,0,0);
+                //此处模拟圆环处理程序
                 rt_thread_delay(2000);
             }
         }

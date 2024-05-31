@@ -1,4 +1,3 @@
-
 #include "zf_common_headfile.h"
 
 rt_thread_t led_thread;
@@ -36,7 +35,7 @@ int main()
 	// locate_pic_init();
 
 	rt_kprintf("---------- camera init ----------\n");
-	
+	//摄像头通信初始化
 	// ART1_UART_Init();
 
 	rt_kprintf("--------- init end ----------\n");

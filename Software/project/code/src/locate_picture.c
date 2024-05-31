@@ -16,37 +16,81 @@ int begin_flag;
 float Vx;
 float Vy;
 
-void locate_picture_entry()
-{
+/**
+ * @brief 用于定位抓取图片debug的程序
+ * 
+ */
+uint8_t locate_catch_flag = 0;
+uint8_t locate_debug_flag = 0;
+void locate_picture_debug(){
+
+	uart_write_byte(ART1_UART,'L');
+	Vy = Pos_PID_Controller(&center_y_con,center_y);
+	Vx = Pos_PID_Controller(&center_x_con,center_x);
+	Car_Change_Speed(Vx,Vy,0);
+	//抓取测试
+	if(locate_catch_flag){
+		Car_Change_Speed(0,0,0);
+		Step_Motor_Catch();
+		locate_catch_flag = 0;
+	}
+}
+
+/**
+ * @brief 定位图片运行函数 用于正式做任务
+ * 
+ */
+void locate_picture_run(){
+
 	static int located_n;//记录连续定位准确的次数
-	while(1)
-	{
-		//阻塞线程
-		rt_sem_take(locate_picture_sem,RT_WAITING_FOREVER);
+	rt_sem_take(locate_picture_sem,RT_WAITING_FOREVER);
 		if(!begin_flag){
 			Car_Rotate(0);
 			begin_flag = 1;
 		}
 		
 		//连续十次定位成功后进行抓取
-		while(located_n <= 10){
-			uart_write_byte(ART1_UART,'L');	
-			located_n = Is_Located? located_n + 1:0;
-			Vy = Pos_PID_Controller(&center_y_con,center_y);
-			Vx = Pos_PID_Controller(&center_x_con,center_x);
-			Car_Change_Speed(Vx,Vy,0);
+		while(1){
+			while(located_n < 5){
+				uart_write_byte(ART1_UART,'L');	
+				located_n = Is_Located? located_n + 1:0;
+				Vy = Pos_PID_Controller(&center_y_con,center_y);
+				Vx = Pos_PID_Controller(&center_x_con,center_x);
+				Car_Change_Speed(Vx,Vy,0);
+			}
+			Car_Change_Speed(0,0,0);
+			rt_thread_delay(1);
+			//抓取
+			Step_Motor_Catch();
+			//若捡到卡片后没有卡片了 
+			if(center_x == -1&&center_y == -1)
+				break;
 		}
-		
-		Car_Change_Speed(0,0,0);
-		rt_thread_delay(1);
+
 		uart_write_byte(ART1_UART,'N');
-		//抓取
-		Step_Motor_Catch();
 		//清除标志位
 		begin_flag = 0;
 		located_n = 0;
 		//返回边线处理线程
-		rt_sem_release(side_catch_sem);
+		if(side_catch_flag == 1){
+			side_catch_flag = 0;
+			rt_sem_release(side_catch_sem);
+		}
+		else if(circule_handle_flag == 1){
+			circule_handle_flag = 0;
+			rt_sem_release(circule_handle_sem);
+		}
+		
+}
+
+void locate_picture_entry()
+{
+	while(1)
+	{
+		if(!locate_debug_flag)
+			locate_picture_run();
+		else
+			locate_picture_debug();
 	}
 }
 
@@ -75,5 +119,6 @@ void locate_pic_init()
 	center_x_con.Value_I_Max = 500;
 	center_x_con.Ref = TARGET_X;
 
-
+	//调试标志位 0---不调试 1---调试
+	locate_debug_flag = 0;
 }

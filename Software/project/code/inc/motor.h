@@ -5,7 +5,7 @@
 #include "zf_common_headfile.h"
 #include "PID.h"
 
-// ���λ����ͼ��ʾ
+// ���λ����ͼ��ʄ1�7
 //			 |
 //	 1	 |   2
 //----------------
@@ -21,13 +21,13 @@
 
 
 /*
-* 使用定时器闭环或者定时器中断闭环仅仅在调试时候使用
-* 上层线程中闭环包括麦轮解算
+* ����ջ�����ѡ�� ����ıջ�ʹ�ó�����·����
+*	ǰ�������ڵ���ʹ��
 *
 */
-#define MOTOR_THREAD 			0	//使用线程闭环
-#define MOTOR_PIT    			1	//使用定时器中断闭环
-#define MOTOR_USE_CAR_LOOP	 	2	//使用上层闭环
+#define MOTOR_THREAD 			0	//���ڵ������߳�
+#define MOTOR_PIT    			1	//���ڶ�ʱ���ж�
+#define MOTOR_USE_CAR_LOOP	 	2	//���ڳ�����·
 
 
 typedef struct Motor
@@ -60,26 +60,20 @@ extern Pos_PID_t Motor_PID_4;
 #define PWM_CH4_A PWM1_MODULE2_CHA_D16
 #define PWM_CH4_B PWM1_MODULE2_CHB_D17
 
-/**
-*	电机外部调用函数，在外部调用电机请使用以下功能
-*
-*/
 
-//电机入口函数，thread以及定时器中断调用此函数
+
+//������к���
 void motor_run();
-//电机初始化函数
+//�����ʼ��
 void Motor_init();
-//电机调速函数
+//����ӿ�
 void Motor_Set_Speed(uint8_t Motor_CH,float target_speed);
-//电机开关函数
+
 void Motor_switch();
 
 
 
-/*
-*	电机内部调用函数，不要在外部调用！！！！！
-* 
-*/
+//����ڲ�����
 void motor_pit_init();
 void Motor_Pwm_cb();
 

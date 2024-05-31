@@ -16,6 +16,9 @@
         "attitude_algorithm.h": "c",
         "zf_device_icm20602.h": "c",
         "zf_device_tft180.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "encoder.h": "c",
+        "circule_handle.h": "c",
+        "side_catch.h": "c"
     }
 }
