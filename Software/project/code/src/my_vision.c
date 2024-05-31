@@ -72,7 +72,7 @@ void Vision_RSHandle()
                        ||IsArcCorner(F.my_segment_R[0])&&IsLose(F.my_segment_R[1])&&IsLose(F.my_segment_L[0])&&F.my_segment_L == 1)
 
 #define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2&&Vision_IsLone(F.my_segment_L[1])&&Vision_IsLone(F.my_segment_R[1]))
-#define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2)||(F.FP_n_R == 1&&F.FP_n_L == 2))
+#define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2&&Vision_IsLone(F.my_segment_R[1]))||(F.FP_n_R == 1&&F.FP_n_L == 2&&Vision_IsLone(F.my_segment_L[1])))
 #define CrossCon3       ((IsLose(F.my_segment_L[0])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
                          (IsLose(F.my_segment_R[0])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
 //十字特殊情况：识别到了圆环的弯道
@@ -91,8 +91,8 @@ void Vision_SymbolJudge()
 
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
-        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && F.segment_n_R > 1)||
-            (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && F.segment_n_L > 1) )
+        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_L[1]))||
+            (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && IsLose(F.my_segment_R[1])) )
             Current_Road = CirculeRoads;
 
         else if(CornerState1||CornerState2||CornerState3) 
@@ -180,7 +180,7 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
            //丢线判定：三个像素均判定为丢线则认为为丢线
            //不是丢线则标记为未定位
             if(LorR){ //左边
-                if((i-2>=0)&&broder[i]<=3&&broder[i-1]<=3&&broder[i-2]<=3){
+                if((i-2>=0)&&broder[i]<=3&&broder[i-1]<=3){
                     target_segment[segment_n].type = lose_segment;
                     broder[i] = LEFT_LOSE_VALUE;
                     broder[i-1] = LEFT_LOSE_VALUE;
@@ -190,7 +190,7 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
                     target_segment[segment_n].type = NULL_segment;
             }
             else if((!LorR)){//右边
-                if((i-2>=0)&&broder[i]>=RIGHT_LOSE_VALUE-3&&broder[i-1]>=RIGHT_LOSE_VALUE-3&&broder[i-2]>=RIGHT_LOSE_VALUE-3){
+                if((i-2>=0)&&broder[i]>=RIGHT_LOSE_VALUE-5&&broder[i-1]>=RIGHT_LOSE_VALUE-5){
                     target_segment[segment_n].type = lose_segment;
                     broder[i] = RIGHT_LOSE_VALUE;
                     broder[i-1] = RIGHT_LOSE_VALUE;
@@ -209,8 +209,8 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
             //对于最后几个点不做判断
             if(i>=3){
                 //防止突变 连续三个量都离边界较远时认为是lose
-                if((LorR && broder[i]>3 && broder[i-1]>3 && broder[i-2]>3 && broder[i-3]>3)||    //左边
-                    ((!LorR) && broder[i]<RIGHT_LOSE_VALUE-3 && broder[i-1]<RIGHT_LOSE_VALUE-3 && broder[i-2]<RIGHT_LOSE_VALUE-3 && broder[i-3]<RIGHT_LOSE_VALUE-3)){ //右边
+                if((LorR && broder[i]>5 && broder[i-1]>5 && broder[i-2]>5 && broder[i-3]>5)||    //左边
+                    ((!LorR) && broder[i]<RIGHT_LOSE_VALUE-5 && broder[i-1]<RIGHT_LOSE_VALUE-5 && broder[i-2]<RIGHT_LOSE_VALUE-5 && broder[i-3]<RIGHT_LOSE_VALUE-5)){ //右边
                     target_segment[segment_n].end = i+1;//记录结尾
                     segment_n++;
                     begin_flag = 1;
@@ -225,8 +225,8 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
         else if(target_segment[segment_n].type == NULL_segment){
             if(i>=2){
                 //防止突变 连续三个量很小认为是lose
-                if((LorR && broder[i]<=3 && broder[i-1]<=3 && broder[i-2]<=3)||    //左边
-                    ((!LorR) && broder[i]>=RIGHT_LOSE_VALUE-3 && broder[i-1]>=RIGHT_LOSE_VALUE-3 && broder[i-2]>=RIGHT_LOSE_VALUE-3)){ //右边
+                if((LorR && broder[i]<=5 && broder[i-1]<=5 && broder[i-2]<=5)||    //左边
+                    ((!LorR) && broder[i]>=RIGHT_LOSE_VALUE-5 && broder[i-1]>=RIGHT_LOSE_VALUE-5 && broder[i-2]>=RIGHT_LOSE_VALUE-5)){ //右边
                     broder[i] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
                     broder[i-1] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
                     broder[i-2] = LorR? LEFT_LOSE_VALUE:RIGHT_LOSE_VALUE;
@@ -235,7 +235,7 @@ void Vision_GetSegment(int16* broder,uint8_t LorR)
                     begin_flag = 1;
                 }
                 else 
-                    broder[i] = (broder[i]<=LEFT_LOSE_VALUE+3||broder[i]>=RIGHT_LOSE_VALUE - 3)? broder[i+1]:broder[i];
+                    broder[i] = (broder[i]<=LEFT_LOSE_VALUE+5||broder[i]>=RIGHT_LOSE_VALUE - 5)? broder[i+1]:broder[i];
             }
             else
             ;
@@ -784,9 +784,9 @@ void Vision_CirculeHandle()
     if(!state){
         BUZZER_SPEAK;
         if(F.my_segment_L[0].type == straight_segment && F.segment_n_L == 1)
-            Cirule_LorR = LEFT_CIRCULE;
-        else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
             Cirule_LorR = RIGHT_CIRCULE;
+        else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
+            Cirule_LorR = LEFT_CIRCULE;
         state = Circule_State1;
     }
 
@@ -816,18 +816,27 @@ void Vision_CirculeHandle()
                 //计算直线的平均斜率
                 float slope = Point_CalSlope((point_t){0,Image_S.leftBroder[0]},(point_t){69,Image_S.leftBroder[69]});
                 //根据远处的角点进行补线
-                Vision_SetLineWithPointK(Image_S.rightBroder,F.feature_p_R[1].x,-slope,0,69);
+                if(IsArc(F.my_segment_R[0])){
+                    int seed = Line_FindMinPoint(Image_S.rightBroder,F.my_segment_R[0].begin,F.my_segment_R[0].end);
+                    Vision_SetLineWithPointK(Image_S.rightBroder,seed,-slope,0,69);
+                }
+                else if(IsCorner(F.my_segment_R[0]))
+                    Vision_SetLineWithPointK(Image_S.rightBroder,F.my_segment_R[2].begin,-slope,0,69);
             }
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
-                //此处模拟圆环处理程序
-                rt_thread_delay(2000);
+                // Car_Change_Speed(0,0,0);
+                // //此处模拟圆环处理程序
+                // rt_thread_delay(2000);
             }
         }
         else if(state == Circule_Stop){
-            if(!IsLose(F.my_segment_R[0])){
+            if(IsLose(F.my_segment_R[0])){
+                float slope = Point_CalSlope((point_t){0,Image_S.leftBroder[0]},(point_t){69,Image_S.leftBroder[69]});
+                Vision_SetLineWithPointK(Image_S.rightBroder,F.feature_p_R[0].x,slope,0,69);
+            }
+            else if(!IsLose(F.my_segment_R[0])){
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
             }
@@ -859,20 +868,31 @@ void Vision_CirculeHandle()
                 //计算直线的平均斜率
                 float slope = Point_CalSlope((point_t){0,Image_S.rightBroder[0]},(point_t){69,Image_S.rightBroder[69]});
                 //根据远处的角点进行补线
-                Vision_SetLineWithPointK(Image_S.leftBroder,F.feature_p_L[1].x,-slope,0,69);
+                if(IsArc(F.my_segment_L[0])){
+                    int seed = Line_FindMaxPoint(Image_S.leftBroder,F.my_segment_L[0].begin,F.my_segment_L[0].end);
+                    Vision_SetLineWithPointK(Image_S.leftBroder,seed,-slope,0,69);
+                }
+                else if(IsCorner(F.my_segment_L[0]))
+                    Vision_SetLineWithPointK(Image_S.leftBroder,F.my_segment_L[2].begin,-slope,0,69);
+                    
             }
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
-                rt_thread_delay(2000);
+                // Car_Change_Speed(0,0,0);
+                // rt_thread_delay(2000);
             }
         }
         else if(state == Circule_Stop){
-            if(!IsLose(F.my_segment_L[0])){
+            if(IsLose(F.my_segment_L[0])){
+                float slope = Point_CalSlope((point_t){0,Image_S.rightBroder[0]},(point_t){69,Image_S.rightBroder[69]});
+                Vision_SetLineWithPointK(Image_S.leftBroder,F.feature_p_L[0].x,slope,0,69);
+            }
+            else if(!IsLose(F.my_segment_L[0])){
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
             }
+						
         }
     }
 }

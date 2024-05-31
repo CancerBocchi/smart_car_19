@@ -1,5 +1,5 @@
 #include "debug_tool.h"
-#include "zf_common_headfile.h""
+#include "zf_common_headfile.h"
 
 float a = 1.3f;
 int c = 1923;
@@ -188,7 +188,6 @@ arg_change arg_register[] = {
 		{"YawKp",DEBUG_FLOAT,&(TraceLine_Yaw_Con.Kp)},
 		{"YawKi",DEBUG_FLOAT,&(TraceLine_Yaw_Con.Ki)},
 		{"YawKd",DEBUG_FLOAT,&(TraceLine_Yaw_Con.Kd)},
-		{"TH",DEBUG_INT,&Threshold},
 		{"AngleKp",DEBUG_FLOAT,&(Car_Yaw_Controller.Kp)},
 		{"AngleKd",DEBUG_FLOAT,&(Car_Yaw_Controller.Kd)},
 		{"adPara",DEBUG_INT,&(adaptivePara)},
@@ -201,6 +200,7 @@ arg_change arg_register[] = {
 		{"LoVyKd",DEBUG_FLOAT,&(center_y_con.Ki)},
 		{"xv",DEBUG_FLOAT,&(center_x_con.Ref)},
 		{"yv",DEBUG_FLOAT,&(center_y_con.Ref)},
+        {"catch_flag",DEBUG_INT,&locate_catch_flag},
 		{NULL,NULL,NULL}
 };
 

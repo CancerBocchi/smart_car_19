@@ -594,6 +594,16 @@
               <FileType>5</FileType>
               <FilePath>..\code\inc\my_vision.h</FilePath>
             </File>
+            <File>
+              <FileName>circule_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\circule_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>circule_handle.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\code\inc\circule_handle.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

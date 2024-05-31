@@ -19,6 +19,7 @@
 ".\objects\buzzer.o"
 ".\objects\locate_picture.o"
 ".\objects\my_vision.o"
+".\objects\circule_handle.o"
 ".\objects\zf_common_clock.o"
 ".\objects\zf_common_debug.o"
 ".\objects\zf_common_fifo.o"

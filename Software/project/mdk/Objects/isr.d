@@ -149,6 +149,6 @@
   ..\user\inc\user_math.h ..\code\inc\step_motor.h \
   ..\code\inc\system_perform.h ..\code\inc\buzzer.h \
   ..\code\inc\openart.h ..\code\inc\side_catch.h ..\code\inc\my_vision.h \
-  ..\code\inc\locate_picture.h ..\user\inc\isr.h \
-  ..\..\libraries\sdk\board\board.h \
+  ..\code\inc\locate_picture.h ..\code\inc\circule_handle.h \
+  ..\user\inc\isr.h ..\..\libraries\sdk\board\board.h \
   ..\..\libraries\sdk\board\clock_config.h

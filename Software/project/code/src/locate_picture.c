@@ -34,6 +34,7 @@ void locate_picture_debug(){
 		Step_Motor_Catch();
 		locate_catch_flag = 0;
 	}
+	rt_thread_delay(1);
 }
 
 /**
@@ -63,7 +64,7 @@ void locate_picture_run(){
 			//抓取
 			Step_Motor_Catch();
 			//若捡到卡片后没有卡片了 
-			if(center_x == -1&&center_y == -1)
+			if(center_x == 0&&center_y == 0)
 				break;
 		}
 
@@ -120,5 +121,5 @@ void locate_pic_init()
 	center_x_con.Ref = TARGET_X;
 
 	//调试标志位 0---不调试 1---调试
-	locate_debug_flag = 0;
+	locate_debug_flag = 1;
 }

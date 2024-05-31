@@ -20,7 +20,7 @@ void Vision_Handle()
     Camera_FindMidLine();   //常规扫线
     // Camera_LongestWight();  //最远线巡线    
     Vision_SymbolJudge();   //元素判断，但是会有问题	
-    Vision_RSHandle();      //元素判断的解决方式
+    //Vision_RSHandle();      //元素判断的解决方式
 
    //获取中线
    for(int i=imgRow-1;i>=0;i--)
@@ -33,8 +33,9 @@ void Vision_Handle()
     // float mid_offset=1.65;
     uint8_t row_begin = 20;
     //tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-
+		tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+		//tft180_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
+	 
     int16 MID_Table[imgRow];
     int16 leftBroder[imgRow];//左边边界
     int16 rightBroder[imgRow];//右边边界
