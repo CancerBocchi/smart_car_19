@@ -43,6 +43,7 @@ uint8_t Line_IsStraight(int16* broder,int16 x1,int16 x2);
 //寻找极值点
 int16 Line_FindMaxPoint(int16* broder,int x1,int x2);
 int16 Line_FindMinPoint(int16* broder,int x1,int x2);
-
+//计算平均值
+int16_t Line_GetAverage(int16* broder,int x1,int x2)；
 
 #endif

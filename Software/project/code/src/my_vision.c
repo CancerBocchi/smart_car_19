@@ -71,13 +71,13 @@ void Vision_RSHandle()
 #define CornerState3    (IsArcCorner(F.my_segment_L[0])&&IsLose(F.my_segment_L[1])&&IsLose(F.my_segment_R[0])&&F.segment_n_R == 1\
                        ||IsArcCorner(F.my_segment_R[0])&&IsLose(F.my_segment_R[1])&&IsLose(F.my_segment_L[0])&&F.my_segment_L == 1)
 
-#define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2&&Vision_IsLone(F.my_segment_L[1])&&Vision_IsLone(F.my_segment_R[1]))
-#define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2&&Vision_IsLone(F.my_segment_R[1]))||(F.FP_n_R == 1&&F.FP_n_L == 2&&Vision_IsLone(F.my_segment_L[1])))
+#define CrossCon1       (F.FP_n_L == 2&&F.FP_n_R == 2)
+#define CrossCon2       ((F.FP_n_L == 1&&F.FP_n_R == 2)||(F.FP_n_R == 1&&F.FP_n_L == 2))
 #define CrossCon3       ((IsLose(F.my_segment_L[0])&&F.segment_n_L == 1&&F.FP_n_L == 0&&F.FP_n_R == 2)||\
                          (IsLose(F.my_segment_R[0])&&F.segment_n_R == 1&&F.FP_n_R == 0&&F.FP_n_L == 2))
 //十字特殊情况：识别到了圆环的弯道
-#define CrossCon4       (((IsLose(F.my_segment_R[0])&&!IsNull(F.my_segment_R[1]))&&(F.segment_n_L <= 2&&IsArc(F.my_segment_L[0])))||\
-                         ((IsLose(F.my_segment_L[0])&&!IsNull(F.my_segment_L[1]))&&(F.segment_n_R <= 2&&IsArc(F.my_segment_R[0]))))
+#define CrossCon4       (((IsLose(F.my_segment_R[0])&&!IsNull(F.my_segment_R[1]))&&(F.segment_n_L <= 2&&IsArc(F.my_segment_L[0])&&F.FP_n_L))||\
+                         ((IsLose(F.my_segment_L[0])&&!IsNull(F.my_segment_L[1]))&&(F.segment_n_R <= 2&&IsArc(F.my_segment_R[0])&&F.FP_n_L)))
 
 void Vision_SymbolJudge()
 {
@@ -385,8 +385,9 @@ void Vision_BroderFindFP(int16* broder)
 
     /*---------------角点检测---------------*/
     point_t pf;
-    //中间缺线
-    if(IsLose(target_seg[1])){
+    //中间缺线 且缺线达到阈值
+    if(IsLose(target_seg[1])&&Vision_IsLone(target_seg[1])){
+        int aver1 = Line_GetAverage(broder,target_seg[0].begin,target_seg[0].end);
         //检测近处序列的角点
         pf = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
         //若没有发现角点
@@ -397,7 +398,15 @@ void Vision_BroderFindFP(int16* broder)
         
             //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
             if(!IsNull(target_seg[2])){
-                    //只寻找较近序列的特征点
+                //若远处序列和近处序列差别太大，认为为突变
+                int aver2 = Line_GetAverage(broder,target_seg[2].begin,target_seg[2].end);
+                if(fabs(aver1 - aver2)>80){
+                    target_FP[0].x = -1;
+                    target_FP[0].y = -1;
+                    (*target_n)--;
+                    return;
+                }
+                //只寻找较近序列的特征点
                 pf = (target_seg[2].begin - target_seg[2].end >= 15)?
                     Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].begin - 15) :
                     Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].end);
@@ -446,7 +455,6 @@ void Vision_BroderFindFP(int16* broder)
 					target_FP[0] = pf;
 					(*target_n)++;
         }
-            
     }
 }
 
@@ -583,6 +591,23 @@ void Vision_ExtendLineK(int16 *broder,int x,int direction,float slope){
 }
 
 /**
+ * @brief 计算边界缺陷度函数
+ * 
+ * @param broder 对应边界
+ * @return float 缺陷率
+ */
+float Vision_GetLoseRate(int16* broder){
+    int LorR = (broder == Image_S.leftBroder)?1:0;
+    int lose_num;
+    for(int i = 0;i<IMAGE_ROW;i++)
+    {
+        lose_num = (LorR&&broder[i]==LEFT_LOSE_VALUE)||(!LorR&&broder[i]==RIGHT_LOSE_VALUE)? 
+                    lose_num+1:lose_num;
+    }
+    return (float)lose_num/IMAGE_ROW;
+}
+
+/**
  * @brief 延长线段到边界
 *   direction --- 补线方向
 *   1---向远处补线 0---向近处补线
@@ -677,6 +702,8 @@ void Vision_SetLineWithPointK(int16* broder,int seed,float slope,int x1,int x2){
 void Vision_CrossHandle()
 {
     static int state = Cross_Begin;
+
+
     //补线
     //斜入十字
     if(CrossCon4){

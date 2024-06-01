@@ -24,7 +24,7 @@ uint8_t locate_catch_flag = 0;
 uint8_t locate_debug_flag = 0;
 void locate_picture_debug(){
 
-	uart_write_byte(ART1_UART,'L');
+	MCX_Change_Mode(MCX_Location_Mode);
 	Vy = Pos_PID_Controller(&center_y_con,center_y);
 	Vx = Pos_PID_Controller(&center_x_con,center_x);
 	Car_Change_Speed(Vx,Vy,0);
@@ -53,12 +53,13 @@ void locate_picture_run(){
 		//连续十次定位成功后进行抓取
 		while(1){
 			while(located_n < 5){
-				uart_write_byte(ART1_UART,'L');	
+				uart_write_byte(MCX_UART,'L');	
 				located_n = Is_Located? located_n + 1:0;
 				Vy = Pos_PID_Controller(&center_y_con,center_y);
 				Vx = Pos_PID_Controller(&center_x_con,center_x);
 				Car_Change_Speed(Vx,Vy,0);
 			}
+			located_n = 0;
 			Car_Change_Speed(0,0,0);
 			rt_thread_delay(1);
 			//抓取
@@ -68,15 +69,15 @@ void locate_picture_run(){
 				break;
 		}
 
-		uart_write_byte(ART1_UART,'N');
+		uart_write_byte(MCX_UART,'N');
 		//清除标志位
 		begin_flag = 0;
-		located_n = 0;
 		//返回边线处理线程
 		if(side_catch_flag == 1){
 			side_catch_flag = 0;
 			rt_sem_release(side_catch_sem);
 		}
+		//返回圆环处理线程
 		else if(circule_handle_flag == 1){
 			circule_handle_flag = 0;
 			rt_sem_release(circule_handle_sem);

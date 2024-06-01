@@ -192,3 +192,40 @@ int16 Line_FindMinPoint(int16 *broder, int x1, int x2)
 	}
 	return min_point;
 }
+
+/**
+ * @brief 检查线段突变性
+ * 
+ * @param broder 对应线数组
+ * @param x1 检查范围1
+ * @param x2 检查范围2
+ * @return uint8_t 
+ */
+uint8_t Line_IsJumpExist(int16* broder,int x1,int x2){
+	int min = Tool_CmpMin(x1,x2);
+	int max = Tool_CmpMax(x1,x2);
+
+	for(int i = min;i < max;i++){
+		// if(broder[i+1] - broder[i])
+	}
+}
+
+/**
+ * @brief 计算平均值
+ * 
+ * @param broder 边界
+ * @param x1 坐标边界1
+ * @param x2 坐标边界2
+ * @return int16_t 平均值
+ */
+int16_t Line_GetAverage(int16* broder,int x1,int x2){
+	int min = Tool_CmpMin(x1,x2);
+	int max = Tool_CmpMax(x1,x2);
+	int total;
+
+	for(int i = min;i<=max;i++){
+		total+=broder[i];
+	}
+
+	return total/(max - min + 1);
+}

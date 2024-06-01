@@ -58,7 +58,7 @@ extern RoadSymbol_type Current_Road;
 extern uint8_t Cirule_LorR;
 
 //判断序列是否足够长
-#define Vision_IsLone(seg) (seg.begin - seg.end>=25)
+#define Vision_IsLone(seg) (seg.begin - seg.end>=15)
 
 //预处理自己的摸索（不一定用得上
 void Vision_GetMyImage();

@@ -14,7 +14,6 @@ void side_catch_entry()
 		//阻塞线程
 		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
 		
-		// //
 		Car_Change_Speed(0,0,0);
 		// rt_thread_delay(1000);
 		BUZZER_SPEAK;
@@ -42,11 +41,10 @@ void side_catch_entry()
 			Car_Rotate(-90);
 		
 		rt_thread_delay(1000);
-
-		uart_write_byte(ART1_UART,'R');
+		//转换 MCX 工作模式
+		MCX_Change_Mode(MCX_Detection_Mode);
 		rt_kprintf("handle success\n");
 		//将角速度控制权归还给巡线
-		
 		Car_Speed_ConRight = Con_By_TraceLine;
 		
 		rt_sem_release(trace_line_sem);

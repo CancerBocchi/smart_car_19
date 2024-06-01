@@ -19,6 +19,7 @@
         "string.h": "c",
         "encoder.h": "c",
         "circule_handle.h": "c",
-        "side_catch.h": "c"
+        "side_catch.h": "c",
+        "mcxvision.h": "c"
     }
 }

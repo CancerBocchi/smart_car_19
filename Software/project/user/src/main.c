@@ -27,16 +27,13 @@ int main()
 	buzzer_init();
 	car_motion_Init();
 	Camera_and_Screen_Init();
+	MCX_UART_Init();
 
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
 	// trace_line_init();
 	// side_catch_init();
 	locate_pic_init();
-
-	rt_kprintf("---------- camera init ----------\n");
-	//摄像头通信初始化
-	// ART1_UART_Init();
 
 	rt_kprintf("--------- init end ----------\n");
 
