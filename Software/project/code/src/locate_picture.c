@@ -53,7 +53,7 @@ void locate_picture_run(){
 		//连续十次定位成功后进行抓取
 		while(1){
 			while(located_n < 5){
-				uart_write_byte(MCX_UART,'L');	
+				MCX_Change_Mode(MCX_Location_Mode);
 				located_n = Is_Located? located_n + 1:0;
 				Vy = Pos_PID_Controller(&center_y_con,center_y);
 				Vx = Pos_PID_Controller(&center_x_con,center_x);
@@ -69,7 +69,7 @@ void locate_picture_run(){
 				break;
 		}
 
-		uart_write_byte(MCX_UART,'N');
+		MCX_Change_Mode(MCX_Reset_Mode);
 		//清除标志位
 		begin_flag = 0;
 		//返回边线处理线程
