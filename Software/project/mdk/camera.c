@@ -696,7 +696,7 @@ void Camera_and_Screen_Init(){
 					rt_kprintf("mt9v03x init successfully\n");
 					break;
 			}
-			system_delay_ms(1000);                                                  // 闪灯表示异常
+			rt_thread_delay(1000);                                                  // 闪灯表示异常
 	}
 	tft180_show_string(0, 16, "init success.");
 	tft180_clear();

@@ -91,8 +91,8 @@ void Vision_SymbolJudge()
 
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
-        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_L[1]))||
-            (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && IsLose(F.my_segment_R[1])) )
+        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_R[1]))||
+            (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && IsLose(F.my_segment_L[1])) )
             Current_Road = CirculeRoads;
 
         else if(CornerState1||CornerState2||CornerState3) 
@@ -384,10 +384,12 @@ void Vision_BroderFindFP(int16* broder)
     }
 
     /*---------------角点检测---------------*/
+    int aver1;
+    int aver2;
     point_t pf;
     //中间缺线 且缺线达到阈值
     if(IsLose(target_seg[1])&&Vision_IsLone(target_seg[1])){
-        int aver1 = Line_GetAverage(broder,target_seg[0].begin,target_seg[0].end);
+        aver1 = Line_GetAverage(broder,target_seg[0].begin,target_seg[0].end);
         //检测近处序列的角点
         pf = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
         //若没有发现角点
@@ -399,7 +401,7 @@ void Vision_BroderFindFP(int16* broder)
             //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
             if(!IsNull(target_seg[2])){
                 //若远处序列和近处序列差别太大，认为为突变
-                int aver2 = Line_GetAverage(broder,target_seg[2].begin,target_seg[2].end);
+                aver2 = Line_GetAverage(broder,target_seg[2].begin,target_seg[2].end);
                 if(fabs(aver1 - aver2)>80){
                     target_FP[0].x = -1;
                     target_FP[0].y = -1;
@@ -423,6 +425,14 @@ void Vision_BroderFindFP(int16* broder)
 
            //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
           if(!IsNull(target_seg[2])){
+                //若远处序列和近处序列差别太大，认为为突变
+                aver2 = Line_GetAverage(broder,target_seg[2].begin,target_seg[2].end);
+                if(fabs(aver1 - aver2)>80){
+                    target_FP[0].x = -1;
+                    target_FP[0].y = -1;
+                    (*target_n)--;
+                    return;
+                }
                 //只寻找较近序列的特征点
                 pf = (target_seg[2].begin - target_seg[2].end >= 15)?
                     Vision_FindArcFP(broder,target_seg[2].begin,target_seg[2].begin - 15) :
@@ -703,7 +713,6 @@ void Vision_CrossHandle()
 {
     static int state = Cross_Begin;
 
-
     //补线
     //斜入十字
     if(CrossCon4){
@@ -720,30 +729,37 @@ void Vision_CrossHandle()
         }
     }
     else{
-    if(F.FP_n_L == 2)
-        Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
-    else if(F.FP_n_L == 1){
-        if(IsLose(F.my_segment_L[0]))
-            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
-        else
-            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
-    }
+        if(F.FP_n_L == 2)
+            Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
+        else if(F.FP_n_L == 1){
+            if(IsLose(F.my_segment_L[0]))
+                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+            else
+                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+        }
 
-    if(F.FP_n_R == 2)
-        Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
-    else if(F.FP_n_R == 1){
-        if(IsLose(F.my_segment_R[0]))
-            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
-        else
-            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
-    }
-        
+        if(F.FP_n_R == 2)
+            Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
+        else if(F.FP_n_R == 1){
+            if(IsLose(F.my_segment_R[0]))
+                Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+            else
+                Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+        }
     }
 
     //状态切换
     if(state == Cross_Begin){
-        if(IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[0]))
-            state = Cross_State_1;
+        //当进入十字的时候发现两边都未能发现角点 突出十字
+        //十字的时候应当有明显的角点
+        if(F.FP_n_L == 0&&F.FP_n_R == 0){
+            Current_Road = NormalRoads;
+            return;
+        }
+        if(IsLose(F.my_segment_L[0])&&IsLose(F.my_segment_R[0])){
+             state = Cross_State_1;
+             BUZZER_SPEAK;
+        }
     }
     else if(state == Cross_State_1){
         if(!IsLose(!F.my_segment_L[0])&&!IsLose(F.my_segment_R[0])){

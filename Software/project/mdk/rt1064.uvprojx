@@ -555,16 +555,6 @@
               <FilePath>..\code\inc\side_catch.h</FilePath>
             </File>
             <File>
-              <FileName>openart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\code\src\openart.c</FilePath>
-            </File>
-            <File>
-              <FileName>openart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\code\inc\openart.h</FilePath>
-            </File>
-            <File>
               <FileName>buzzer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\code\src\buzzer.c</FilePath>
@@ -603,6 +593,16 @@
               <FileName>circule_handle.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\code\inc\circule_handle.h</FilePath>
+            </File>
+            <File>
+              <FileName>MCXvision.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\MCXvision.c</FilePath>
+            </File>
+            <File>
+              <FileName>MCXvision.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\code\inc\MCXvision.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -9,6 +9,13 @@
  * 	传感器		[ MOTOR ] [ encoder ] [ IMU ]
  * 	 外设		[ PWM ]   [ qtimer ]  [ spi ]
  */
+
+ /**
+  * 车辆距离与国际单位的换算
+  * 			控制单位		国际单位
+  * 测试数据1：	200/s			0.88m/s	    272.3/s---1m/s
+  * 测试数据2： 
+ */
  
 #include "zf_common_headfile.h"
 

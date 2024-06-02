@@ -22,8 +22,8 @@ typedef enum{
 }MCX_Current_Mode;
 
 extern uint8_t MCX_Detection_Flag;
-extern uint8_t center_x;
-extern uint8_t center_y;
+extern int16_t center_x;
+extern int16_t center_y;
 
 void MCX_Change_Mode(uint8_t mode);
 void MCX_UART_Init(void);

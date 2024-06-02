@@ -114,6 +114,7 @@ void trace_line_init()
 	else 
 		rt_kprintf("trace line thread created successfully!\n");
 
+	//MCX_Change_Mode(MCX_Detection_Mode);
 }
 
 
@@ -133,12 +134,12 @@ void trace_line_entry()
 			trace_line_method();
 			
 			//状态切换管理 若art模块发出了识别到图片的信号，则阻塞该线程，运行边沿检测线程
-			if(Art1_Detection_Flag){
+			if(MCX_Detection_Flag){
 				rt_kprintf("found picture!x:%d,y:%d\n",center_x,center_y);
 				//启动边线处理线程
 				rt_sem_release(side_catch_sem);
 				rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-				Art1_Detection_Flag = 0;
+				MCX_Detection_Flag = 0;
 			}
 			
 		}

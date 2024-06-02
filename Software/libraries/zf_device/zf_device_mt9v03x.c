@@ -418,7 +418,7 @@ uint8 mt9v03x_init (void)
     soft_iic_info_struct mt9v03x_iic_struct;
     do
     {
-        system_delay_ms(200);
+        rt_thread_delay(200);
         set_camera_type(CAMERA_GRAYSCALE, NULL, NULL, NULL);                        // 设置连接摄像头类型
         // 首先尝试SCCB通讯
         mt9v03x_type = MT9V03X_SCCB;

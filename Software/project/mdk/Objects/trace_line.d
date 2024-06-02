@@ -147,6 +147,6 @@
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
   ..\code\inc\car.h ..\mdk\camera.h ..\user\inc\user_math.h \
   ..\code\inc\step_motor.h ..\code\inc\system_perform.h \
-  ..\code\inc\buzzer.h ..\code\inc\openart.h ..\code\inc\side_catch.h \
+  ..\code\inc\buzzer.h ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
   ..\code\inc\my_vision.h ..\code\inc\locate_picture.h \
   ..\code\inc\circule_handle.h

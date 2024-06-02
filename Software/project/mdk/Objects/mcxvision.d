@@ -1,8 +1,7 @@
-./objects/user_math.o: ..\user\src\user_math.c ..\user\inc\user_math.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+./objects/mcxvision.o: ..\code\src\MCXvision.c ..\code\inc\MCXvision.h \
   ..\..\libraries\zf_common\zf_common_headfile.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\..\libraries\sdk\drives\fsl_common.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\assert.h \
@@ -137,8 +136,9 @@
   ..\..\libraries\rttherad_libraries\include\rtservice.h \
   ..\..\libraries\rttherad_libraries\include\rtm.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
-  ..\code\inc\PID.h ..\code\inc\motor.h ..\code\inc\encoder.h \
-  ..\code\inc\PID.h ..\code\inc\Attitude_algorithm.h ..\code\inc\vofa.h \
+  ..\code\inc\PID.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\code\inc\motor.h ..\code\inc\encoder.h ..\code\inc\PID.h \
+  ..\code\inc\Attitude_algorithm.h ..\code\inc\vofa.h \
   ..\code\inc\config.h ..\code\inc\encoder.h ..\code\inc\debug_tool.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
@@ -146,7 +146,7 @@
   ..\..\libraries\rttherad_libraries\components\finsh\shell.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
   ..\code\inc\car.h ..\code\inc\trace_line.h ..\mdk\camera.h \
-  ..\code\inc\step_motor.h ..\code\inc\system_perform.h \
-  ..\code\inc\buzzer.h ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
-  ..\code\inc\my_vision.h ..\code\inc\locate_picture.h \
-  ..\code\inc\circule_handle.h
+  ..\user\inc\user_math.h ..\code\inc\step_motor.h \
+  ..\code\inc\system_perform.h ..\code\inc\buzzer.h \
+  ..\code\inc\side_catch.h ..\code\inc\my_vision.h \
+  ..\code\inc\locate_picture.h ..\code\inc\circule_handle.h

@@ -200,7 +200,7 @@ arg_change arg_register[] = {
 		{"LoVyKd",DEBUG_FLOAT,&(center_y_con.Ki)},
 		{"xv",DEBUG_FLOAT,&(center_x_con.Ref)},
 		{"yv",DEBUG_FLOAT,&(center_y_con.Ref)},
-        {"catch_flag",DEBUG_INT,&locate_catch_flag},
+		{"catch_flag",DEBUG_INT,&locate_catch_flag},
 		{NULL,NULL,NULL}
 };
 
@@ -275,3 +275,25 @@ help:
 MSH_CMD_EXPORT(setarg, setarg sample: setarg <_target_> <number>);
 
 
+// /**
+//  * @brief ≥µ∂®æ‡≈‹÷∏¡Ó
+// */
+// static void CarMove(int argc, char**argv){
+
+//     if(argc == 4){
+//         float dx = atof(argv[1]);
+//         float dy = atof(argv[2]);
+//         float dt = atof(argv[3]);
+
+//         Car_DistanceMotion(dx,dy,dt);
+//     }
+//     else 
+//         goto help;
+
+// help:
+//     rt_kprintf("you can use like this:\n");
+//     rt_kprintf("CarMove 100 0 1        ----- x move 100, y move 0 in 1s\n");
+// 	return;
+// }
+
+// MSH_CMD_EXPORT(CarMove, CarMove sample: CarMove <dx> <dy> <dt>);
