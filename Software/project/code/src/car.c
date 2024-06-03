@@ -145,13 +145,13 @@ void Car_Rotate(float angle)
 /**
  * @brief 车辆运行函数
  * 
- * @param dx x轴确定的距离
- * @param dy y轴确定的距离
+ * @param dx x轴确定的距离	单位cm
+ * @param dy y轴确定的距离  单位cm
  * @param dt 达到距离的时间 单位s
  */
 void Car_DistanceMotion(float dx,float dy,float dt){
-	float Vx = dx/dt;
-	float Vy = dy/dt;
+	float Vx = Car_DisConvert_x(dx)/dt;
+	float Vy = Car_DsiConvert_y(dy)/dt;
 	Vx = Vx>Car_Max_Speed? Car_Max_Speed/5:Vx;
 	Vy = Vy>Car_Max_Speed? Car_Max_Speed/5:Vy;
 

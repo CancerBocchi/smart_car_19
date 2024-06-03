@@ -145,6 +145,7 @@
 #include "my_vision.h"
 #include "locate_picture.h"
 #include "circule_handle.h"
+#include "classify.h"
 //===================================================用户自定义文件===================================================
 
 #endif

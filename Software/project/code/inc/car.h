@@ -12,9 +12,8 @@
 
  /**
   * 车辆距离与国际单位的换算
-  * 			控制单位		国际单位
-  * 测试数据1：	200/s			0.88m/s	    272.3/s---1m/s
-  * 测试数据2： 
+  * y轴--- 230 个单位是 1m
+  * x轴--- 250 个单位是 1m
  */
  
 #include "zf_common_headfile.h"
@@ -23,6 +22,9 @@
 #define CAR_USE_PIT		1
 //车辆最大速度
 #define Car_Max_Speed	300
+//cm单位转换为车辆距离单位
+#define Car_DisConvert_x(x) (x*250.0f/100.0f)
+#define Car_DsiConvert_y(y)	(y*230.0f/100.0f)
 
 typedef struct{
 	

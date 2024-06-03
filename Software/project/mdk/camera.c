@@ -701,3 +701,7 @@ void Camera_and_Screen_Init(){
 	tft180_show_string(0, 16, "init success.");
 	tft180_clear();
 }
+
+void Camera_CirculeFindLine(uint8 image,int* line){
+
+}

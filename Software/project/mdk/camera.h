@@ -7,7 +7,7 @@
 #define START_Y 10
 #define BLACK 0
 #define WHITE 255
-#define  imgRow          70      
+#define imgRow          70      
 #define  imgCol          188
 #define MID_COL (imgCol>>1)
 
@@ -48,6 +48,8 @@ void Camera_FindMidLine(void);
 int Camera_My_Adapt_Threshold(uint8*image,uint16 width, uint16 height);
 //初始化摄像头硬件
 void Camera_and_Screen_Init();
+//圆环爬线
+void Camera_CirculeFindLine(uint8 image,int* line);
 
 
 #endif

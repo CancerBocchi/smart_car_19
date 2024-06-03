@@ -1,5 +1,8 @@
 #include "circule_handle.h"
 
+//圆环中心到图片对的距离
+#define Circule_Distance1
+
 //信号量控制块
 rt_sem_t circule_handle_sem;
 //线程控制块
@@ -29,9 +32,11 @@ void circule_handle_entry(){
         rt_sem_release(locate_picture_sem);
         rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
 
-        
-
-
+        //抓取完毕
+        if(Cirule_LorR == LEFT_CIRCULE)
+            Car_Rotate(-90);
+        else 
+            Car_Rotate(90);
     }
 }
 

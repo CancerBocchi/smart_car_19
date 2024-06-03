@@ -23,17 +23,17 @@ int main()
 
 	rt_kprintf("----------  Basic Hardware Init ----------\n");
 	//基础外设初始化
-//	Step_Motor_Init();
-//	buzzer_init();
-//	car_motion_Init();
+	Step_Motor_Init();
+	buzzer_init();
+	car_motion_Init();
 	Camera_and_Screen_Init();
-//	MCX_UART_Init();
+	MCX_UART_Init();
 
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
-//	trace_line_init();
-//	side_catch_init();
-//	locate_pic_init();
+	trace_line_init();
+	side_catch_init();
+	locate_pic_init();
 
 	rt_kprintf("--------- init end ----------\n");
 
