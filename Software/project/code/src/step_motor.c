@@ -48,7 +48,7 @@ void Step_Motor_Init()
 	
 	S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
 	
-	
+	// servo_slow_ctrl(0, 18, 100);
 #if ARM_DEBUG_SWITCH == 1
 		if(S_Motor_test_Thread!=NULL)
 			rt_thread_startup(S_Motor_test_Thread);
@@ -71,10 +71,10 @@ void Step_Motor_Catch()
 //				Step_Motor_Reset();
 //		}
 		rt_thread_delay(100);
-		servo_slow_ctrl(0, 15, 100);
+		servo_slow_ctrl(0, 18, 100);
 		gpio_set_level(B10,1);
-		rt_thread_delay(400);
-		servo_slow_ctrl(120, 97, 100);
+		rt_thread_delay(600);
+		servo_slow_ctrl(120, 95, 100);
 		rt_thread_delay(100);
 		servo_slow_ctrl(120, 180, 100);
 		rt_thread_delay(100);

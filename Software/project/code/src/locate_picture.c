@@ -1,7 +1,7 @@
 #include "locate_picture.h"
 
 #define TARGET_X 105
-#define TARGET_Y 160
+#define TARGET_Y 153
 
 #define Is_Located (fabs(center_x - TARGET_X)<=2 && fabs(center_y - TARGET_Y)<=2)
 
@@ -110,7 +110,7 @@ void locate_pic_init()
 	rt_kprintf("locate_pic task init\n");
 	
 	//调试标志位 0---不调试 1---调试
-	locate_debug_flag = 1;
+	locate_debug_flag = 0;
 	
 	locate_picture_sem = rt_sem_create("locate",0,RT_IPC_FLAG_FIFO);
 	if(locate_picture_sem == RT_NULL){

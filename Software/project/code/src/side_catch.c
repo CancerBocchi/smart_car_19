@@ -21,11 +21,13 @@ void side_catch_entry()
 		BUZZER_SPEAK;
 		
 		if(center_x > 125){
-			Car_Rotate(-90);//右转
+			// Car_Rotate(-90);//右转
+			Car_DistanceMotion(40,30,0.6);
 			LorR = 1;
 		}
 		else if(center_x < 125){
-			Car_Rotate(90);//左转
+			//Car_Rotate(90);//左转
+			Car_DistanceMotion(-40,30,0.6);
 			LorR = 0;
 		}
 
@@ -39,11 +41,11 @@ void side_catch_entry()
 		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
 		
 		if(LorR)
-			Car_Rotate(90);
+			Car_DistanceMotion(-30,0,0.5);
 		else if(!LorR)
-			Car_Rotate(-90);
+			Car_DistanceMotion(30,0,0.5);
 		
-		rt_thread_delay(1000);
+		// rt_thread_delay(1000);
 		//转换 MCX 工作模式
 		MCX_Change_Mode(MCX_Detection_Mode);
 		rt_kprintf("handle success\n");
