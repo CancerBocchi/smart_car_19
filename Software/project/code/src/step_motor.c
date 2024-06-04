@@ -72,9 +72,8 @@ void Step_Motor_Catch()
 //		}
 		rt_thread_delay(100);
 		servo_slow_ctrl(0, 15, 100);
-		rt_thread_delay(400);
 		gpio_set_level(B10,1);
-		rt_thread_delay(50);
+		rt_thread_delay(400);
 		servo_slow_ctrl(120, 97, 100);
 		rt_thread_delay(100);
 		servo_slow_ctrl(120, 180, 100);

@@ -23,7 +23,6 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction_config.h \
   ..\..\libraries\sdk\components\lists\fsl_component_generic_list.h \

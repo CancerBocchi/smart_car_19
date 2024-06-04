@@ -6,18 +6,18 @@ State Att;//閺堚偓缂佸牏娈戠憴鎺戝
 State Att_A;//闁俺绻冮崝鐘烩偓鐔峰濞村鐣婚惃鍕潡鎼达拷
 State Att_G;//闁俺绻冪憴鎺椻偓鐔峰濞村鐣婚惃鍕潡鎼达拷
 
-float D_Gyro[3][3]={0};//鐟欐帡鈧喎瀹抽弮��祮閻晠妯€
+float D_Gyro[3][3]={0};//鐟欐帡鈧喎瀹抽弮瀣祮閻晠妯€
 Gyro_Offset GyroOffset;
 
 float ICS_Gyro_x;
 float ICS_Gyro_y;
-float ICS_Gyro_z;//閹垱鈧冨棘閼板啰閮存稉��畱鐟欐帡鈧喎锟ￄ1�7??
+float ICS_Gyro_z;//閹垱鈧冨棘閼板啰閮存稉瀣畱鐟欐帡鈧喎锟�?1?7??
 
-int previous_t;//閸楁洑缍呭顔绢潄1�7
-int current_t;//閸楁洑缍呭顔绢潄1�7
+int previous_t;//閸楁洑缍呭顔绢�?1?7
+int current_t;//閸楁洑缍呭顔绢�?1?7
 float dt;//閸楁洑缍呯粔锟�??
 
-//閸椻€崇毜閺囧吋鎶ゅ▔锟ￄ1�7??
+//閸椻€崇毜閺囧吋鎶ゅ▔锟�?1?7??
 raw_data raw_imu_data;
 
 KalmanInfo Kal;
@@ -38,7 +38,7 @@ void imu_data_convertion(int16 acc_x,int16 acc_y,int16 acc_z,int16 gyro_x,int16 
 	raw_imu_data.gyr_data[1] = ((float)gyro_y - GyroOffset.y)*gyro_range/IMU_RESOLUTION*angle_to_rad;
 	raw_imu_data.gyr_data[2] = ((float)gyro_z - GyroOffset.z)*gyro_range/IMU_RESOLUTION*angle_to_rad;
 
-//丢�阶低通滤波器
+//一阶低通滤波器
 	fliter_value[1] = (float)((1.0f - a) * (float)fliter_value[0] + a*raw_imu_data.gyr_data[2]);
 	fliter_value[0] = fliter_value[1];
 
@@ -48,7 +48,7 @@ void imu_data_convertion(int16 acc_x,int16 acc_y,int16 acc_z,int16 gyro_x,int16 
 /*********閸戣姤鏆熺紓鏍у晸*********/
 
 /*
-*鐠侊紕鐣荤憴鎺椻偓鐔峰鏉烆剚宕查惌鈺呮▄1�7
+*鐠侊紕鐣荤憴鎺椻偓鐔峰鏉烆剚宕查惌鈺呮�?1?7
 */
 void Cancer_GetDGyro(float D[3][3])
 {
@@ -64,9 +64,9 @@ void Cancer_GetDGyro(float D[3][3])
 
 
 /*
-*濞村鍣洪崗顒€绱￠敍锟ￄ1�7?? 
+*濞村鍣洪崗顒€绱￠敍锟�?1?7?? 
 *roll=arctan(ay/az)  pitch=-arctan(ax/sqrt(ay^2+az^2))
-*閺嶈宓侢�崝鐘烩偓鐔峰鐠佲€崇繁閸掓媽顫囧ù��櫄1�7
+*閺嶈宓侀崝鐘烩偓鐔峰鐠佲€崇繁閸掓媽顫囧ù瀣�?1?7
 */
 void Cancer_GetState_Accel(State*att)
 {
@@ -82,27 +82,27 @@ void Cancer_GetState_Accel(State*att)
 
 
 /*
-*閸椻€崇毜閺囧吋鎶ゅ▔锟ￄ1�7??
+*閸椻€崇毜閺囧吋鎶ゅ▔锟�?1?7??
 */
 
 void Cancer_KalmanInit(KalmanInfo* Kal)
 {
-	Kal->Qk=0.0025;//濞村鍣洪弬鐟版▄1�7 
-	Kal->Rk=0.3;//鐟欏倹绁撮弬鐟版▄1�7 
+	Kal->Qk=0.0025;//濞村鍣洪弬鐟版�?1?7 
+	Kal->Rk=0.3;//鐟欏倹绁撮弬鐟版�?1?7 
 	Kal->H=1;
 	Kal->P=1;
-	Cancer_GetDGyro(D_Gyro);//閼惧嘲褰囩憴鎺戝閸欐ɑ宕查惌鈺呮▄1�7
-	Cancer_GetState_Accel(&Att);//閼惧嘲褰囩挧宄邦潗閻樿埖鈧拄1�7
+	Cancer_GetDGyro(D_Gyro);//閼惧嘲褰囩憴鎺戝閸欐ɑ宕查惌鈺呮�?1?7
+	Cancer_GetState_Accel(&Att);//閼惧嘲褰囩挧宄邦潗閻樿埖鈧�?1?7
 }
 
 void Cancer_Kalman_Algo(KalmanInfo* Kal)
 {
 	
-	/******閻樿埖鈧椒鍙婄拋锟ￄ1�7??******/
+	/******閻樿埖鈧椒鍙婄拋锟�?1?7??******/
 	imu_data_convertion(icm20602_acc_x,icm20602_acc_y,icm20602_acc_z,icm20602_gyro_x,icm20602_gyro_y,icm20602_gyro_z);
-	current_t=imu_get_tick;	//閼惧嘲褰囬弮鍫曟＄1�7
+	current_t=imu_get_tick;	//閼惧嘲褰囬弮鍫曟�?1?7
 	dt=(float)(current_t-previous_t)/1000;
-	previous_t=current_t;//閺囧瓨鏌婇弮鍫曟＄1�7
+	previous_t=current_t;//閺囧瓨鏌婇弮鍫曟�?1?7
 	
 	//閼惧嘲褰囩憴鎺椻偓鐔峰閻ㄥ嫪鍙婄拋锛勭波閺嬶拷
 	Att_G.pitch = Att.pitch+(raw_imu_data.gyr_data[0]+D_Gyro[0][1]*raw_imu_data.gyr_data[1]+D_Gyro[0][2]*raw_imu_data.gyr_data[2])*dt;
@@ -111,20 +111,20 @@ void Cancer_Kalman_Algo(KalmanInfo* Kal)
 	if(fabs(raw_imu_data.gyr_data[2])>0.01f)
 		Att.yaw += raw_imu_data.gyr_data[2]*dt/angle_to_rad;
 
-	/******閺傜懓妯婃导鎷岊吢�******/
+	/******閺傜懓妯婃导鎷岊吀******/
 	Kal->P+=Kal->Qk;
 	
-	/******Ka娴兼媽锟ￄ1�7??******/
+	/******Ka娴兼媽锟�?1?7??******/
 	Kal->Ka=Kal->P/((Kal->P)+(Kal->Rk));
 	
-	/******娣囶喗顒滅紒鎾寸亄1�7******/
-	Cancer_GetState_Accel(&Att_A);//閼惧嘲褰囧ù��櫤閸婏拷
+	/******娣囶喗顒滅紒鎾寸�?1?7******/
+	Cancer_GetState_Accel(&Att_A);//閼惧嘲褰囧ù瀣櫤閸婏拷
 	Att.roll=Att.roll+Kal->Ka*(Att_A.roll-Att_G.roll);
 	Att.pitch=Att.pitch+Kal->Ka*(Att_A.pitch-Att_G.pitch);
 
 
 	
-	/******閺囧瓨鏌婇弬鐟版▄1�7******/
+	/******閺囧瓨鏌婇弬鐟版�?1?7******/
 	Kal->P=(1-Kal->Ka)*Kal->P;
 	
 }
@@ -155,17 +155,18 @@ float Att_GetYaw()
 {
 	imu_data_convertion(icm20602_acc_x,icm20602_acc_y,icm20602_acc_z,icm20602_gyro_x,icm20602_gyro_y,icm20602_gyro_z);
 	current_t=imu_get_tick;	//获取系统时间
-	dt=(float)(current_t-previous_t) * IMU_UNIT_TIME;//计算时间巄1�7,计数器相差的倄1�7 * 计数器的单位时间
+	dt=(float)(current_t-previous_t) * IMU_UNIT_TIME;//计算时间�?1?7,计数器相差的�?1?7 * 计数器的单位时间
 	previous_t=current_t;//更新时间
 
 	if(fabs(raw_imu_data.gyr_data[2])>0.01f)//略去微小分量
-		Att.yaw += raw_imu_data.gyr_data[2]*dt/angle_to_rad;//转化为弧庄1�7
+		Att.yaw += raw_imu_data.gyr_data[2]*dt/angle_to_rad;//转化为弧�?1?7
 
 //	Att.yaw = Att.yaw>360.0f? (Att.yaw - 360.0f) : Att.yaw;
 //	Att.yaw = Att.yaw<0.0f? (Att.yaw + 360.0f) : Att.yaw;
 
 	return Att.yaw;
 }
+
 
 
 

@@ -23,7 +23,7 @@
 //车辆最大速度
 #define Car_Max_Speed	300
 //cm单位转换为车辆距离单位
-#define Car_DisConvert_x(x) (x*250.0f/100.0f)
+#define Car_DisConvert_x(x) (x*240.0f/100.0f)
 #define Car_DsiConvert_y(y)	(y*230.0f/100.0f)
 
 typedef struct{

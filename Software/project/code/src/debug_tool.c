@@ -275,25 +275,54 @@ help:
 MSH_CMD_EXPORT(setarg, setarg sample: setarg <_target_> <number>);
 
 
-// /**
-//  * @brief 车定距跑指令
-// */
-// static void CarMove(int argc, char**argv){
+/**
+ * @brief 车定距跑指令
+*/
+static void CarMove(int argc, char**argv){
 
-//     if(argc == 4){
-//         float dx = atof(argv[1]);
-//         float dy = atof(argv[2]);
-//         float dt = atof(argv[3]);
+    if(argc == 4){
+        float dx = atof(argv[1]);
+        float dy = atof(argv[2]);
+        float dt = atof(argv[3]);
 
-//         Car_DistanceMotion(dx,dy,dt);
-//     }
-//     else 
-//         goto help;
+        Car_DistanceMotion(dx,dy,dt);
+    }
+    else 
+        goto help;
 
-// help:
-//     rt_kprintf("you can use like this:\n");
-//     rt_kprintf("CarMove 100 0 1        ----- x move 100, y move 0 in 1s\n");
-// 	return;
-// }
+help:
+    rt_kprintf("you can use like this:\n");
+    rt_kprintf("CarMove 100 0 1        ----- x move 100, y move 0 in 1s\n");
+	return;
+}
 
-// MSH_CMD_EXPORT(CarMove, CarMove sample: CarMove <dx> <dy> <dt>);
+MSH_CMD_EXPORT(CarMove, CarMove sample: CarMove <dx> <dy> <dt>);
+
+
+/**
+ * @brief 硬件测试程序
+*/
+static void HardwareTest(){
+    rt_kprintf("Motion test begins\n");
+    Car_Change_Speed(100,0,0);
+    rt_thread_delay(500);
+    Car_Change_Speed(-100,0,0);
+    rt_thread_delay(500);
+
+    rt_kprintf("Step Motor test begins\n");
+    Step_Motor_Catch();
+
+    rt_kprintf("Electromagnet test begins\n");
+    Magnet_Catch;
+    rt_thread_delay(1000);
+    Magnet_Put;
+
+    rt_kprintf("Buzzer test begins\n");
+    BUZZER_SPEAK;
+    rt_thread_delay(500);
+
+    rt_kprintf("Hardware test ends\n");
+
+}
+
+MSH_CMD_EXPORT(HardwareTest, HardwareTest sample: HardwareTest);

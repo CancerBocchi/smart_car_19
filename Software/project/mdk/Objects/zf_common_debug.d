@@ -24,12 +24,8 @@
   ..\..\libraries\zf_common\zf_common_typedef.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
-  ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\zf_common\zf_common_interrupt.h \
-  ..\..\libraries\sdk\deceive\MIMXRT1064.h \
   ..\..\libraries\zf_driver\zf_driver_gpio.h \
-  ..\..\libraries\zf_common\zf_common_typedef.h \
   ..\..\libraries\sdk\drives\fsl_gpio.h \
   ..\..\libraries\zf_driver\zf_driver_pwm.h \
   ..\..\libraries\zf_driver\zf_driver_uart.h \
@@ -48,7 +44,6 @@
   ..\..\libraries\zf_driver\zf_driver_delay.h \
   ..\..\libraries\zf_driver\zf_driver_encoder.h \
   ..\..\libraries\zf_driver\zf_driver_exti.h \
-  ..\..\libraries\zf_driver\zf_driver_gpio.h \
   ..\..\libraries\zf_driver\zf_driver_flash.h \
   ..\..\libraries\zf_driver\zf_driver_iic.h \
   ..\..\libraries\zf_driver\zf_driver_pit.h \
@@ -60,7 +55,6 @@
   ..\..\libraries\zf_driver\zf_driver_timer.h \
   ..\..\libraries\zf_driver\zf_driver_csi.h \
   ..\..\libraries\zf_driver\zf_driver_romapi.h \
-  ..\..\libraries\sdk\drives\fsl_clock.h \
   ..\..\libraries\sdk\xip\EVKMIMXRT1064_FLEXSPI_NOR_CONFIG.h \
   ..\..\libraries\sdk\drives\fsl_rtwdog.h \
   ..\..\libraries\sdk\drives\fsl_wdog.h \
@@ -68,20 +62,17 @@
   ..\..\libraries\sdk\drives\fsl_edma.h \
   ..\..\libraries\zf_driver\zf_driver_usb_cdc.h \
   ..\..\libraries\zf_driver\zf_qtimer.h \
-  ..\..\libraries\zf_common\zf_common_headfile.h \
   ..\..\libraries\sdk\drives\fsl_qtmr.h \
   ..\..\libraries\zf_driver\zf_iomuxc.h \
   ..\..\libraries\zf_device\zf_device_absolute_encoder.h \
   ..\..\libraries\zf_device\zf_device_bluetooth_ch9141.h \
   ..\..\libraries\zf_device\zf_device_camera.h \
-  ..\..\libraries\zf_common\zf_common_fifo.h \
   ..\..\libraries\zf_device\zf_device_gnss.h \
   ..\..\libraries\zf_device\zf_device_icm20602.h \
   ..\..\libraries\zf_device\zf_device_imu963ra.h \
   ..\..\libraries\zf_device\zf_device_ips114.h \
   ..\..\libraries\zf_device\zf_device_ips200.h \
   ..\..\libraries\zf_device\zf_device_key.h \
-  ..\..\libraries\zf_common\zf_common_debug.h \
   ..\..\libraries\zf_device\zf_device_mpu6050.h \
   ..\..\libraries\zf_device\zf_device_oled.h \
   ..\..\libraries\zf_device\zf_device_mt9v03x.h \
@@ -139,17 +130,15 @@
   ..\..\libraries\rttherad_libraries\include\rtm.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
   ..\code\inc\PID.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  ..\code\inc\motor.h ..\code\inc\encoder.h ..\code\inc\PID.h \
+  ..\code\inc\motor.h ..\code\inc\encoder.h \
   ..\code\inc\Attitude_algorithm.h ..\code\inc\vofa.h \
-  ..\code\inc\config.h ..\code\inc\encoder.h ..\code\inc\debug_tool.h \
+  ..\code\inc\config.h ..\code\inc\debug_tool.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
-  ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\ctype.h \
   ..\..\libraries\rttherad_libraries\components\finsh\shell.h \
-  ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
   ..\code\inc\car.h ..\code\inc\trace_line.h ..\mdk\camera.h \
   ..\user\inc\user_math.h ..\code\inc\step_motor.h \
   ..\code\inc\system_perform.h ..\code\inc\buzzer.h \
   ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
   ..\code\inc\my_vision.h ..\code\inc\locate_picture.h \
-  ..\code\inc\circule_handle.h
+  ..\code\inc\circule_handle.h ..\code\inc\classify.h

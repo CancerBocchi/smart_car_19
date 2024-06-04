@@ -22,7 +22,6 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\components\sdmmc\host\usdhc\fsl_sdmmc_host.h \
   ..\..\libraries\components\sdmmc\osa\fsl_sdmmc_osa.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction.h \
@@ -34,9 +33,7 @@
   ..\..\libraries\sdk\board\clock_config.h \
   ..\..\libraries\sdk\drives\fsl_iomuxc.h \
   ..\..\libraries\zf_driver\zf_driver_gpio.h \
-  ..\..\libraries\sdk\deceive\MIMXRT1064.h \
   ..\..\libraries\zf_common\zf_common_typedef.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_gpio.h

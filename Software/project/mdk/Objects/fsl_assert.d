@@ -19,6 +19,5 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\sdk\utilities\debug_console\fsl_debug_console.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h

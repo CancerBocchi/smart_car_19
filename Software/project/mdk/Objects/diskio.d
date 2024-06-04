@@ -4,8 +4,6 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   ..\..\libraries\components\fatfs\source\diskio.h \
   ..\..\libraries\components\fatfs\source\fsl_sd_disk\fsl_sd_disk.h \
-  ..\..\libraries\components\fatfs\source\ff.h \
-  ..\..\libraries\components\fatfs\source\diskio.h \
   ..\..\libraries\components\sdmmc\sd\fsl_sd.h \
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_common.h \
   ..\..\libraries\sdk\drives\fsl_common.h \
@@ -27,7 +25,6 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\components\sdmmc\host\usdhc\fsl_sdmmc_host.h \
   ..\..\libraries\components\sdmmc\osa\fsl_sdmmc_osa.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction.h \

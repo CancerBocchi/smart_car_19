@@ -826,11 +826,30 @@ void Vision_CirculeHandle()
     static int state = Circule_Begin;
     if(!state){
         BUZZER_SPEAK;
-        if(F.my_segment_L[0].type == straight_segment && F.segment_n_L == 1)
+        if(IsStrai(F.my_segment_L[0]) && F.segment_n_L == 1)
             Cirule_LorR = RIGHT_CIRCULE;
-        else if(F.my_segment_R[0].type == straight_segment && F.segment_n_R == 1)
+        else if(IsStrai(F.my_segment_R[0]) && F.segment_n_R == 1)
             Cirule_LorR = LEFT_CIRCULE;
         state = Circule_State1;
+    }
+    //防止错误判断
+    switch(Cirule_LorR){
+        static int out_n;
+        case RIGHT_CIRCULE:
+            out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
+            if(out_n == 5){
+                Current_Road = NormalRoads;
+                state = Circule_Begin;
+                out_n = 0;
+            }
+        break;
+        case LEFT_CIRCULE:
+            out_n = !IsStrai(F.my_segment_R[0])? out_n+1:0;
+            if(out_n == 5){
+                Current_Road = NormalRoads;
+                state = Circule_Begin;
+            }
+        break;
     }
 
     if(Cirule_LorR == RIGHT_CIRCULE){//右边圆环
@@ -869,9 +888,12 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
-                // //此处模拟圆环处理程序
-                // rt_thread_delay(2000);
+                Car_Change_Speed(0,0,0);
+                //启动圆环 同时阻塞寻仙
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){
@@ -886,6 +908,7 @@ void Vision_CirculeHandle()
         }
 
     }
+    
     else{//左边圆环
          if(state == Circule_State1){
             if(F.FP_n_L && !IsLose(F.my_segment_L[0]))
@@ -922,8 +945,12 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
-                // rt_thread_delay(2000);
+                Car_Change_Speed(0,0,0);
+                //启动圆环 同时阻塞寻仙
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){

@@ -20,7 +20,6 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   ..\..\libraries\components\fatfs\source\fsl_sd_disk\fsl_sd_disk.h \
   ..\..\libraries\components\fatfs\source\ff.h \
@@ -42,11 +41,8 @@
   ..\..\libraries\zf_common\zf_common_clock.h \
   ..\..\libraries\zf_common\zf_common_typedef.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
-  ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\zf_common\zf_common_debug.h \
   ..\..\libraries\zf_driver\zf_driver_gpio.h \
-  ..\..\libraries\sdk\deceive\MIMXRT1064.h \
-  ..\..\libraries\zf_common\zf_common_typedef.h \
   ..\..\libraries\sdk\drives\fsl_gpio.h \
   ..\..\libraries\zf_driver\zf_driver_delay.h \
   ..\..\libraries\zf_driver\zf_driver_sdio.h

@@ -13,30 +13,52 @@ uint8_t circule_handle_flag = 0;
 
 void circule_handle_entry(){
     static uint8_t begin_flag = 0;
+    static float init_yaw;
     while(1){
         rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+        rt_kprintf("task:get into the circule task\n");
         //初始处理
         if(!begin_flag){
+            //得到初始角度
+            init_yaw = Att_CurrentYaw;
             //转向
             if(Cirule_LorR == LEFT_CIRCULE)
                 Car_Rotate(90);
             else 
                 Car_Rotate(-90);
+            //给足时间使得车转到位
+            rt_thread_delay(500);
             //定位跑
-            Car_DistanceMotion(0,40,0.5);
-            begin_flag = 1;
+            Car_DistanceMotion(0,-15,0.4);
+
         }
 
+        // rt_thread_delay(2000);
         //启动定位抓取线程
+        rt_kprintf("task:start to catch things\n");
         circule_handle_flag = 1;
         rt_sem_release(locate_picture_sem);
         rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+        rt_kprintf("task:return to the circule_handle thread\n");
 
         //抓取完毕
-        if(Cirule_LorR == LEFT_CIRCULE)
+        if(Cirule_LorR == LEFT_CIRCULE){
+            //右转
             Car_Rotate(-90);
-        else 
+            //给足时间使得车转到位
+            rt_thread_delay(500);
+            Car_DistanceMotion(15,-30,0.5);
+        }
+        else{
             Car_Rotate(90);
+            //给足时间使得车转到位
+            rt_thread_delay(500);
+            Car_DistanceMotion(-15,-30,0.5);
+        }
+        //返回巡线线程
+        Car_Speed_ConRight = Con_By_TraceLine;
+        rt_sem_release(trace_line_sem);
+
     }
 }
 

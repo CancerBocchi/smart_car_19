@@ -21,7 +21,6 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\components\sdmmc\osa\fsl_sdmmc_osa.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction.h \
   ..\..\libraries\sdk\components\osa\fsl_os_abstraction_config.h \

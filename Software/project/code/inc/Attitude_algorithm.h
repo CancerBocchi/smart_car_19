@@ -11,13 +11,14 @@
 	#define PI 3.1415926f
 #endif // !
 
-#define acc_range  16		//g 加速度单位为 g 
+#define acc_range  16		//g 加速度单位�? g 
 #define gyro_range 4000		//degree ps 角速度单位为度每秒
-#define IMU_RESOLUTION 65536 	//2^16 分辨率
+#define IMU_RESOLUTION 65536 	//2^16 分辨�?
 
 #define IMU_INIT icm20602_init()
-#define IMU_UNIT_TIME 0.001 //单位为s eg 定义为 0.001即定义为 1毫秒
+#define IMU_UNIT_TIME 0.001 //单位为s eg 定义�? 0.001即定义为 1毫秒
 
+#define Att_CurrentYaw 		(Att.yaw)
 
 #define imu_get_tick rt_tick_get()
 
@@ -37,10 +38,10 @@ typedef struct state
 
 typedef struct 
 {
-	float P;//协方�?
-	float Ka;//卡尔曼增�?
-	float Qk;//估计噪声的方�?
-	float Rk;//观测噪声的方�?
+	float P;//协方�??
+	float Ka;//卡尔曼增�??
+	float Qk;//估计噪声的方�??
+	float Rk;//观测噪声的方�??
 	float H;//测量矩阵
 }KalmanInfo;
 

@@ -20,6 +20,7 @@
         "encoder.h": "c",
         "circule_handle.h": "c",
         "side_catch.h": "c",
-        "mcxvision.h": "c"
+        "mcxvision.h": "c",
+        "step_motor.h": "c"
     }
 }

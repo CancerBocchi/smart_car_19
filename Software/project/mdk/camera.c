@@ -20,7 +20,7 @@ void Vision_Handle()
     Camera_FindMidLine();   //常规扫线
     // Camera_LongestWight();  //最远线巡线    
     Vision_SymbolJudge();   //元素判断，但是会有问题	
-    //Vision_RSHandle();      //元素判断的解决方式
+    Vision_RSHandle();      //元素判断的解决方式
 
    //获取中线
    for(int i=imgRow-1;i>=0;i--)
@@ -31,37 +31,37 @@ void Vision_Handle()
 
 //    //图像debug
     // float mid_offset=1.65;
-    uint8_t row_begin = 20;
+    // uint8_t row_begin = 20;
     //tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-		tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-		//tft180_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
+    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+    //tft180_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
 	 
-    int16 MID_Table[imgRow];
-    int16 leftBroder[imgRow];//左边边界
-    int16 rightBroder[imgRow];//右边边界
-    for(int i=imgRow-1;i>=0;i--){
-        MID_Table[i] = Image_S.MID_Table[i]*158/188;
-        leftBroder[i] = Image_S.leftBroder[i]*158/188;
-        rightBroder[i] = Image_S.rightBroder[i]*158/188;
-    }
+//     int16 MID_Table[imgRow];
+//     int16 leftBroder[imgRow];//左边边界
+//     int16 rightBroder[imgRow];//右边边界
+//     for(int i=imgRow-1;i>=0;i--){
+//         MID_Table[i] = Image_S.MID_Table[i]*158/188;
+//         leftBroder[i] = Image_S.leftBroder[i]*158/188;
+//         rightBroder[i] = Image_S.rightBroder[i]*158/188;
+//     }
 
-    for(int i=imgRow-1;i>0;i--)
-    {
-        if(MID_Table[i]>=160)
-            MID_Table[i] = 159;
-        if(leftBroder[i]>=160)
-            leftBroder[i] = 159;
-        if(rightBroder[i]>=160)
-            rightBroder[i] = 159;
+//     for(int i=imgRow-1;i>0;i--)
+//     {
+//         if(MID_Table[i]>=160)
+//             MID_Table[i] = 159;
+//         if(leftBroder[i]>=160)
+//             leftBroder[i] = 159;
+//         if(rightBroder[i]>=160)
+//             rightBroder[i] = 159;
 				
-				tft180_draw_point(MID_Table[i], i+20, RGB565_RED);
-        //tft180_draw_point(leftBroder[i], i+20, RGB565_BLUE);
-        tft180_draw_point(rightBroder[i], i+20, RGB565_BROWN);
-//        //中线
-        tft180_draw_point((int)(80), i+20, RGB565_GREEN);
-    }
+// 				tft180_draw_point(MID_Table[i], i+20, RGB565_RED);
+//         //tft180_draw_point(leftBroder[i], i+20, RGB565_BLUE);
+//         tft180_draw_point(rightBroder[i], i+20, RGB565_BROWN);
+// //        //中线
+//         tft180_draw_point((int)(80), i+20, RGB565_GREEN);
+//     }
 
-    Vision_DrawFP();
+//     Vision_DrawFP();
         //最长白线法
     // tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
     // tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);

@@ -20,6 +20,7 @@
 ".\objects\my_vision.o"
 ".\objects\circule_handle.o"
 ".\objects\mcxvision.o"
+".\objects\classify.o"
 ".\objects\zf_common_clock.o"
 ".\objects\zf_common_debug.o"
 ".\objects\zf_common_fifo.o"

@@ -21,8 +21,6 @@
   ..\..\libraries\sdk\deceive\MIMXRT1064_features.h \
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
-  ..\..\libraries\sdk\drives\fsl_common.h \
   ..\..\libraries\sdk\board\board.h \
   ..\..\libraries\sdk\board\clock_config.h \
-  ..\..\libraries\sdk\drives\fsl_gpio.h \
-  ..\..\libraries\sdk\drives\fsl_clock.h
+  ..\..\libraries\sdk\drives\fsl_gpio.h

@@ -66,7 +66,7 @@ typedef struct{
 }Class_Basket_t;
 
 //单分类使用函数
-void Class_AddOneThing(uint8_t class);
+void Class_AddOneThing(uint8_t class,uint8_t circule_or_line);
 Class_Info_t* Class_GetLastThing();
 void Class_DeleteOneThing();
 

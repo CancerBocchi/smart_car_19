@@ -24,7 +24,6 @@
   ..\..\libraries\rttherad_libraries\include\rtm.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
-  ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\ctype.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
