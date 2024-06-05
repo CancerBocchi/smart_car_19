@@ -21,6 +21,7 @@
         "circule_handle.h": "c",
         "side_catch.h": "c",
         "mcxvision.h": "c",
-        "step_motor.h": "c"
+        "step_motor.h": "c",
+        "system_perform.h": "c"
     }
 }

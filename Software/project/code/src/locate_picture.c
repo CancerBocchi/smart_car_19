@@ -1,18 +1,21 @@
 #include "locate_picture.h"
 
-#define TARGET_X 105
-#define TARGET_Y 153
-
-#define Is_Located (fabs(center_x - TARGET_X)<=2 && fabs(center_y - TARGET_Y)<=2)
-
-rt_thread_t locate_picture_thread;
-rt_sem_t locate_picture_sem;
 
 Pos_PID_t center_y_con;
 Pos_PID_t center_x_con;
 
+#define TARGET_X center_x_con.Ref
+#define TARGET_Y center_y_con.Ref
+
+#define Is_Located (fabs(center_x - TARGET_X)<=1 && fabs(center_y - TARGET_Y)<=1)
+
+rt_thread_t locate_picture_thread;
+rt_sem_t locate_picture_sem;
+
 float Vx;
 float Vy;
+
+uint8 error_detect_flag = 0;
 
 /**
  * @brief 用于定位抓取图片debug的程序
@@ -40,6 +43,13 @@ void locate_picture_debug(){
 	rt_thread_delay(1);
 }
 
+// uint8_t locate_picture_IsErrorDetect(){
+// 	static int unfound;
+// 	for(int i = 0;i<10;i++){
+// 		if(unfound)
+// 	}
+// }
+
 /**
  * @brief 定位图片运行函数 用于正式做任务
  * 
@@ -53,18 +63,26 @@ void locate_picture_run(){
 	if(!begin_flag){
 		Car_Rotate(0);
 		begin_flag = 1;
+		rt_thread_delay(500);
 	}
 	
 	//连续十次定位成功后进行抓取
 	while(1){
 		while(located_n < 15){
 			MCX_Change_Mode(MCX_Location_Mode);
+			if(center_x  == 0&& center_y == 0&&side_catch_flag){
+				error_detect_flag = 1;
+				break;
+			}
 			located_n = Is_Located? located_n + 1:0;
 			Vy = Pos_PID_Controller(&center_y_con,center_y);
 			Vx = Pos_PID_Controller(&center_x_con,center_x);
 			Car_Change_Speed(Vx,Vy,0);
 			rt_thread_delay(1);
 		}
+		if(error_detect_flag&&side_catch_flag)
+			break;
+
 		located_n = 0;
 		Car_Change_Speed(0,0,0);
 		//抓取
@@ -125,12 +143,12 @@ void locate_pic_init()
 	center_y_con.Output_Max = 100;
 	center_y_con.Output_Min = -100;
 	center_y_con.Value_I_Max = 500;
-	center_y_con.Ref = TARGET_Y;
+	center_y_con.Ref = 155;
 	
 	Pos_PID_Init(&center_x_con,-1.2,0,0);
 	center_x_con.Output_Max = 100;
 	center_x_con.Output_Min = -100;
 	center_x_con.Value_I_Max = 500;
-	center_x_con.Ref = TARGET_X;
+	center_x_con.Ref = 110;
 
 }

@@ -9,6 +9,8 @@ extern Pos_PID_t center_x_con;
 extern rt_sem_t locate_picture_sem;
 extern int locate_catch_flag;
 
+extern uint8 error_detect_flag;
+
 void locate_pic_init();
 
 

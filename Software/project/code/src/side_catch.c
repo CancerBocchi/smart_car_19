@@ -22,28 +22,38 @@ void side_catch_entry()
 		
 		if(center_x > 125){
 			// Car_Rotate(-90);//右转
-			Car_DistanceMotion(40,30,0.6);
+			Car_DistanceMotion(35,10,0.8);
 			LorR = 1;
 		}
 		else if(center_x < 125){
 			//Car_Rotate(90);//左转
-			Car_DistanceMotion(-40,30,0.6);
+			Car_DistanceMotion(-35,10,0.8);
 			LorR = 0;
 		}
 
 		//延迟是的车辆转弯完成
-		rt_thread_delay(1000);
+		// rt_thread_delay(1000);
 
 		//启动定位抓取线程 挂起边线线程
 		
 		side_catch_flag = 1;
 		rt_sem_release(locate_picture_sem);
 		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
-		
-		if(LorR)
-			Car_DistanceMotion(-30,0,0.5);
-		else if(!LorR)
-			Car_DistanceMotion(30,0,0.5);
+		//如果没有误识别
+		if(!error_detect_flag){
+			if(LorR)
+				Car_DistanceMotion(-30,0,0.5);
+			else if(!LorR)
+				Car_DistanceMotion(30,0,0.5);
+		}
+		else{
+			if(LorR)
+				Car_DistanceMotion(-30,-10,0.5);
+			else if(!LorR)
+				Car_DistanceMotion(30,-10,0.5);
+			error_detect_flag = 0;
+		}
+
 		
 		// rt_thread_delay(1000);
 		//转换 MCX 工作模式

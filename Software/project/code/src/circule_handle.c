@@ -29,7 +29,7 @@ void circule_handle_entry(){
             //给足时间使得车转到位
             rt_thread_delay(500);
             //定位跑
-            Car_DistanceMotion(0,-15,0.4);
+            Car_DistanceMotion(0,-20,0.4);
 
         }
 
@@ -47,13 +47,13 @@ void circule_handle_entry(){
             Car_Rotate(-90);
             //给足时间使得车转到位
             rt_thread_delay(500);
-            Car_DistanceMotion(15,-30,0.5);
+            Car_DistanceMotion(30,-30,0.8);
         }
         else{
             Car_Rotate(90);
             //给足时间使得车转到位
             rt_thread_delay(500);
-            Car_DistanceMotion(-15,-30,0.5);
+            Car_DistanceMotion(-30,-30,0.8);
         }
         //返回巡线线程
         Car_Speed_ConRight = Con_By_TraceLine;

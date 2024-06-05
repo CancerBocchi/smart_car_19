@@ -71,13 +71,19 @@ void Step_Motor_Catch()
 //				Step_Motor_Reset();
 //		}
 		rt_thread_delay(100);
-		servo_slow_ctrl(0, 18, 100);
+		servo_slow_ctrl(30, 20, 100);
+		rt_thread_delay(100);
+		servo_slow_ctrl(5, 20, 50);
 		gpio_set_level(B10,1);
-		rt_thread_delay(600);
-		servo_slow_ctrl(120, 95, 100);
-		rt_thread_delay(100);
-		servo_slow_ctrl(120, 180, 100);
-		rt_thread_delay(100);
+		rt_thread_delay(400);
+		servo_slow_ctrl(80, 50, 100);
+		rt_thread_delay(90);
+		servo_slow_ctrl(80, 95, 50);
+		rt_thread_delay(50);
+		servo_slow_ctrl(90, 160, 100);
+		rt_thread_delay(90);
+		servo_slow_ctrl(140, 160, 100);
+		rt_thread_delay(200);
 		gpio_set_level(B10,0);
 		rt_thread_delay(100);
 		Step_Motor_Reset();
