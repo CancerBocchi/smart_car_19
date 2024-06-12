@@ -8,6 +8,13 @@ lpuart_handle_t MCX_g_lpuartHandle;
 uint8_t MCX_uart_rx_buffer;
 
 
+//记录当前模式
+typedef enum{
+    Reset_Mode,
+    Detection_Mode,
+    Location_Mode
+}MCX_Current_Mode;
+
 //此变量用于切换寻线和编写采集线程
 uint8_t MCX_Detection_Flag;
 MCX_Current_Mode mcxCurrent_Mode;
@@ -25,7 +32,7 @@ void MCX_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t stat
 	static uint8_t rx_state;
 
 	if(kStatus_LPUART_RxIdle == status)
-  {
+  	{
 		
 		if(MCX_uart_rx_buffer == BUFFER_HEAD)
 		{
@@ -33,16 +40,7 @@ void MCX_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t stat
 		}
 		else if(MCX_uart_rx_buffer == BUFFER_TAIL)
 		{
-			if(MCX_rx_buffer[1])
-			{
-				center_x = MCX_rx_buffer[2];
-				center_y = MCX_rx_buffer[3];
-				MCX_Detection_Flag = 1;
-			}
-			else{
-				center_x = 0;
-				center_y = 0;
-			}
+			MCX_uart_handle();
 			rx_state = 0;
 			count = 0;
 		}
@@ -106,7 +104,7 @@ void MCX_uart_handle(){
 		break;
 
 		case Detection_Mode:
-			if(MCX_rx_buffer[0]){
+			if(MCX_rx_buffer[1]){
 				center_x = MCX_rx_buffer[2];
 				center_y = MCX_rx_buffer[3];
 				MCX_Detection_Flag = 1;

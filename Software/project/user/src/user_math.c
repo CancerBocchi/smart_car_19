@@ -228,3 +228,26 @@ int16_t Line_GetAverage(int16* broder,int x1,int x2){
 
 	return total/(max - min + 1);
 }
+
+/**
+ * @brief 判断目标数字是否是某个数的倍数，并且0倍也在考虑范围之内
+ * 
+ * @param target 目标数字
+ * @param multiple 多少的倍数
+ * @param delta 误差范围，允许误差范围内认为是倍数
+ * @return uint8_t 是否是倍数，1是倍数，0不是倍数
+ * 
+ * @example Tool(a,60,0.1); 判断 a 是否为 60 的倍数，允许误差范围为0.1
+ */
+uint8_t Tool_IsMultiple(float target,float multiple,float delta){
+
+	while(target > multiple)
+		target -= multiple;
+
+	while(target < 0)
+		target += multiple;
+
+
+	return (fabs(target - multiple)<delta||fabs(target)<delta)? 1 : 0 ;
+
+}

@@ -43,18 +43,11 @@ void locate_picture_debug(){
 	rt_thread_delay(1);
 }
 
-// uint8_t locate_picture_IsErrorDetect(){
-// 	static int unfound;
-// 	for(int i = 0;i<10;i++){
-// 		if(unfound)
-// 	}
-// }
-
 /**
  * @brief 定位图片运行函数 用于正式做任务
  * 
  */
-void locate_picture_run(){
+void locate_picture_catch(){
 
 	static int located_n;//记录连续定位准确的次数
 	static int begin_flag;
@@ -116,7 +109,7 @@ void locate_picture_entry()
 	while(1)
 	{
 		if(locate_debug_flag == 0)
-			locate_picture_run();
+			locate_picture_catch();
 		else
 			locate_picture_debug();
 	}

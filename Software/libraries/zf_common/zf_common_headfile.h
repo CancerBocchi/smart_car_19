@@ -136,7 +136,7 @@
 #include "car.h"
 #include "trace_line.h"
 #include "camera.h"
-#include  "user_math.h"
+#include "user_math.h"
 #include "step_motor.h"
 #include "system_perform.h"
 #include "buzzer.h"
@@ -146,6 +146,8 @@
 #include "locate_picture.h"
 #include "circule_handle.h"
 #include "classify.h"
+#include "art.h"
+#include "putdown_pic.h"
 //===================================================用户自定义文件===================================================
 
 #endif

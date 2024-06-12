@@ -8,7 +8,7 @@ int adaptivePara = 6;
 RoadSymbol_type Current_Road;
 
 // 圆环左右标识位
-uint8_t Cirule_LorR;
+uint8_t Circule_LorR;
 
 //路况特征判断结构体
 struct{

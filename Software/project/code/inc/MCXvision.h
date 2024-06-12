@@ -14,18 +14,12 @@
 #define MCX_UART_TX		UART3_TX_B22
 #define MCX_UART_IRQn	LPUART3_IRQn
 
-//记录当前模式
-typedef enum{
-    Reset_Mode,
-    Detection_Mode,
-    Location_Mode
-}MCX_Current_Mode;
-
 extern uint8_t MCX_Detection_Flag;
 extern int16_t center_x;
 extern int16_t center_y;
 
 void MCX_Change_Mode(uint8_t mode);
 void MCX_UART_Init(void);
+void MCX_uart_handle();
 
 #endif

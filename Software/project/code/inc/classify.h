@@ -3,17 +3,13 @@
 
 #include "zf_common_headfile.h"
 
+#define Class_Null          0
+
+#define Class_Cir           1
+#define Class_Side          2
 
 
-//框的标号
-#define Class_Basket1    0
-#define Class_Basket2    60
-#define Class_Basket3    120
-#define Class_Basket4    180
-#define Class_Basket5    240
-#define Class_Basket6    300 
-
-#define Class_Null 0
+#define Turntable_Rotate(angle) Step_angle_con(angle,100)
 
 //三大类物品分类
 typedef enum{
@@ -54,13 +50,15 @@ typedef struct{
     int class_position;
     //应当为圆环还是最后的
     uint8_t circule_or_final;
+    
 
 }Class_Info_t;
 
 //框的相关信息
 typedef struct{
     int howmany;        //框内数量
-    int CirculeClass;   //细分
+    int angle;
+    int DetailClass;   //细分
     int FinalClass;     //大分类
     
 }Class_Basket_t;
@@ -70,5 +68,14 @@ void Class_AddOneThing(uint8_t class,uint8_t circule_or_line);
 Class_Info_t* Class_GetLastThing();
 void Class_DeleteOneThing();
 
+
+//小类分为大类
+Class_Three_t Class_ClassifyTheDetailed(int class);
+//像框中添加物品
+void Class_Six_AddOneThing(int DetailClass,int cir_side_flag);
+//最终分类
+int Class_Six_FinalPut(int FinalClass);
+//圆环分类
+uint8_t Class_Six_CirPut(int DetailClass);
 
 #endif 

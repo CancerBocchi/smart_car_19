@@ -1,6 +1,8 @@
 #include "step_motor.h"
 
 static uint16 servo1_duty = 0, servo2_duty = 0;
+//用于控制转盘的舵机
+static uint16 step_duty = 0;
 
 int catch_flag = 0;
 
@@ -136,5 +138,28 @@ void servo_slow_ctrl(uint16 _servo1_angle, uint16 _servo2_angle, float _step_cou
             return;
         }
     }
-    
+}
+
+/**
+ * @brief 用于控制转盘舵机
+ * 
+ * @param target_angle 
+ * @param count 
+ */
+void Step_angle_con(uint16_t target_angle,int count){
+	float servo1_start = (float)step_duty;
+    float servo1_step = (float)(target_angle - step_duty)/count;
+    while(1)
+    {
+        system_delay_ms(5);
+        if(fabsf(servo1_start - (float)target_angle) >= servo1_step)servo1_start += servo1_step;
+        else servo1_start = target_angle;
+        pwm_set_duty(DOWN_MOTOR_CON_PIN, (uint32)SERVO_MOTOR_DUTY((uint16)servo1_start));
+        
+        if(fabsf(servo1_start - (float)target_angle) < 1){
+            step_duty = (uint16)target_angle;
+            return;
+        }
+    }
+
 }

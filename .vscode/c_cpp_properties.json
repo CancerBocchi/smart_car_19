@@ -8,7 +8,20 @@
                 "Software/libraries/zf_device",
                 "Software/libraries/zf_driver",
                 "Software/project/code/inc",
-                "Software/libraries/zf_common"
+                "Software/libraries/zf_common",
+                "Software/libraries/sdk/deceive",
+                "Software/libraries/sdk/CMSIS/Include",
+                "Software/libraries/sdk/board",
+                "Software/libraries/sdk/CMSIS/Driver/Include",
+                "Software/libraries/sdk/drives",
+                "Software/libraries/sdk/xip",
+                "Software/libraries/sdk/utilities",
+                "Software/libraries/sdk/utilities/debug_console",
+                "Software/libraries/sdk/utilities/str",
+                "Software/libraries/sdk/components/serial_manager",
+                "Software/libraries/sdk/components/osa",
+                "Software/libraries/sdk/components/lists",
+                "Software/libraries/sdk/cmsis_drivers"
             ],
             "defines": [
                 "_DEBUG",

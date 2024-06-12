@@ -55,7 +55,7 @@ typedef struct segment{
 extern int adaptivePara;
 extern uint8 handle_image[IMAGE_ROW][IMAGE_COL];
 extern RoadSymbol_type Current_Road;
-extern uint8_t Cirule_LorR;
+extern uint8_t Circule_LorR;
 
 //ÅÐ¶ÏÐòÁÐÊÇ·ñ×ã¹»³¤
 #define Vision_IsLone(seg) (seg.begin - seg.end>=15)

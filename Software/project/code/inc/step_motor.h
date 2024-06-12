@@ -24,6 +24,7 @@ void Step_Motor_Init();
 void Step_Motor_Reset();
 void Step_Motor_Catch();
 void Step_Motor_Put();
+void Step_angle_con(uint16_t target_angle,int count);
 
 
 #endif

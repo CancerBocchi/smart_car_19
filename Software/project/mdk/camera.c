@@ -1,5 +1,6 @@
 #include "zf_common_headfile.h"
 #include "camera.h"
+#include <stdbool.h>
 
 RoadLine_t Image_S;//保存图像边界
 
@@ -521,162 +522,6 @@ void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int h
     }
 }
 
-/**
- * @brief 将单个点二?1?7?1?7化,如果是白色则置为255，否则置丄1?1?770
- *
- * @param src raw image
- * @param x x
- * @param y y
- * @return uint8_t
- */
-// uint8_t VadaptiveTH(uint8_t src[VIMGH][VIMGW], uint8_t x, uint8_t y)
-// {
-//     int half_block = BLOCK / 2;
-//     int thres = 0;
-//     if (y < half_block || y >= VIMGH - half_block || x < half_block || x >= VIMGW - half_block)
-//         return 0;
-//     for (int dy = -half_block; dy <= half_block; dy++)
-//         for (int dx = -half_block; dx <= half_block; dx++)
-//             thres += src[y + dy][x + dx];
-//     thres = thres / (BLOCK * BLOCK) - CLIP_VAL;
-
-//     return src[y][x] > thres ? 255 : 0;
-// }
-
-/* TAG there is the logic below*/
-
-/**
- * @brief 直道时的扫线策略
- *
- */
-// void VscanStraight(void)
-// {
-//     for (uint8_t i = VIMGW / 2 - 20; i >= BLOCK / 2 - 1; i--)
-//     {
-//         if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
-//         {
-//             Veight_neighborhood(SRCIMG, F.Lp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 0);
-//             break;
-//         }
-//     }
-//     for (uint8_t i = VIMGW / 2 + 20; i < VIMGW - BLOCK / 2 + 1; i++)
-//     {
-//         if (!VadaptiveTH(SRCIMG, i, VIMGH - BLOCK / 2 - 1))
-//         {
-//             Veight_neighborhood(SRCIMG, F.Rp, (point_t){i, VIMGH - BLOCK / 2 - 1}, 1);
-//             break;
-//         }
-//     }
-// }
-
-// /**
-//  * @brief
-//  *
-//  * @param p 数组中某个的地址,p只允许为F.Lp或?1?7?1?7F.Rp
-//  * @param seed seed
-//  * @param LorR 0表示逆时针，1表示顺时钄1?1?77
-//  */
-// void Veight_neighborhood(uint8_t src[VIMGH][VIMGW], point_t *p, point_t seed, uint8_t LorR)
-// {
-//     point_t **pp;
-//     if (p == F.Lp)
-//         pp = &F.Lpp;
-//     else if (p == F.Rp)
-//         pp = &F.Rpp;
-//     else
-//         while (1)
-//             ;
-
-//     uint8_t dirindex = 0;
-//     uint8_t arrayindex;
-//     uint8_t breakflag = 0;
-//     point_t *orip = p;
-//     point_t *stackbottom = NULL;
-//     uint8_t stacksize = 0;
-//     point_t newp;
-
-//     while (!breakflag)
-//     {
-//         uint8_t i = 0;
-//         for (i = 0; i < 8; i++)
-//         {
-//             arrayindex = dirindex + i;
-//             if (arrayindex > 7)
-//                 arrayindex -= 8;
-//             newp = (point_t){seed.x + Pointdirection[LorR][arrayindex].x, seed.y + Pointdirection[LorR][arrayindex].y};
-//             if (!VadaptiveTH(src, newp.x, newp.y)) //找到了下丢?1?7个点
-//             {
-//                 if (!checkPexists(orip, newp))
-//                 {
-//                     if (arrayindex >= 2)
-//                         dirindex = arrayindex - 2;
-//                     else
-//                         dirindex = arrayindex + 6;
-
-//                     if (LorR == SCANFORLEFT && newp.x > VIMGW - 10)
-//                     {
-//                         breakflag = 1;
-//                         break;
-//                     }
-//                     if (LorR == SCANFORRIGHT && newp.x < 10)
-//                     {
-//                         breakflag = 1;
-//                         break;
-//                     }
-//                     if ((arrayindex == 7 || arrayindex == 6) && stackbottom == NULL) //栈底初始匄1?1?77
-//                         stackbottom = *pp;
-//                     if (stackbottom != NULL)
-//                         stacksize++;
-//                     if (stacksize == 16) //当栈满，弢?1?7始检验栈的内宄1?1?77
-//                     {
-//                         int dx = 0, dy = 0;
-//                         for (point_t *sp = *pp - 1; sp >= stackbottom; sp--)
-//                         {
-//                             dx += (sp + 1)->x - sp->x;
-//                             dy += (sp + 1)->y - sp->y;
-//                         }
-//                         if (LorR == 0 && dx >= 0 && dy > dx / 2) //左边畄1?1?77
-//                         {
-//                             *pp = stackbottom;
-//                             breakflag = 1;
-//                             break;
-//                         }
-//                         else if (LorR == 1 && dx <= 0 && dy >= -dx / 2) //右边畄1?1?77
-//                         {
-//                             *pp = stackbottom;
-//                             breakflag = 1;
-//                             break;
-//                         }
-//                         else //如果不满足?1?7?1?7?1?7出条件则将栈初始匄1?1?77
-//                         {
-//                             stacksize = 0;
-//                             stackbottom = NULL;
-//                         }
-//                     }
-
-//                     **pp = newp;
-//                     seed = newp;
-
-//                     (*pp)++;
-//                     if (*pp - p >= VIMGH * 5)
-//                     {
-//                         breakflag = 1;
-//                         break;
-//                     }
-//                     break;
-//                 }
-//                 else
-//                 {
-//                     breakflag = 1;
-//                     // break;
-//                 }
-//             }
-//         }
-//         if (i == 8)
-//             breakflag = 1;
-//     }
-// }
-
 void Camera_and_Screen_Init(){
 	//初始化屏幕
 	tft180_set_dir(TFT180_CROSSWISE);                                           // 需要先横屏 不然显示不下
@@ -702,6 +547,109 @@ void Camera_and_Screen_Init(){
 	tft180_clear();
 }
 
-void Camera_CirculeFindLine(uint8 image,int* line){
+/**
+ * @brief 圆环寻找边界函数
+ * 
+ * @param image 
+ * @param line 
+ */
+#define WIDTH IMAGE_COL  // 
+#define HEIGHT IMAGE_ROW // 
+#define INTENSITY_THRESHOLD 200 // 
+#define GRADIENT_THRESHOLD 50   // 
 
+void compute_gradient(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH]);
+bool is_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int x, int y);
+int find_initial_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int center_x);
+void crawl_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int *col_line, int start_x, int start_y, int direction);
+
+void Camera_CirculeFindLine(uint8_t image[HEIGHT][WIDTH], int *col_line) {
+    int16_t gradient[HEIGHT][WIDTH];
+
+    // 
+    compute_gradient(image, gradient);
+
+    int center_x = WIDTH / 2;
+    int initial_y = find_initial_boundary(image, gradient, center_x);
+
+    if (initial_y != -1) {
+        //
+        for (int i = 0; i < WIDTH; i++) {
+            col_line[i] = -1; // -1 
+        }
+        col_line[center_x] = initial_y;
+
+        // 
+        crawl_boundary(image, gradient, col_line, center_x, initial_y, -1); // 鍚戝乏
+        crawl_boundary(image, gradient, col_line, center_x, initial_y, 1);  // 鍚戝彸
+    }
 }
+
+
+void compute_gradient(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH]) {
+    for (int y = 1; y < HEIGHT - 1; y++) {
+        for (int x = 1; x < WIDTH - 1; x++) {
+            int gx = image[y][x + 1] - image[y][x - 1];
+            int gy = image[y + 1][x] - image[y - 1][x];
+            gradient[y][x] = abs(gx) + abs(gy); // 
+        }
+    }
+}
+
+bool is_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int x, int y) {
+    if (image[y][x] >= INTENSITY_THRESHOLD) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                int nx = x + dx;
+                int ny = y + dy;
+                if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
+                    if (image[ny][nx] < INTENSITY_THRESHOLD || gradient[ny][nx] > GRADIENT_THRESHOLD) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+int find_initial_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int center_x) {
+    for (int y = HEIGHT - 1; y >= 0; y--) {
+        for (int x = center_x - 10; x <= center_x + 10; x++) {
+            if (is_boundary(image, gradient, x, y)) {
+                return y;
+            }
+        }
+    }
+    return -1;
+}
+
+void crawl_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int *col_line, int start_x, int start_y, int direction) {
+    int x = start_x;
+    int y = start_y;
+    while (true) {
+        bool found = false;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                int nx = x + dx * direction;
+                int ny = y + dy;
+                if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
+                    if (is_boundary(image, gradient, nx, ny)) {
+                        if (ny > col_line[nx]) {
+                            col_line[nx] = ny;
+                        }
+                        x = nx;
+                        y = ny;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (found) break;
+        }
+        if (!found) break;
+    }
+}
+

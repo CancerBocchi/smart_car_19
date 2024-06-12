@@ -39,6 +39,7 @@ typedef enum Speed_Right{
 
 	Con_By_TraceLine,
 	Con_By_AngleLoop,
+	Con_By_Circule,
 	
 }Speed_Con_Right;
 
@@ -58,7 +59,7 @@ void car_motion_run();
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed);
 // 汽车转向接口
 void Car_Rotate(float angle);
-// 车辆定距控制
+
 void Car_DistanceMotion(float dx,float dy,float dt);
 // 航向角控制
 void Car_Change_Yaw(float Yaw_Ref);
