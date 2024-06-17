@@ -22,6 +22,7 @@ void buzzer_entry()
 void buzzer_init()
 {
 	gpio_init(BUZZER_PIN,GPO,1,GPO_PUSH_PULL);
+	gpio_init(B17,GPO,1,GPO_PUSH_PULL);
 //	
 	buzzer_thread = rt_thread_create("buzzer",buzzer_entry,RT_NULL,512,10,100);
 	buzzer_mail = rt_mb_create("buzzer_mail",1,RT_IPC_FLAG_FIFO);

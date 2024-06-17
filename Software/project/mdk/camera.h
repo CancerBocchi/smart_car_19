@@ -49,7 +49,7 @@ int Camera_My_Adapt_Threshold(uint8*image,uint16 width, uint16 height);
 //初始化摄像头硬件
 void Camera_and_Screen_Init();
 //圆环爬线
-void Camera_CirculeFindLine(uint8 image,int* line);
+void Camera_CirculeFindLine(uint8_t image[imgRow][imgCol], int *col_line);
 
 
 #endif

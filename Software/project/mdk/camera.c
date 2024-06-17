@@ -563,7 +563,7 @@ bool is_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], 
 int find_initial_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int center_x);
 void crawl_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int *col_line, int start_x, int start_y, int direction);
 
-void Camera_CirculeFindLine(uint8_t image[HEIGHT][WIDTH], int *col_line) {
+void Camera_CirculeFindLine(uint8_t image[IMAGE_ROW][IMAGE_COL], int *col_line) {
     int16_t gradient[HEIGHT][WIDTH];
 
     // 

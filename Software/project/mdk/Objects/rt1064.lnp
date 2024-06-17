@@ -21,6 +21,7 @@
 ".\objects\circule_handle.o"
 ".\objects\mcxvision.o"
 ".\objects\classify.o"
+".\objects\art.o"
 ".\objects\zf_common_clock.o"
 ".\objects\zf_common_debug.o"
 ".\objects\zf_common_fifo.o"

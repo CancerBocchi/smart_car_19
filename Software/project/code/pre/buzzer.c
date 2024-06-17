@@ -1,4 +1,5 @@
 #include "buzzer.h"
+
 #define BUZZER_PIN			B11			// 定义主板上蜂鸣器对应引脚
 
 
@@ -13,9 +14,9 @@ void buzzer_entry(void *parameter)
         //接收邮箱数据，如果没有数据则持续等待并释放CPU控制权
         rt_mb_recv(buzzer_mailbox, &mb_data, RT_WAITING_FOREVER);
 
-        gpio_set(BUZZER_PIN, 1);    //打开蜂鸣器
+        gpio_set(BUZZER_PIN, 0);    //打开蜂鸣器
         rt_thread_mdelay(mb_data);  //延时
-        gpio_set(BUZZER_PIN, 0);    //关闭蜂鸣器
+        gpio_set(BUZZER_PIN, 1);    //关闭蜂鸣器
     }
 }
 
@@ -28,7 +29,8 @@ void buzzer_init(void)
 
     rt_kprintf("Buzzer Init\n");
     //初始化蜂鸣器所使用的GPIO
-    gpio_init(BUZZER_PIN, GPO, 0, GPIO_PIN_CONFIG);			// 初始化为GPIO浮空输入 默认上拉高电平
+    gpio_init(B17, GPO, 1, GPIO_PIN_CONFIG);
+    gpio_init(BUZZER_PIN, GPO, 1, GPIO_PIN_CONFIG);			// 初始化为GPIO浮空输入 默认上拉高电平
     
     //创建邮箱
     buzzer_mailbox = rt_mb_create("buzzer", 5, RT_IPC_FLAG_FIFO);

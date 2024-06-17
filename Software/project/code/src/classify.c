@@ -26,12 +26,12 @@ void Class_Init(){
     Class_Basket[1].FinalClass = Class_Weapons;
     Class_Basket[2].FinalClass = Class_Supply;
 
-    Class_Basket[0].angle = 0;
-    Class_Basket[1].angle = 60;
-    Class_Basket[2].angle = 120;
-    Class_Basket[3].angle = 180;
-    Class_Basket[4].angle = 240;
-    Class_Basket[5].angle = 300;
+    Class_Basket[0].angle = 23.6;
+    Class_Basket[1].angle = 60+23.6;
+    Class_Basket[2].angle = 120+23.6;
+    Class_Basket[3].angle = 180+23.6;
+    Class_Basket[4].angle = 240+23.6;
+    Class_Basket[5].angle = 300+23.6;
     //对于框的初始化
     current_basket = 1;
     Turntable_Rotate(Class_Basket[current_basket - 1].angle);

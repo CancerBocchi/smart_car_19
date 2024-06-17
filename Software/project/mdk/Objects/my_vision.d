@@ -140,4 +140,4 @@
   ..\code\inc\system_perform.h ..\code\inc\buzzer.h \
   ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
   ..\code\inc\locate_picture.h ..\code\inc\circule_handle.h \
-  ..\code\inc\classify.h
+  ..\code\inc\classify.h ..\code\inc\art.h ..\code\inc\putdown_pic.h

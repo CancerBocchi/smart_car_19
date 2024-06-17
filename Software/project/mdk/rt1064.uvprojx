@@ -666,6 +666,11 @@
               <FileType>5</FileType>
               <FilePath>..\code\inc\classify.h</FilePath>
             </File>
+            <File>
+              <FileName>art.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\art.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

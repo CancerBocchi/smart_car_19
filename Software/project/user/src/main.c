@@ -25,17 +25,32 @@ int main()
 	//基础外设初始化
 	Step_Motor_Init();
 	buzzer_init();
-	car_motion_Init();
-	Camera_and_Screen_Init();
-	MCX_UART_Init();
+	// car_motion_Init();
+	// Camera_and_Screen_Init();
+	// MCX_UART_Init();
 
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
-	locate_pic_init();
-	side_catch_init();
-	circule_handle_init();
-	trace_line_init();
+	// locate_pic_init();
+	// side_catch_init();
+	// circule_handle_init();
+	// trace_line_init();
 
 	rt_kprintf("--------- init end ----------\n");
+
+	while(1){
+		Turntable_Rotate(23.8);
+		rt_thread_delay(1000);
+		Turntable_Rotate(60+23.8);
+		rt_thread_delay(1000);
+		Turntable_Rotate(120+23.8);
+		rt_thread_delay(1000);
+		Turntable_Rotate(180+23.8);
+		rt_thread_delay(1000);
+		Turntable_Rotate(240+23.8);
+		rt_thread_delay(1000);
+		Turntable_Rotate(300+23.8);
+		rt_thread_delay(1000);
+	}
 
 }

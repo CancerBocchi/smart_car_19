@@ -43,14 +43,18 @@ void Step_Motor_Init()
 	rt_kprintf("Catch Arm Init\n");
 	pwm_init(DOWN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(DOWN_MOTOR_INIT_ANGLE));   
 	pwm_init(UP_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(UP_MOTOR_INIT_ANGLE));
-	
+	pwm_init(TURN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(0));
+
 	gpio_init(B10, GPO, 0, GPO_PUSH_PULL);
 	
 	servo1_duty = UP_MOTOR_INIT_ANGLE;servo2_duty = DOWN_MOTOR_INIT_ANGLE;
 	
 	S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
+
+	Step_Motor_Reset();
+	Turntable_Rotate(23.8);
 	
-	// servo_slow_ctrl(0, 18, 100);
+
 #if ARM_DEBUG_SWITCH == 1
 		if(S_Motor_test_Thread!=NULL)
 			rt_thread_startup(S_Motor_test_Thread);
@@ -68,26 +72,18 @@ void Step_Motor_Reset()
 
 void Step_Motor_Catch()
 {
-//		if(servo1_duty != UP_MOTOR_INIT_ANGLE || servo2_duty != UP_MOTOR_INIT_ANGLE)
-//		{
-//				Step_Motor_Reset();
-//		}
 		rt_thread_delay(100);
-		servo_slow_ctrl(30, 20, 100);
-		rt_thread_delay(100);
-		servo_slow_ctrl(5, 20, 50);
-		gpio_set_level(B10,1);
-		rt_thread_delay(400);
-		servo_slow_ctrl(80, 50, 100);
-		rt_thread_delay(90);
-		servo_slow_ctrl(80, 95, 50);
+		servo_slow_ctrl(95, 15, 100);
 		rt_thread_delay(50);
-		servo_slow_ctrl(90, 160, 100);
-		rt_thread_delay(90);
-		servo_slow_ctrl(140, 160, 100);
+		gpio_set_level(B10,1);
+		rt_thread_delay(250);
+		servo_slow_ctrl(160, 15, 100);
 		rt_thread_delay(200);
-		gpio_set_level(B10,0);
+		servo_slow_ctrl(160, 180, 100);
+		rt_thread_delay(300);
+		servo_slow_ctrl(180, 180, 100);
 		rt_thread_delay(100);
+		gpio_set_level(B10,0);
 		Step_Motor_Reset();
 		
 }
@@ -154,7 +150,7 @@ void Step_angle_con(uint16_t target_angle,int count){
         system_delay_ms(5);
         if(fabsf(servo1_start - (float)target_angle) >= servo1_step)servo1_start += servo1_step;
         else servo1_start = target_angle;
-        pwm_set_duty(DOWN_MOTOR_CON_PIN, (uint32)SERVO_MOTOR_DUTY((uint16)servo1_start));
+        pwm_set_duty(TURN_MOTOR_CON_PIN, (uint32)SERVO_360_MOTOR_DUTY((uint16)servo1_start));
         
         if(fabsf(servo1_start - (float)target_angle) < 1){
             step_duty = (uint16)target_angle;

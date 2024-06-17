@@ -831,13 +831,13 @@ void Vision_CirculeHandle()
         //∑¿÷πŒÛ ∂±
         MCX_Change_Mode(MCX_Reset_Mode);
         if(IsStrai(F.my_segment_L[0]) && F.segment_n_L == 1)
-            Cirule_LorR = RIGHT_CIRCULE;
+            Circule_LorR = RIGHT_CIRCULE;
         else if(IsStrai(F.my_segment_R[0]) && F.segment_n_R == 1)
-            Cirule_LorR = LEFT_CIRCULE;
+            Circule_LorR = LEFT_CIRCULE;
         state = Circule_State1;
     }
     //∑¿÷π¥ÌŒÛ≈–∂œ
-    switch(Cirule_LorR){
+    switch(Circule_LorR){
         static int out_n;
         case RIGHT_CIRCULE:
             out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
@@ -858,7 +858,7 @@ void Vision_CirculeHandle()
         break;
     }
 
-    if(Cirule_LorR == RIGHT_CIRCULE){//”“±ﬂ‘≤ª∑
+    if(Circule_LorR == RIGHT_CIRCULE){//”“±ﬂ‘≤ª∑
         if(state == Circule_State1){
             if(F.FP_n_R && !IsLose(F.my_segment_R[0]))
                 Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);

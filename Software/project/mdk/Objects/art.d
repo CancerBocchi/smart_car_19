@@ -1,4 +1,4 @@
-./objects/vofa.o: ..\code\src\vofa.c ..\code\inc\vofa.h \
+./objects/art.o: ..\code\src\art.c ..\code\inc\art.h \
   ..\..\libraries\zf_common\zf_common_headfile.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
@@ -130,8 +130,8 @@
   ..\..\libraries\rttherad_libraries\components\finsh\finsh_api.h \
   ..\code\inc\PID.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
   ..\code\inc\motor.h ..\code\inc\encoder.h \
-  ..\code\inc\Attitude_algorithm.h ..\code\inc\config.h \
-  ..\code\inc\debug_tool.h \
+  ..\code\inc\Attitude_algorithm.h ..\code\inc\vofa.h \
+  ..\code\inc\config.h ..\code\inc\debug_tool.h \
   ..\..\libraries\rttherad_libraries\components\finsh\finsh.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\ctype.h \
   ..\..\libraries\rttherad_libraries\components\finsh\shell.h \
@@ -140,5 +140,5 @@
   ..\code\inc\system_perform.h ..\code\inc\buzzer.h \
   ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
   ..\code\inc\my_vision.h ..\code\inc\locate_picture.h \
-  ..\code\inc\circule_handle.h ..\code\inc\classify.h ..\code\inc\art.h \
+  ..\code\inc\circule_handle.h ..\code\inc\classify.h \
   ..\code\inc\putdown_pic.h
