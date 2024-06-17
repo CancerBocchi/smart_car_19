@@ -21,7 +21,7 @@
 #define SERVO_360_MOTOR_DUTY(x)         ((float)PWM_DUTY_MAX/(1000.0/(float)STEP_MOTOR_FRE)*(0.5+(float)(x)/180.0))
 
 #define DOWN_MOTOR_INIT_ANGLE					(15)
-#define UP_MOTOR_INIT_ANGLE						(160)
+#define UP_MOTOR_INIT_ANGLE						(175)
 
 void servo_slow_ctrl(uint16 _servo1_angle, uint16 _servo2_angle, float _step_count);
 void Step_Motor_Init();

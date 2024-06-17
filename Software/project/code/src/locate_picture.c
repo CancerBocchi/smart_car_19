@@ -7,7 +7,7 @@ Pos_PID_t center_x_con;
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
 
-#define Is_Located (fabs(center_x - TARGET_X)<=1 && fabs(center_y - TARGET_Y)<=1)
+#define Is_Located (fabs(center_x - TARGET_X)<=2 && fabs(center_y - TARGET_Y)<=2)
 
 rt_thread_t locate_picture_thread;
 rt_sem_t locate_picture_sem;
@@ -136,12 +136,12 @@ void locate_pic_init()
 	center_y_con.Output_Max = 100;
 	center_y_con.Output_Min = -100;
 	center_y_con.Value_I_Max = 500;
-	center_y_con.Ref = 155;
+	center_y_con.Ref = 145;
 	
 	Pos_PID_Init(&center_x_con,-1.2,0,0);
 	center_x_con.Output_Max = 100;
 	center_x_con.Output_Min = -100;
 	center_x_con.Value_I_Max = 500;
-	center_x_con.Ref = 110;
+	center_x_con.Ref = 115;
 
 }

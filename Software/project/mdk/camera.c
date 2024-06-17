@@ -33,40 +33,42 @@ void Vision_Handle()
 //    //图像debug
     // float mid_offset=1.65;
     // uint8_t row_begin = 20;
-    //tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-    tft180_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
-    //tft180_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
-	 
-//     int16 MID_Table[imgRow];
-//     int16 leftBroder[imgRow];//左边边界
-//     int16 rightBroder[imgRow];//右边边界
-//     for(int i=imgRow-1;i>=0;i--){
-//         MID_Table[i] = Image_S.MID_Table[i]*158/188;
-//         leftBroder[i] = Image_S.leftBroder[i]*158/188;
-//         rightBroder[i] = Image_S.rightBroder[i]*158/188;
-//     }
+    //ips200_show_gray_image(START_X, START_Y, (const uint8 *)my_image, imgCol, imgRow, 158, 70, 0);
+    ips200_show_gray_image(0, 0, (const uint8 *)my_image, imgCol, imgRow, 188, 70, 0);
+    //ips200_show_gray_image(START_X, START_Y, (const uint8 *)mt9v03x_image, MT9V03X_W, MT9V03X_H, 158, 70, 0);
+//	 
+//    int16 MID_Table[imgRow];
+//    int16 leftBroder[imgRow];//左边边界
+//    int16 rightBroder[imgRow];//右边边界
+//    for(int i=imgRow-1;i>=0;i--){
+//        MID_Table[i] = Image_S.MID_Table[i];
+//        leftBroder[i] = Image_S.leftBroder[i];
+//        rightBroder[i] = Image_S.rightBroder[i];
+//    }
 
-//     for(int i=imgRow-1;i>0;i--)
-//     {
-//         if(MID_Table[i]>=160)
-//             MID_Table[i] = 159;
-//         if(leftBroder[i]>=160)
-//             leftBroder[i] = 159;
-//         if(rightBroder[i]>=160)
-//             rightBroder[i] = 159;
-				
-// 				tft180_draw_point(MID_Table[i], i+20, RGB565_RED);
-//         //tft180_draw_point(leftBroder[i], i+20, RGB565_BLUE);
-//         tft180_draw_point(rightBroder[i], i+20, RGB565_BROWN);
-// //        //中线
-//         tft180_draw_point((int)(80), i+20, RGB565_GREEN);
-//     }
+//    for(int i=imgRow-1;i>0;i--)
+//    {
+//        if(MID_Table[i]>=188)
+//            MID_Table[i] = 187;
+//        if(leftBroder[i]>=188)
+//            leftBroder[i] = 187;
+//        if(rightBroder[i]>=188)
+//            rightBroder[i] = 187;
+//				
+//        ips200_draw_point(MID_Table[i], i, RGB565_RED);
+//        ips200_draw_point(leftBroder[i], i, RGB565_BLUE);
+//        ips200_draw_point(rightBroder[i], i, RGB565_BROWN);
+//        //中线
+//        ips200_draw_point((int)(94), i, RGB565_GREEN);
+//    }
 
-//     Vision_DrawFP();
+    
+    
+    Vision_DrawFP();
         //最长白线法
-    // tft180_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
-    // tft180_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
-    // tft180_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
+    // ips200_draw_line(Longest_White_Column_Right[1],78-(imgRow-1),Longest_White_Column_Right[1],78-(imgRow-1)+Longest_White_Column_Right[0],RGB565_RED);
+    // ips200_draw_line(Longest_White_Column_Left[1],78-(imgRow-1),Longest_White_Column_Left[1],78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
+    // ips200_draw_line(Center,78-(imgRow-1),Center,78-(imgRow-1)+Longest_White_Column_Left[0],RGB565_RED);
 
 }
 
@@ -524,16 +526,17 @@ void adaptiveThreshold(uint8_t *img_data, uint8_t *output_data, int width, int h
 
 void Camera_and_Screen_Init(){
 	//初始化屏幕
-	tft180_set_dir(TFT180_CROSSWISE);                                           // 需要先横屏 不然显示不下
-	tft180_init();
-	tft180_show_string(0, 0, "mt9v03x init.");
+	ips200_set_dir(IPS200_CROSSWISE);          
+                                     // 需要先横屏 不然显示不下
+	ips200_init(IPS200_TYPE_SPI);
+	ips200_show_string(0, 0, "mt9v03x init.");
 	
 	//初始化摄像头
 	while(1)
 	{
 			if(mt9v03x_init())
 			{
-					tft180_show_string(0, 16, "mt9v03x reinit.");
+					ips200_show_string(0, 16, "mt9v03x reinit.");
 					rt_kprintf("mt9v03x failed try to reinit\n");
 			}
 			else
@@ -543,8 +546,8 @@ void Camera_and_Screen_Init(){
 			}
 			rt_thread_delay(1000);                                                  // 闪灯表示异常
 	}
-	tft180_show_string(0, 16, "init success.");
-	tft180_clear();
+	ips200_show_string(0, 16, "init success.");
+	ips200_clear();
 }
 
 /**

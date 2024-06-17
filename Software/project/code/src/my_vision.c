@@ -33,22 +33,26 @@ void Vision_RSHandle()
     {
     case LoseRoads:
         Current_Road = NormalRoads;
+        
         break;
 
     case NormalRoads: 
-
+        ips200_show_string(200,50,"Nor");
         break;
 
     case CrossRoads:
         Vision_CrossHandle();
+        ips200_show_string(200,50,"Cro");
         break;
     
     case CirculeRoads:
         Vision_CirculeHandle();
+        ips200_show_string(200,50,"Cir");
         break;
 
     case CornerRoads:
         Vision_CornerHandle();
+        ips200_show_string(200,50,"Cor");
         break;
 
     default:
@@ -89,6 +93,12 @@ void Vision_SymbolJudge()
     Vision_BroderFindFP(Image_S.leftBroder);
     Vision_BroderFindFP(Image_S.rightBroder);
 
+    char str[100];
+    rt_sprintf(str,"left_p:%d",F.FP_n_L);
+    ips200_show_string(200,35,str);
+    rt_sprintf(str,"right_p:%d",F.FP_n_R);
+    ips200_show_string(200,20,str);
+
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
         if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_R[1]))||
@@ -119,27 +129,27 @@ void Vision_SymbolJudge()
 void Vision_DrawFP(){
     
     for(int i = 0;i<F.FP_n_L;i++){
-//        tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//        ips200_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
 //        if(78-(imgRow-1)+F.feature_p_L[i].x+1 < 128)
-//            tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x+1,RGB565_RED);
+//            ips200_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x+1,RGB565_RED);
 //        if(78-(imgRow-1)+F.feature_p_L[i].x-1 >= 0)
-//            tft180_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x-1,RGB565_RED);
+//            ips200_draw_point(F.feature_p_L[i].y*158/188,78-(imgRow-1)+F.feature_p_L[i].x-1,RGB565_RED);
 //        if((F.feature_p_L[i].y+1)*158/188 < 160)
-//            tft180_draw_point((F.feature_p_L[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//            ips200_draw_point((F.feature_p_L[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
 //        if((F.feature_p_L[i].y+1)*158/188 >= 0)
-//            tft180_draw_point((F.feature_p_L[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
+//            ips200_draw_point((F.feature_p_L[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_L[i].x,RGB565_RED);
     }
 
     for(int i = 0;i<F.FP_n_R;i++){
-//        tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//        ips200_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
 //        if(78-(imgRow-1)+F.feature_p_R[i].x+1 < 128)
-//            tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x+1,RGB565_RED);
+//            ips200_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x+1,RGB565_RED);
 //        if(78-(imgRow-1)+F.feature_p_R[i].x-1 >= 0)
-//            tft180_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x-1,RGB565_RED);
+//            ips200_draw_point(F.feature_p_R[i].y*158/188,78-(imgRow-1)+F.feature_p_R[i].x-1,RGB565_RED);
 //        if((F.feature_p_R[i].y+1)*158/188 < 160)
-//            tft180_draw_point((F.feature_p_R[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//            ips200_draw_point((F.feature_p_R[i].y+1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
 //        if((F.feature_p_R[i].y-1)*158/188 >= 0)
-//            tft180_draw_point((F.feature_p_R[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
+//            ips200_draw_point((F.feature_p_R[i].y-1)*158/188,78-(imgRow-1)+F.feature_p_R[i].x,RGB565_RED);
     }
 }
 
@@ -390,6 +400,7 @@ void Vision_BroderFindFP(int16* broder)
     //中间缺线 且缺线达到阈值
     if(IsLose(target_seg[1])&&Vision_IsLone(target_seg[1])){
         aver1 = Line_GetAverage(broder,target_seg[0].begin,target_seg[0].end);
+        
         //检测近处序列的角点
         pf = Vision_FindArcFP(broder,target_seg[0].begin,target_seg[0].end);
         //若没有发现角点
@@ -397,6 +408,7 @@ void Vision_BroderFindFP(int16* broder)
             target_FP[0].x = target_seg[0].end;
             target_FP[0].y = broder[target_seg[0].end];
             (*target_n)++;
+            //计算近处序列的平均斜率 用于预防u形弯误判
         
             //*检测远处序列的角点  当远处序列有值的时候检测 有值的时候必定有角点*
             if(!IsNull(target_seg[2])){
@@ -713,42 +725,7 @@ void Vision_CrossHandle()
 {
     static int state = Cross_Begin;
 
-    //补线
-    //斜入十字
-    if(CrossCon4){
-        //左边
-        if (IsArc(F.my_segment_L[0])&&F.segment_n_L == 1){
-            //此时应当左边找到一个特征点 计算特征点到另一边角点的斜率
-            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
-            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
-        }
-        //右边
-        else if(IsArc(F.my_segment_R[0])&&F.segment_n_R == 1){
-            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
-            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
-        }
-    }
-    else{
-        if(F.FP_n_L == 2)
-            Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
-        else if(F.FP_n_L == 1){
-            if(IsLose(F.my_segment_L[0]))
-                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
-            else
-                Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
-        }
-
-        if(F.FP_n_R == 2)
-            Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
-        else if(F.FP_n_R == 1){
-            if(IsLose(F.my_segment_R[0]))
-                Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
-            else
-                Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
-        }
-    }
-
-    //状态切换
+        //状态切换
     if(state == Cross_Begin){
         //当进入十字的时候发现两边都未能发现角点 突出十字
         //十字的时候应当有明显的角点
@@ -769,7 +746,40 @@ void Vision_CrossHandle()
             Current_Road = NormalRoads;
         }
     }
+    //补线
+    //斜入十字
+    if(CrossCon4){
+        //左边
+        if (IsArc(F.my_segment_L[0])&&F.segment_n_L == 1){
+            //此时应当左边找到一个特征点 计算特征点到另一边角点的斜率
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+        }
+        //右边
+        else if(IsArc(F.my_segment_R[0])&&F.segment_n_R == 1){
+            Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+            Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+        }
+    }
+    // else{
+    //     if(F.FP_n_L == 2)
+    //         Vision_set_AdditionalLine(F.feature_p_L[0].x,F.feature_p_L[1].x,Image_S.leftBroder);
+    //     else if(F.FP_n_L == 1){
+    //         if(IsLose(F.my_segment_L[0]))
+    //             Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,0);
+    //         else
+    //             Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
+    //     }
 
+    //     if(F.FP_n_R == 2)
+    //         Vision_set_AdditionalLine(F.feature_p_R[0].x,F.feature_p_R[1].x,Image_S.rightBroder);
+    //     else if(F.FP_n_R == 1){
+    //         if(IsLose(F.my_segment_R[0]))
+    //             Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,0);
+    //         else
+    //             Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
+    //     }
+    // }
    
 }
 
@@ -894,12 +904,12 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
+                // Car_Change_Speed(0,0,0);
                 //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                rt_kprintf("task:return to the traceline thread\n");
+                // rt_kprintf("task:ready to get into the circulehandle task\n");
+                // rt_sem_release(circule_handle_sem);
+                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_kprintf("task:return to the traceline thread\n");
 
             }
         }
@@ -953,12 +963,12 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
+                // Car_Change_Speed(0,0,0);
                 //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                rt_kprintf("task:return to the traceline thread\n");
+                // rt_kprintf("task:ready to get into the circulehandle task\n");
+                // rt_sem_release(circule_handle_sem);
+                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){

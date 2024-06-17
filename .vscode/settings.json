@@ -45,6 +45,10 @@
         "cstddef": "c",
         "format": "c",
         "functional": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "zf_common_clock.h": "c",
+        "zf_common_function.h": "c",
+        "zf_driver_spi.h": "c",
+        "zf_driver_soft_spi.h": "c"
     }
 }

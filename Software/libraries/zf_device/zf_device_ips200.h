@@ -82,10 +82,10 @@
 //====================================================硬件 SPI 驱动====================================================
 #endif
 // 如果使用的是单排排针的两寸屏幕 SPI 驱动控制引脚 可以修改
-#define IPS200_RST_PIN_SPI              (B2 )                                   // 液晶复位引脚定义
-#define IPS200_DC_PIN_SPI               (C19)                                   // 液晶命令位引脚定义
+#define IPS200_RST_PIN_SPI              (C24)                                   // 液晶复位引脚定义
+#define IPS200_DC_PIN_SPI               (C26)                                   // 液晶命令位引脚定义
 #define IPS200_CS_PIN_SPI               (B3 )
-#define IPS200_BLk_PIN_SPI              (C18)
+#define IPS200_BLk_PIN_SPI              (C25)
 
 // 如果使用的是双排排针的两寸屏幕 并口驱动控制引脚 可以修改
 #define IPS200_RD_PIN_PARALLEL8         (B0 )
