@@ -7,7 +7,7 @@ Pos_PID_t center_x_con;
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
 
-#define Is_Located (fabs(center_x - TARGET_X)<=2 && fabs(center_y - TARGET_Y)<=2)
+#define Is_Located (fabs(center_x - TARGET_X)<=4 && fabs(center_y - TARGET_Y)<=4)
 
 rt_thread_t locate_picture_thread;
 rt_sem_t locate_picture_sem;
@@ -36,7 +36,18 @@ void locate_picture_debug(){
 	Car_Change_Speed(Vx,Vy,0);
 	//抓取测试
 	if(locate_catch_flag){
+		
 		Car_Change_Speed(0,0,0);
+
+		Art_Change_Mode(Art_Classify_Mode);
+
+		while(Art_GetData() == Class_Null);
+		Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		rt_kprintf("Classify:the class is %c\n",Art_GetData());
+
+		Art_Change_Mode(Art_Reset_Mode);
+
+		
 		Step_Motor_Catch();
 		locate_catch_flag = 0;
 	}
@@ -61,7 +72,7 @@ void locate_picture_catch(){
 	
 	//连续十次定位成功后进行抓取
 	while(1){
-		while(located_n < 15){
+		while(located_n < 5){
 			MCX_Change_Mode(MCX_Location_Mode);
 			if(center_x  == 0&& center_y == 0&&side_catch_flag){
 				error_detect_flag = 1;
@@ -78,6 +89,12 @@ void locate_picture_catch(){
 
 		located_n = 0;
 		Car_Change_Speed(0,0,0);
+		//识别
+		Art_Change_Mode(Art_Classify_Mode);
+		while(Art_GetData() == Class_Null);
+		Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		rt_kprintf("Classify:the class is %c\n",Art_GetData());
+		Art_Change_Mode(Art_Reset_Mode);
 		//抓取
 		Step_Motor_Catch();
 		//若捡到卡片后没有卡片了 

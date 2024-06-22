@@ -9,7 +9,7 @@
 #define Art_UART_IRQn	LPUART5_IRQn
 
 #define Art_Classify_Mode   'C'
-#define Art_Reset_Mode      'R'
+#define Art_Reset_Mode      'S'
 #define Art_NumLetter_Mode  'N'
 
 uint8_t Art_GetData();

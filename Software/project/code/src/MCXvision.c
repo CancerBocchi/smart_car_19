@@ -104,7 +104,7 @@ void MCX_uart_handle(){
 		break;
 
 		case Detection_Mode:
-			if(MCX_rx_buffer[1]){
+			if(MCX_rx_buffer[1] == 1){
 				center_x = MCX_rx_buffer[2];
 				center_y = MCX_rx_buffer[3];
 				MCX_Detection_Flag = 1;

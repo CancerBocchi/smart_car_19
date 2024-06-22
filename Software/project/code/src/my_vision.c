@@ -851,7 +851,7 @@ void Vision_CirculeHandle()
         static int out_n;
         case RIGHT_CIRCULE:
             out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
-            if(out_n == 5){
+            if(out_n == 2){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 out_n = 0;
@@ -860,7 +860,7 @@ void Vision_CirculeHandle()
         break;
         case LEFT_CIRCULE:
             out_n = !IsStrai(F.my_segment_R[0])? out_n+1:0;
-            if(out_n == 5){
+            if(out_n == 2){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 MCX_Change_Mode(MCX_Detection_Mode);

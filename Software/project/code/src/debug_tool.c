@@ -27,6 +27,8 @@ void debug_tool_init()
 }
 
 
+
+
 static arg_change* match_arg(char* str,arg_change* register_,int arg_count)
 {
     for(int i = 0;i<arg_count;i++)
@@ -39,14 +41,19 @@ static arg_change* match_arg(char* str,arg_change* register_,int arg_count)
     return NULL;
 }
 
+static void  ClassState(){
+	Class_Debug();
+}
+MSH_CMD_EXPORT(ClassState , View Class Meg);
+
 /**
  * @brief ³µÁ¾Æô¶¯
  *       
  * 
 */
 static void  CarStart(){
-    Car_Start();
-    Car_Change_Speed(0,0,0);
+	extern int Start_Flag;
+    Start_Flag = 1;
 }
 MSH_CMD_EXPORT(CarStart , Start The Car);
 

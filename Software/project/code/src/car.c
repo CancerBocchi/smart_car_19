@@ -15,7 +15,7 @@ mecanum_Speed Car_Speed;
 
 Pos_PID_t Car_Yaw_Controller;
 
-uint8_t Car_BootSwitch;//车辆总开关
+uint8_t Car_BootSwitch = 1;//车辆总开关
 
 //
 //车辆速度控制权限
@@ -125,6 +125,7 @@ void car_motion_entry()
 {
 	while(1)
 	{
+		if(Car_BootSwitch)
 		car_motion_run();
 		rt_thread_delay(1);
 	}

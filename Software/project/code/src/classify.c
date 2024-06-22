@@ -10,7 +10,7 @@
  * 5 - 待定
  * 圆环处理的时候依次将 5，4，3，2，1 定义为圆环分类框
  */
-static Class_Basket_t Class_Basket[6];
+Class_Basket_t Class_Basket[6];
 //记录圆环分类时候捡到第几个卡片了
 static int Class_CirNum = 5;
 //记录目前的篮筐 为 1-6 如果要访问对应数组元素 则需要减 1
@@ -50,7 +50,7 @@ Class_Three_t Class_ClassifyTheDetailed(int class){
         return Class_Traffic_Tool;
     
     else if(class == Class_Boom||class == Class_Gun||class == Class_Batons
-            || class == Class_Knife||Class_FireAxe)
+            || class == Class_Knife||class == Class_FireAxe)
         return Class_Weapons;
 
     else if(class == Class_FirstAid||class == Class_Flashlight||
@@ -76,7 +76,7 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
 
         //将圆环标记好
         Class_Basket[Class_CirNum].DetailClass = DetailClass;
-        Class_CirNum--;
+        Class_CirNum--; //存储的圆环个数相加
         Turntable_Rotate(Class_Basket[Class_CirNum].angle);
         current_basket = Class_CirNum+1;
     }
@@ -84,13 +84,14 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
     else if(cir_side_flag == Class_Side){
         //获取大类
         int class = Class_ClassifyTheDetailed(DetailClass);
+        rt_kprintf("Class:%d\n",class);
         //转盘转到对应角度
         Turntable_Rotate(Class_Basket[class - 1].angle);
         current_basket = class;
         //记录数量
         Class_Basket[class - 1].howmany++;
     }
-    //是的圆环转到位
+    //等圆环转到位
     rt_thread_delay(200);
 }
 
@@ -149,6 +150,26 @@ uint8_t Class_Six_CirPut(int DetailClass){
  */
 void Class_Six_CirRest(){
     Class_CirNum = 5;
+}
+
+/**
+ * @brief 抓取图片后打印信息
+*/
+void Class_Debug(){
+
+    rt_kprintf("------Class_Current_State------:\n");
+
+    rt_kprintf("--side catch:\n traffic_num:%d \n weapon_num:%d \n supply_num:%d \n",
+                Class_Basket[0].howmany,Class_Basket[1].howmany,Class_Basket[2].howmany);
+
+    for(int i = 5;i>0;i--){
+        if(Class_Basket[i].DetailClass == Class_Null)
+            rt_kprintf("--circule %d_class:NULL\n",i);
+        else
+            rt_kprintf("--circule %d_class:%c\n",i,Class_Basket[i]);
+    }
+
+    rt_kprintf("--------------end---------------");
 }
 
 

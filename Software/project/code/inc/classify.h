@@ -14,8 +14,8 @@
 //三大类物品分类
 typedef enum{
     Class_Traffic_Tool = 1,
-    Class_Weapons,
-    Class_Supply
+    Class_Weapons = 2,
+    Class_Supply = 3
 }Class_Three_t;
 
 //十五类物品分类
@@ -57,7 +57,7 @@ typedef struct{
 //框的相关信息
 typedef struct{
     int howmany;        //框内数量
-    int angle;
+    float angle;
     int DetailClass;   //细分
     int FinalClass;     //大分类
     
@@ -68,7 +68,7 @@ void Class_AddOneThing(uint8_t class,uint8_t circule_or_line);
 Class_Info_t* Class_GetLastThing();
 void Class_DeleteOneThing();
 
-
+extern Class_Basket_t Class_Basket[6];
 //小类分为大类
 Class_Three_t Class_ClassifyTheDetailed(int class);
 //像框中添加物品
@@ -77,5 +77,9 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag);
 int Class_Six_FinalPut(int FinalClass);
 //圆环分类
 uint8_t Class_Six_CirPut(int DetailClass);
+
+void Class_Init();
+
+void Class_Debug();
 
 #endif 

@@ -71,6 +71,7 @@ void Art_Change_Mode(uint8_t mode){
 		break;
 
 		case 'R':
+			Art_Data = 0;
 			ArtCurrent_Mode = Reset_Mode;
 		break;
 

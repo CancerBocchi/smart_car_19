@@ -22,12 +22,12 @@ void side_catch_entry()
 		
 		if(center_x > 125){
 			// Car_Rotate(-90);//ÓÒ×ª
-			Car_DistanceMotion(35,10,0.8);
+			Car_DistanceMotion(35,20,1);
 			LorR = 1;
 		}
 		else if(center_x < 125){
 			//Car_Rotate(90);//×ó×ª
-			Car_DistanceMotion(-35,10,0.8);
+			Car_DistanceMotion(-35,20,1);
 			LorR = 0;
 		}
 

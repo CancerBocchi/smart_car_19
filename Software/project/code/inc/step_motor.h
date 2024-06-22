@@ -9,8 +9,8 @@
 #define DOWN_MOTOR_CON_PIN 					PWM1_MODULE0_CHA_D12
 #define UP_MOTOR_CON_PIN 					PWM2_MODULE1_CHB_C9
 
-#define TURN_MOTOR_CON_PIN                  PWM1_MODULE3_CHB_B11    
-
+#define TURN_MOTOR_CON_PIN                  PWM2_MODULE0_CHA_C6
+   
 #define Magnet_Catch                        gpio_set_level(B10,1)
 #define Magnet_Put                          gpio_set_level(B10,0)
 
