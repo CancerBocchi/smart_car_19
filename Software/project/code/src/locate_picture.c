@@ -7,7 +7,7 @@ Pos_PID_t center_x_con;
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
 
-#define Is_Located (fabs(center_x - TARGET_X)<=4 && fabs(center_y - TARGET_Y)<=4)
+#define Is_Located (fabs(center_x - TARGET_X)<=3 && fabs(center_y - TARGET_Y)<=3)
 
 rt_thread_t locate_picture_thread;
 rt_sem_t locate_picture_sem;
@@ -51,6 +51,10 @@ void locate_picture_debug(){
 		Step_Motor_Catch();
 		locate_catch_flag = 0;
 	}
+	// if(locate_catch_flag){
+	// 	Step_Motor_Put();
+	// 	locate_catch_flag = 0;
+	// }
 	rt_thread_delay(1);
 }
 
@@ -72,7 +76,7 @@ void locate_picture_catch(){
 	
 	//连续十次定位成功后进行抓取
 	while(1){
-		while(located_n < 5){
+		while(located_n < 15){
 			MCX_Change_Mode(MCX_Location_Mode);
 			if(center_x  == 0&& center_y == 0&&side_catch_flag){
 				error_detect_flag = 1;
@@ -153,7 +157,7 @@ void locate_pic_init()
 	center_y_con.Output_Max = 100;
 	center_y_con.Output_Min = -100;
 	center_y_con.Value_I_Max = 500;
-	center_y_con.Ref = 145;
+	center_y_con.Ref = 130;
 	
 	Pos_PID_Init(&center_x_con,-1.2,0,0);
 	center_x_con.Output_Max = 100;

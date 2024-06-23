@@ -9,6 +9,7 @@ uint8 my_image[imgRow][imgCol];
 //二值化后的图像
 uint8 my_image_BW[imgRow][imgCol];
 
+int cir_line[IMAGE_COL];
 
 int16 Threshold = 250;
 
@@ -18,17 +19,16 @@ void Vision_Handle()
     //图像预处理
     Camera_PreProcess();
 
-    Camera_FindMidLine();   //常规扫线
+    // Camera_FindMidLine();   //常规扫线
     // Camera_LongestWight();  //最远线巡线    
-    Vision_SymbolJudge();   //元素判断，但是会有问题	
-    Vision_RSHandle();      //元素判断的解决方式
+    // Vision_SymbolJudge();   //元素判断，但是会有问题	
+    // Vision_RSHandle();      //元素判断的解决方式
 
    //获取中线
-   for(int i=imgRow-1;i>=0;i--)
-   {
-      Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
-   }
-
+//    for(int i=imgRow-1;i>=0;i--)
+//    {
+//       Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
+//    }
 
 //    //图像debug
     // float mid_offset=1.65;

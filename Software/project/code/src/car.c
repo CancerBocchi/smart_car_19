@@ -223,6 +223,7 @@ void car_motion_Init()
 void Car_Stop()
 {
 	Car_Change_Speed(0,0,0);
+	rt_thread_delay(1000);
 	Car_Switch(0);
 }
 

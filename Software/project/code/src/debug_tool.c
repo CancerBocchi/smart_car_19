@@ -117,6 +117,7 @@ arg_change arr_register[] ={
     {"leftb",imgRow,&(Image_S.leftBroder)},
     {"rightb",imgRow,&(Image_S.rightBroder)},
     {"midl",imgRow,&(Image_S.MID_Table)},
+    {"cir",imgCol,&(cir_line)},
     {NULL,NULL,NULL}
 };
 

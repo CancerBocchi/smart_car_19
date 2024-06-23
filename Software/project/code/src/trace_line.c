@@ -107,12 +107,12 @@ void trace_line_init()
 	//初始化线程
 	trace_line_thread = rt_thread_create("trace line",trace_line_entry,NULL,4096,2,1000);
 
-	if(trace_line_thread != NULL)
-	{
+	if(trace_line_thread != RT_NULL){
+		rt_kprintf("trace line thread created successfully!\n");
 		rt_thread_startup(trace_line_thread);
 	}
 	else 
-		rt_kprintf("trace line thread created successfully!\n");
+		rt_kprintf("trace_line_thread created failed\n");
 
 	MCX_Change_Mode(MCX_Detection_Mode);
 }

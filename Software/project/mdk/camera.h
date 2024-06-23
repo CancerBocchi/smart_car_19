@@ -35,6 +35,7 @@ extern int Longest_White_Column_Left[2];
 extern int Longest_White_Column_Right[2];
 extern int White_Column[imgCol];//每列白列长度
 extern int Center;
+extern int cir_line[imgCol];
 
 //
 void Vision_Handle();

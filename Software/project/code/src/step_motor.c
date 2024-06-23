@@ -73,11 +73,11 @@ void Step_Motor_Reset()
 void Step_Motor_Catch()
 {
 		rt_thread_delay(100);
-		servo_slow_ctrl(95, 15, 100);
+		servo_slow_ctrl(95, 0, 100);
 		rt_thread_delay(50);
 		gpio_set_level(B10,1);
 		rt_thread_delay(250);
-		servo_slow_ctrl(160, 15, 100);
+		servo_slow_ctrl(160, 0, 100);
 		rt_thread_delay(200);
 		servo_slow_ctrl(160, 180, 100);
 		rt_thread_delay(300);
@@ -92,15 +92,16 @@ void Step_Motor_Put()
 {
 		rt_thread_delay(100);
 		gpio_set_level(B10,1);
-		servo_slow_ctrl(150, 150, 100);
-		rt_thread_delay(200);
-		servo_slow_ctrl(120, 150, 50);
-		rt_thread_delay(50);
-		servo_slow_ctrl(20, 20, 100);
-//		rt_thread_delay(100);
-//		servo_slow_ctrl(20,20,100);
+		servo_slow_ctrl(160, 180, 100);
+		rt_thread_delay(500);
+		servo_slow_ctrl(180, 180, 50);
+		rt_thread_delay(300);
+		servo_slow_ctrl(170, 180, 50);
 		rt_thread_delay(100);
+		servo_slow_ctrl(160, 10, 50);
+		rt_thread_delay(200);
 		gpio_set_level(B10,0);
+		Step_Motor_Reset();
 
 }
 
