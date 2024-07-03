@@ -23,6 +23,7 @@ uint8 error_detect_flag = 0;
  */
 int locate_catch_flag = 0;
 uint8_t locate_debug_flag;
+uint8_t locate_put_flag;
 void locate_picture_debug(){
 
 	static int begin_flag;
@@ -37,24 +38,24 @@ void locate_picture_debug(){
 	//抓取测试
 	if(locate_catch_flag){
 		
-		Car_Change_Speed(0,0,0);
+		// Car_Change_Speed(0,0,0);
 
-		Art_Change_Mode(Art_Classify_Mode);
+		// Art_Change_Mode(Art_Classify_Mode);
 
-		while(Art_GetData() == Class_Null);
-		Class_Six_AddOneThing(Art_GetData(),Class_Side);
-		rt_kprintf("Classify:the class is %c\n",Art_GetData());
+		// while(Art_GetData() == Class_Null);
+		// Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		// rt_kprintf("Classify:the class is %c\n",Art_GetData());
 
-		Art_Change_Mode(Art_Reset_Mode);
+		// Art_Change_Mode(Art_Reset_Mode);
 
 		
 		Step_Motor_Catch();
 		locate_catch_flag = 0;
 	}
-	// if(locate_catch_flag){
-	// 	Step_Motor_Put();
-	// 	locate_catch_flag = 0;
-	// }
+	if(locate_put_flag){
+		Step_Motor_Put();
+		locate_put_flag = 0;
+	}
 	rt_thread_delay(1);
 }
 
@@ -96,6 +97,9 @@ void locate_picture_catch(){
 		//识别
 		Art_Change_Mode(Art_Classify_Mode);
 		while(Art_GetData() == Class_Null);
+
+		servo_slow_ctrl(DOWN_MOTOR_INIT_ANGLE,150,100);
+		rt_thread_delay(100);
 		Class_Six_AddOneThing(Art_GetData(),Class_Side);
 		rt_kprintf("Classify:the class is %c\n",Art_GetData());
 		Art_Change_Mode(Art_Reset_Mode);
@@ -142,7 +146,7 @@ void locate_pic_init()
 	rt_kprintf("locate_pic task init\n");
 	
 	//调试标志位 0---不调试 1---调试
-	locate_debug_flag = 0;
+	locate_debug_flag = 1;
 	
 	locate_picture_sem = rt_sem_create("locate",0,RT_IPC_FLAG_FIFO);
 	if(locate_picture_sem == RT_NULL){
