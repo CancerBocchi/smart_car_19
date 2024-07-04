@@ -99,8 +99,13 @@ void locate_picture_catch(){
 		while(Art_GetData() == Class_Null);
 
 		servo_slow_ctrl(DOWN_MOTOR_INIT_ANGLE,150,100);
+		
 		rt_thread_delay(100);
-		Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		if(side_catch_flag)
+			Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		else if(circule_handle_flag)
+			Class_Six_AddOneThing(Art_GetData(),Class_Cir);
+
 		rt_kprintf("Classify:the class is %c\n",Art_GetData());
 		Art_Change_Mode(Art_Reset_Mode);
 		//ץȡ

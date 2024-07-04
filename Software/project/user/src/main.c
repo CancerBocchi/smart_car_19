@@ -41,7 +41,7 @@ int main()
 	//任务初始化
 	locate_pic_init();	
 	// side_catch_init();
-	// //circule_handle_init();
+	circule_handle_init();
 	// trace_line_init();
 
 	rt_kprintf("--------- init end ----------\n");

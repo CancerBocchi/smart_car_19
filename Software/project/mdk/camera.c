@@ -556,103 +556,38 @@ void Camera_and_Screen_Init(){
  * @param image 
  * @param line 
  */
-#define WIDTH IMAGE_COL  // 
-#define HEIGHT IMAGE_ROW // 
-#define INTENSITY_THRESHOLD 200 // 
-#define GRADIENT_THRESHOLD 50   // 
+#define BLOCK 7
+#define CLIP_VAL 10
+//单点二值化
+uint8_t VadaptiveTH(uint8_t src[imgRow][imgCol], uint8_t x, uint8_t y)
+{
+    int half_block = BLOCK / 2;
+        int thres = 0;
+    if (y < half_block || y >= imgRow - half_block || x < half_block || x >= imgCol - half_block)
+        return 1;
+    for (int dy = -half_block; dy <= half_block; dy++)
+        for (int dx = -half_block; dx <= half_block; dx++)
+            thres += src[y + dy][x + dx];
+    thres = thres / (BLOCK * BLOCK) - CLIP_VAL;
 
-void compute_gradient(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH]);
-bool is_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int x, int y);
-int find_initial_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int center_x);
-void crawl_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int *col_line, int start_x, int start_y, int direction);
-
-void Camera_CirculeFindLine(uint8_t image[IMAGE_ROW][IMAGE_COL], int *col_line) {
-    int16_t gradient[HEIGHT][WIDTH];
-
-    // 
-    compute_gradient(image, gradient);
-
-    int center_x = WIDTH / 2;
-    int initial_y = find_initial_boundary(image, gradient, center_x);
-
-    if (initial_y != -1) {
-        //
-        for (int i = 0; i < WIDTH; i++) {
-            col_line[i] = -1; // -1 
-        }
-        col_line[center_x] = initial_y;
-
-        // 
-        crawl_boundary(image, gradient, col_line, center_x, initial_y, -1); // 鍚戝乏
-        crawl_boundary(image, gradient, col_line, center_x, initial_y, 1);  // 鍚戝彸
-    }
+    return src[y][x] > thres ? 255 : 0;
 }
 
-
-void compute_gradient(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH]) {
-    for (int y = 1; y < HEIGHT - 1; y++) {
-        for (int x = 1; x < WIDTH - 1; x++) {
-            int gx = image[y][x + 1] - image[y][x - 1];
-            int gy = image[y + 1][x] - image[y - 1][x];
-            gradient[y][x] = abs(gx) + abs(gy); // 
-        }
-    }
-}
-
-bool is_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int x, int y) {
-    if (image[y][x] >= INTENSITY_THRESHOLD) {
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                int nx = x + dx;
-                int ny = y + dy;
-                if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
-                    if (image[ny][nx] < INTENSITY_THRESHOLD || gradient[ny][nx] > GRADIENT_THRESHOLD) {
-                        return true;
-                    }
+/**
+ * @brief 圆环巡线
+ * 
+ */
+#define Judge_Thre 50
+void Camera_CirFindLine(uint8_t src[imgRow][imgCol]) {
+    for (int i = imgCol - 1; i >= 0; i--) {
+        for (int j = imgRow - 1; j >= 0; j--) {
+            if (abs(src[j + 1][i] - src[j][i]) > Judge_Thre) {
+                if (!VadaptiveTH(src, i, j)) {
+                    cir_line[i] = j;
+                    break;
                 }
-            }
+            } else
+                cir_line[i] = 0;
         }
     }
-    return false;
 }
-
-int find_initial_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int center_x) {
-    for (int y = HEIGHT - 1; y >= 0; y--) {
-        for (int x = center_x - 10; x <= center_x + 10; x++) {
-            if (is_boundary(image, gradient, x, y)) {
-                return y;
-            }
-        }
-    }
-    return -1;
-}
-
-void crawl_boundary(uint8_t image[HEIGHT][WIDTH], int16_t gradient[HEIGHT][WIDTH], int *col_line, int start_x, int start_y, int direction) {
-    int x = start_x;
-    int y = start_y;
-    while (true) {
-        bool found = false;
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                int nx = x + dx * direction;
-                int ny = y + dy;
-                if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
-                    if (is_boundary(image, gradient, nx, ny)) {
-                        if (ny > col_line[nx]) {
-                            col_line[nx] = ny;
-                        }
-                        x = nx;
-                        y = ny;
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (found) break;
-        }
-        if (!found) break;
-    }
-}
-
