@@ -50,6 +50,8 @@
         "zf_common_function.h": "c",
         "zf_driver_spi.h": "c",
         "zf_driver_soft_spi.h": "c",
-        "zf_device_ips200.h": "c"
+        "zf_device_ips200.h": "c",
+        "zf_common_debug.h": "c",
+        "zf_driver_gpio.h": "c"
     }
 }

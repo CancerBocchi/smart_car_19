@@ -189,7 +189,7 @@ static int arg_count;
 //×¢²á±í
 arg_change arg_register[] = {
 		{"Yaw",DEBUG_FLOAT,&(Car_Yaw_Controller.Ref)},
-        {"Vx",DEBUG_FLOAT,&(Car_Speed.Vx)},
+        {"Vx",DEBUG_FLOAT,&(cirucle_xspeed)},
         {"Vy",DEBUG_FLOAT,&(speed_forward)},
 		{"VxKp",DEBUG_FLOAT,&(TraceLine_Vx_Con.Kp)},
 		{"VxKi",DEBUG_FLOAT,&(TraceLine_Vx_Con.Ki)},
@@ -201,11 +201,9 @@ arg_change arg_register[] = {
 		{"adPara",DEBUG_INT,&(adaptivePara)},
 		{"Car_Switch",DEBUG_INT,&(Car_BootSwitch)}, 
 		{"LoVxKp",DEBUG_FLOAT,&(center_x_con.Kp)},
-		{"LoVxKi",DEBUG_FLOAT,&(center_x_con.Ki)},
-		{"LoVxKd",DEBUG_FLOAT,&(center_x_con.Kd)},
 		{"LoVyKp",DEBUG_FLOAT,&(center_y_con.Kp)},
-		{"LoVyKi",DEBUG_FLOAT,&(center_y_con.Ki)},
-		{"LoVyKd",DEBUG_FLOAT,&(center_y_con.Ki)},
+        {"CirYawKp",DEBUG_FLOAT,&(circule_Trace_Con_Omega.Kp)},
+        {"CirVyKp",DEBUG_FLOAT,&(circule_Trace_Con_Vy.Kp)},
 		{"xv",DEBUG_FLOAT,&(center_x_con.Ref)},
 		{"yv",DEBUG_FLOAT,&(center_y_con.Ref)},
 		{"catch_flag",DEBUG_INT,&locate_catch_flag},

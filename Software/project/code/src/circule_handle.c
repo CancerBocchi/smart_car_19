@@ -2,9 +2,9 @@
 
 //圆环中心到图片对的距离
 #define Circule_Distance1
-#define Circule_Normal_xSpeed 100
+#define Circule_Normal_xSpeed 50
 
-static int cirucle_xspeed;
+float cirucle_xspeed;
 
 //信号量控制块
 rt_sem_t circule_handle_sem;
@@ -41,30 +41,32 @@ void circule_handle_entry(){
 
         }
 
-        // rt_thread_delay(2000);
+        rt_thread_delay(2000);
         //启动定位抓取线程
-        rt_kprintf("task:start to catch things\n");
-        circule_handle_flag = 1;
-        rt_sem_release(locate_picture_sem);
-        rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
-        rt_kprintf("task:return to the circule_handle thread\n");
+        // rt_kprintf("task:start to catch things\n");
+        // circule_handle_flag = 1;
+        // rt_sem_release(locate_picture_sem);
+        // rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+        // rt_kprintf("task:return to the circule_handle thread\n");
 
         //抓取完毕 旋转180度，先放置最不好放置的东西
         Car_Rotate(180);
         rt_thread_delay(1000);
         Car_DistanceMotion(0,-30,0.8);
+        rt_thread_delay(500);
         //识别种类
-        Art_Change_Mode(Art_NumLetter_Mode);
-        rt_thread_delay(10);
-        Class_Six_CirPut(Art_GetData());
-        Step_Motor_Put();
+        // Art_Change_Mode(Art_NumLetter_Mode);
+        // rt_thread_delay(10);
+        // Class_Six_CirPut(Art_GetData());
+        // Step_Motor_Put();
         //转向并且回到圆环中心
         if(Circule_LorR == LEFT_CIRCULE){
             //左转
             Car_Rotate(90);
             //给足时间使得车转到位
             rt_thread_delay(500);
-            Car_DistanceMotion(-30,0,0.8);
+            Car_DistanceMotion(-50,0,0.8);
+            rt_thread_delay(500);
             // Car_DistanceMotion(30,-30,0.8);
         }
         else{
@@ -72,7 +74,8 @@ void circule_handle_entry(){
             Car_Rotate(-90);
             //给足时间使得车转到位
             rt_thread_delay(500);
-            Car_DistanceMotion(30,0,0.8);
+            Car_DistanceMotion(50,0,0.6);
+            rt_thread_delay(500);
             // Car_DistanceMotion(-30,-30,0.8);
         }
         //巡线放置
@@ -83,49 +86,57 @@ void circule_handle_entry(){
                 Car_Change_Speed(0,0,0);
                 //向前移动放置卡片
                 Car_DistanceMotion(0,-30,0.8);
-                //art 识别
-                Art_Change_Mode(Art_NumLetter_Mode);
-                rt_thread_delay(10);
-                //分类
-                int ret = Class_Six_CirPut(Art_GetData());
-                //已经分类完毕
-                if(ret == 2)
-                    break;
-                //还没有没有该类
-                else if(ret == 1)
-                    continue;
-                //有该类，放下
-                Step_Motor_Put();
+                rt_thread_delay(500);
+                // //art 识别
+                // Art_Change_Mode(Art_NumLetter_Mode);
+                // rt_thread_delay(10);
+                // //分类
+                // int ret = Class_Six_CirPut(Art_GetData());
+                // //已经分类完毕
+                // if(ret == 2)
+                //     break;
+                // //还没有没有该类
+                // else if(ret == 1)
+                //     continue;
+                // //有该类，放下
+                // Step_Motor_Put();
+                Car_DistanceMotion(0,30,0.8);
+                rt_thread_delay(500);
             }
         }
         float Delta_Yaw = fabs(init_yaw - Att_GetYaw());
         //转到初始角度
         Car_Speed_ConRight = Con_By_AngleLoop;
         Car_Change_Yaw(init_yaw);
+        rt_thread_delay(500);
         //针对不同的角度定距移动
         if(Tool_IsFloatEqu(Delta_Yaw,60,1.0f)){
             if(Circule_LorR == LEFT_CIRCULE)
                 Car_DistanceMotion(30,-30,1);
             else
                 Car_DistanceMotion(-30,-30,1);
+            rt_thread_delay(500);
         }
         else if(Tool_IsFloatEqu(Delta_Yaw,120,1.0f)){
             if(Circule_LorR == LEFT_CIRCULE)
                 Car_DistanceMotion(60,-40,3);
             else
                 Car_DistanceMotion(-60,-40,3);
+            rt_thread_delay(500);
         }
         else if(Tool_IsFloatEqu(Delta_Yaw,180,1.0f)){
             if(Circule_LorR == LEFT_CIRCULE)
                 Car_DistanceMotion(30,-50,2);
             else
                 Car_DistanceMotion(-30,-50,2);
+            rt_thread_delay(500);
         }
         else if(Tool_IsFloatEqu(Delta_Yaw,0,1.0f)){
             if(Circule_LorR == LEFT_CIRCULE)
                 Car_DistanceMotion(30,-10,1);
             else
                 Car_DistanceMotion(-30,-10,1);
+            rt_thread_delay(500);
         }
         
         //返回巡线线程
@@ -140,32 +151,41 @@ void circule_handle_entry(){
  * 
  */
 void circule_trace_line(){
+
+    Camera_PreProcess();
+    Camera_CirFindLine(my_image);
+    Vision_Draw();
+
     //将速度控制权限交给圆环
     Car_Speed_ConRight = Con_By_Circule;
-    //扫线
-    int line[IMAGE_COL];
-    Camera_CirculeFindLine(my_image,line);
 
     // //计算误差
-    // float current_error;
-    // for(int i = 60;i<128;i++)
-    //     current_error += line[i] - 35;
-    // current_error /= 68.0f;
+    float current_error = 0;
+    float left_right_error = 0;
+    for(int i = 60;i<128;i++)
+        current_error += cir_line[i] - 35;
+    current_error /= 68.0f;
 
-    // //左边圆环速度应当向左，右边圆环速度应当向右
-    // cirucle_xspeed = Circule_LorR? Circule_Normal_xSpeed : -Circule_Normal_xSpeed;
+    for(int i = 60;i<94;i++){
+        left_right_error += cir_line[i];
+        left_right_error -= cir_line[i+34];
+    }
+    //左边圆环速度应当向左，右边圆环速度应当向右
+    //cirucle_xspeed = Circule_LorR? Circule_Normal_xSpeed : -Circule_Normal_xSpeed;
 
-    // //PID闭环控制
-    // Car_Change_Speed(cirucle_xspeed,
-    //                 Pos_PID_Controller(&circule_Trace_Con_Vy,current_error),
-    //                 Pos_PID_Controller(&circule_Trace_Con_Omega,current_error));
-
+    //PID闭环控制
+    Car_Change_Speed(cirucle_xspeed,
+                    Pos_PID_Controller(&circule_Trace_Con_Vy,current_error),
+                    Pos_PID_Controller(&circule_Trace_Con_Omega,left_right_error));
+    left_right_error = 0;
+    current_error = 0;
 }
 
 /**
  * @brief 圆环处理初始化函数
  * 
  */
+// uint8_t circule_trace_debug = 0;
 void circule_handle_init(){
 
     rt_kprintf("circule handle task init\n");
@@ -180,15 +200,15 @@ void circule_handle_init(){
         while(1);
     }
 
-	rt_thread_startup(circule_handle_thread);
+	// rt_thread_startup(circule_handle_thread);
 
-    Pos_PID_Init(&circule_Trace_Con_Omega,0,0,0);
+    Pos_PID_Init(&circule_Trace_Con_Omega,-0.3,0,0);
     circule_Trace_Con_Omega.Output_Max = 50;
     circule_Trace_Con_Omega.Output_Min = -50;
     circule_Trace_Con_Omega.Value_I_Max = 200;
     circule_Trace_Con_Omega.Ref = 0;
 
-    Pos_PID_Init(&circule_Trace_Con_Vy,0,0,0);
+    Pos_PID_Init(&circule_Trace_Con_Vy,-1,0,0);
     circule_Trace_Con_Vy.Output_Max = 50;
     circule_Trace_Con_Vy.Output_Min = -50;
     circule_Trace_Con_Vy.Value_I_Max = 200;

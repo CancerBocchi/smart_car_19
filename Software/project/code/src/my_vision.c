@@ -851,19 +851,21 @@ void Vision_CirculeHandle()
         static int out_n;
         case RIGHT_CIRCULE:
             out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
-            if(out_n == 2){
+            if(out_n == 5){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 out_n = 0;
                 MCX_Change_Mode(MCX_Detection_Mode);
+                rt_kprintf("RS:Out of Cir\n");
             }
         break;
         case LEFT_CIRCULE:
             out_n = !IsStrai(F.my_segment_R[0])? out_n+1:0;
-            if(out_n == 2){
+            if(out_n == 5){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 MCX_Change_Mode(MCX_Detection_Mode);
+                rt_kprintf("RS:Out of Cir\n");
             }
         break;
     }
@@ -872,8 +874,11 @@ void Vision_CirculeHandle()
         if(state == Circule_State1){
             if(F.FP_n_R && !IsLose(F.my_segment_R[0]))
                 Vision_ExtendLine(Image_S.rightBroder,F.feature_p_R[0].x,1);
-            if(IsLose(F.my_segment_R[0]))
-                state = Circule_State2;
+            if(IsLose(F.my_segment_R[0])){
+                state = Circule_State2; 
+                rt_kprintf("RS:Cir State2\n");
+            }
+                
         }
         else if(state == Circule_State2){
             //做直线
@@ -886,8 +891,11 @@ void Vision_CirculeHandle()
                 Vision_SetLineWithPointK(Image_S.rightBroder,seed,-slope,0,69);
             }
                 
-            else if(!IsLose(F.my_segment_R[0]))
+            else if(!IsLose(F.my_segment_R[0])){
+                rt_kprintf("RS:Cir State3\n");
                 state = Circule_State3;
+            }
+                
         }
         else if(state == Circule_State3){
             if(!IsLose(F.my_segment_R[0])){
@@ -904,12 +912,13 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
+                Car_Change_Speed(0,0,0);
                 //启动圆环 同时阻塞寻仙
-                // rt_kprintf("task:ready to get into the circulehandle task\n");
-                // rt_sem_release(circule_handle_sem);
-                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_kprintf("task:return to the traceline thread\n");
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_thread_delay(1000);
+                rt_kprintf("task:return to the traceline thread\n");
 
             }
         }
@@ -922,6 +931,7 @@ void Vision_CirculeHandle()
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
                 MCX_Change_Mode(MCX_Detection_Mode);
+                rt_kprintf("RS:Out of Cir\n");
             }
         }
 
@@ -931,8 +941,10 @@ void Vision_CirculeHandle()
          if(state == Circule_State1){
             if(F.FP_n_L && !IsLose(F.my_segment_L[0]))
                 Vision_ExtendLine(Image_S.leftBroder,F.feature_p_L[0].x,1);
-            if(IsLose(F.my_segment_L[0]))
+            if(IsLose(F.my_segment_L[0])){
+                rt_kprintf("RS:Cir State2\n");
                 state = Circule_State2;
+            }     
         }
         else if(state == Circule_State2){
             //做直线
@@ -944,8 +956,10 @@ void Vision_CirculeHandle()
                 Vision_SetLineWithPointK(Image_S.leftBroder,seed,-slope,0,69);
             }
                 
-            else if(!IsLose(F.my_segment_L[0]))
+            else if(!IsLose(F.my_segment_L[0])){
+                rt_kprintf("RS:Cir State3\n");
                 state = Circule_State3;
+            }       
         }
         else if(state == Circule_State3){
             if(!IsLose(F.my_segment_L[0])){
@@ -963,12 +977,14 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
+                Car_Change_Speed(0,0,0);
+                
                 //启动圆环 同时阻塞寻仙
-                // rt_kprintf("task:ready to get into the circulehandle task\n");
-                // rt_sem_release(circule_handle_sem);
-                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_kprintf("task:return to the traceline thread\n");
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_thread_delay(1000);
+                rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){
@@ -980,6 +996,7 @@ void Vision_CirculeHandle()
                 state = Circule_Begin;
                 Current_Road = NormalRoads;
                 MCX_Change_Mode(MCX_Detection_Mode);
+                rt_kprintf("RS:Out of Cir\n");
             }
 						
         }

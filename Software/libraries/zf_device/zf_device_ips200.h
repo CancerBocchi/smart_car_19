@@ -75,7 +75,7 @@
 #else
 //====================================================硬件 SPI 驱动====================================================
 // 如果使用的是单排排针的两寸屏幕 SPI 驱动控制引脚 可以修改
-#define IPS200_SPI_SPEED                (60 * 1000 * 1000)                      // 硬件 SPI 速率 这里设置为系统时钟二分频
+#define IPS200_SPI_SPEED                (30 * 1000 * 1000)                      // 硬件 SPI 速率 这里设置为系统时钟二分频
 #define IPS200_SPI                      (SPI_3           )                      // 硬件 SPI 号
 #define IPS200_SCL_PIN_SPI              (SPI3_SCK_B0     )                      // 硬件 SPI SCK 引脚
 #define IPS200_SDA_PIN_SPI              (SPI3_MOSI_B1    )                      // 硬件 SPI MOSI 引脚

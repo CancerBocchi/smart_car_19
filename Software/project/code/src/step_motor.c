@@ -51,10 +51,13 @@ void Step_Motor_Init()
 	
 	S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
 
-	Step_Motor_Reset();
+
+	servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
 	rt_thread_delay(300);
 	Turntable_Rotate(23.8);
-	
+	rt_thread_delay(300);
+	Step_Motor_Reset();
+
 
 #if ARM_DEBUG_SWITCH == 1
 		if(S_Motor_test_Thread!=NULL)
