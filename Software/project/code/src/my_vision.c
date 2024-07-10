@@ -912,13 +912,13 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
-                //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_thread_delay(1000);
-                rt_kprintf("task:return to the traceline thread\n");
+                // Car_Change_Speed(0,0,0);
+                // //启动圆环 同时阻塞寻仙
+                // rt_kprintf("task:ready to get into the circulehandle task\n");
+                // rt_sem_release(circule_handle_sem);
+                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // // rt_thread_delay(1000);
+                // rt_kprintf("task:return to the traceline thread\n");
 
             }
         }
@@ -977,14 +977,14 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
+                // Car_Change_Speed(0,0,0);
                 
-                //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_thread_delay(1000);
-                rt_kprintf("task:return to the traceline thread\n");
+                // //启动圆环 同时阻塞寻仙
+                // rt_kprintf("task:ready to get into the circulehandle task\n");
+                // rt_sem_release(circule_handle_sem);
+                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // // rt_thread_delay(1000);
+                // rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){

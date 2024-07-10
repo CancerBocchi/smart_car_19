@@ -207,6 +207,7 @@ arg_change arg_register[] = {
 		{"xv",DEBUG_FLOAT,&(center_x_con.Ref)},
 		{"yv",DEBUG_FLOAT,&(center_y_con.Ref)},
 		{"catch_flag",DEBUG_INT,&locate_catch_flag},
+        {"put_flag",DEBUG_INT,&locate_put_flag},
 		{NULL,NULL,NULL}
 };
 

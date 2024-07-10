@@ -102,16 +102,16 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
  * @return int 框内剩余的数量
  */
 int Class_Six_FinalPut(int FinalClass){
+    FinalClass -= 48;
     if(current_basket != FinalClass){
-
         Turntable_Rotate(Class_Basket[FinalClass - 1].angle);
         current_basket = FinalClass;
-
-        rt_thread_delay(200);
+        rt_thread_delay(500);
     }
-    Class_Basket[FinalClass - 1].howmany--;
+    Step_Motor_Put();
+    Class_Basket[FinalClass - 1].howmany = (Class_Basket[FinalClass - 1].howmany)?Class_Basket[FinalClass - 1].howmany-1:0;
 
-    return Class_Basket[FinalClass - 1].howmany--;
+    return Class_Basket[FinalClass - 1].howmany;
 }
 
 /**

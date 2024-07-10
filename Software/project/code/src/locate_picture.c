@@ -7,7 +7,7 @@ Pos_PID_t center_x_con;
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
 
-#define Is_Located (fabs(center_x - TARGET_X)<=3 && fabs(center_y - TARGET_Y)<=3)
+#define Is_Located (fabs(center_x - TARGET_X)<=1 && fabs(center_y - TARGET_Y)<=1)
 
 rt_thread_t locate_picture_thread;
 rt_sem_t locate_picture_sem;
@@ -23,37 +23,78 @@ uint8 error_detect_flag = 0;
  */
 int locate_catch_flag = 0;
 uint8_t locate_debug_flag;
-uint8_t locate_put_flag;
+int locate_put_flag = 0;
 void locate_picture_debug(){
 
 	static int begin_flag;
+	static int located_n;
 	if(!begin_flag){
 		Car_Rotate(0);
 		begin_flag = 1;
 	}
-	MCX_Change_Mode(MCX_Location_Mode);
-	Vy = Pos_PID_Controller(&center_y_con,center_y);
-	Vx = Pos_PID_Controller(&center_x_con,center_x);
-	Car_Change_Speed(Vx,Vy,0);
-	//抓取测试
 	if(locate_catch_flag){
-		
-		// Car_Change_Speed(0,0,0);
+		int tick =rt_tick_get();
+		while(located_n<1000){
+			MCX_Change_Mode(MCX_Location_Mode);
+			Vy = Pos_PID_Controller(&center_y_con,center_y);
+			Vx = Pos_PID_Controller(&center_x_con,center_x);
+			Car_Change_Speed(Vx,Vy,0);
+			located_n = Is_Located? located_n+1:0;
+			if(rt_tick_get()-tick >= 3000)
+				break;
+		}
+		//抓取测试
+			
+		Car_Change_Speed(0,0,0);
 
-		// Art_Change_Mode(Art_Classify_Mode);
+		Art_Change_Mode(Art_Classify_Mode2);
 
-		// while(Art_GetData() == Class_Null);
-		// Class_Six_AddOneThing(Art_GetData(),Class_Side);
-		// rt_kprintf("Classify:the class is %c\n",Art_GetData());
+		while(Art_GetData() == Class_Null);
 
-		// Art_Change_Mode(Art_Reset_Mode);
+		servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
+		rt_thread_delay(100);
 
-		
+		Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		rt_kprintf("Classify:the class is %c\n",Art_GetData());
+
+		Art_Change_Mode(Art_Reset_Mode);
+
 		Step_Motor_Catch();
 		locate_catch_flag = 0;
+		located_n = 0;
 	}
+
 	if(locate_put_flag){
+
+		// int tick =rt_tick_get();
+		// while(located_n<1000){
+		// 	MCX_Change_Mode(MCX_Location_Mode);
+		// 	Vy = Pos_PID_Controller(&center_y_con,center_y);
+		// 	Vx = Pos_PID_Controller(&center_x_con,center_x);
+		// 	Car_Change_Speed(Vx,Vy,0);
+		// 	located_n = Is_Located? located_n+1:0;
+		// 	if(rt_tick_get()-tick >= 3000)
+		// 		break;
+		// }
+
+		// Car_Change_Speed(0,0,0);
+
+		// Art_Change_Mode(Art_NumLetter_Mode0);
+
+		// while(Art_GetData() == Class_Null);
+
+		// Car_DistanceMotion(20,0,0.5);
+
+		// servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
+		// rt_thread_delay(100);
+		// int class = Art_GetData();
+
+		// Art_Change_Mode(Art_Reset_Mode);
+		// rt_kprintf("Classify:the num/letter is %c\n",class);
+
+		// while(Class_Six_FinalPut(class));
 		Step_Motor_Put();
+		
 		locate_put_flag = 0;
 	}
 	rt_thread_delay(1);
@@ -77,7 +118,8 @@ void locate_picture_catch(){
 	
 	//连续十次定位成功后进行抓取
 	while(1){
-		while(located_n < 15){
+		int tick = rt_tick_get();
+		while(located_n < 500){
 			MCX_Change_Mode(MCX_Location_Mode);
 			if(center_x  == 0&& center_y == 0&&side_catch_flag){
 				error_detect_flag = 1;
@@ -88,6 +130,8 @@ void locate_picture_catch(){
 			Vx = Pos_PID_Controller(&center_x_con,center_x);
 			Car_Change_Speed(Vx,Vy,0);
 			rt_thread_delay(1);
+			if(rt_tick_get() - tick >= 4000)
+				break;
 		}
 		if(error_detect_flag&&side_catch_flag)
 			break;
@@ -95,12 +139,12 @@ void locate_picture_catch(){
 		located_n = 0;
 		Car_Change_Speed(0,0,0);
 		//识别
-		Art_Change_Mode(Art_Classify_Mode);
+		Art_Change_Mode(Art_Classify_Mode2);
 		while(Art_GetData() == Class_Null);
 
-		servo_slow_ctrl(DOWN_MOTOR_INIT_ANGLE,150,100);
-		
+		servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
 		rt_thread_delay(100);
+
 		if(side_catch_flag)
 			Class_Six_AddOneThing(Art_GetData(),Class_Side);
 		else if(circule_handle_flag)
@@ -151,7 +195,7 @@ void locate_pic_init()
 	rt_kprintf("locate_pic task init\n");
 	
 	//调试标志位 0---不调试 1---调试
-	locate_debug_flag = 1;
+	locate_debug_flag = 0;
 	
 	locate_picture_sem = rt_sem_create("locate",0,RT_IPC_FLAG_FIFO);
 	if(locate_picture_sem == RT_NULL){
@@ -166,12 +210,12 @@ void locate_pic_init()
 	center_y_con.Output_Max = 100;
 	center_y_con.Output_Min = -100;
 	center_y_con.Value_I_Max = 500;
-	center_y_con.Ref = 130;
+	center_y_con.Ref = 145;
 	
 	Pos_PID_Init(&center_x_con,-1.2,0,0);
 	center_x_con.Output_Max = 100;
 	center_x_con.Output_Min = -100;
 	center_x_con.Value_I_Max = 500;
-	center_x_con.Ref = 115;
+	center_x_con.Ref = 120;
 
 }

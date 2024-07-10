@@ -43,10 +43,15 @@ void Vision_Handle()
    {
        if(MID_Table[i]>=188)
            MID_Table[i] = 187;
+        MID_Table[i] = MID_Table[i]<0? 0:MID_Table[i];
+
        if(leftBroder[i]>=188)
            leftBroder[i] = 187;
+        leftBroder[i] = leftBroder[i]<0? 0:leftBroder[i];
+
        if(rightBroder[i]>=188)
            rightBroder[i] = 187;
+        rightBroder[i] = rightBroder[i]<0? 0:rightBroder[i]; 
 				
        ips200_draw_point(MID_Table[i], i, RGB565_RED);
        ips200_draw_point(leftBroder[i], i, RGB565_BLUE);

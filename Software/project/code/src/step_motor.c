@@ -43,7 +43,11 @@ void Step_Motor_Init()
 	rt_kprintf("Catch Arm Init\n");
 	pwm_init(DOWN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(DOWN_MOTOR_INIT_ANGLE));   
 	pwm_init(UP_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(UP_MOTOR_INIT_ANGLE));
-	pwm_init(TURN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(0));
+	
+	servo_slow_ctrl(140, DOWN_MOTOR_INIT_ANGLE, 100);
+	rt_thread_delay(300);
+	
+	pwm_init(TURN_MOTOR_CON_PIN, STEP_MOTOR_FRE, (uint32)SERVO_MOTOR_DUTY(23.8));
 
 	gpio_init(B10, GPO, 0, GPO_PUSH_PULL);
 	
@@ -51,9 +55,6 @@ void Step_Motor_Init()
 	
 	S_Motor_test_Thread = rt_thread_create("S_motor",Catch_Entry,NULL,1024,2,1000);
 
-
-	servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
-	rt_thread_delay(300);
 	Turntable_Rotate(23.8);
 	rt_thread_delay(300);
 	Step_Motor_Reset();
@@ -81,13 +82,17 @@ void Step_Motor_Catch()
 		rt_thread_delay(50);
 		gpio_set_level(B10,1);
 		rt_thread_delay(250);
-		servo_slow_ctrl(160, 7, 100);
+		servo_slow_ctrl(140, 7, 100);
 		rt_thread_delay(200);
-		servo_slow_ctrl(160, 140, 100);
+		servo_slow_ctrl(140, 100, 100);
+		rt_thread_delay(100);
+		servo_slow_ctrl(175, 100, 100);
 		rt_thread_delay(300);
-		servo_slow_ctrl(180, 140, 100);
+		servo_slow_ctrl(180, 150, 100);
 		rt_thread_delay(100);
 		gpio_set_level(B10,0);
+		servo_slow_ctrl(140, 150, 100);
+		rt_thread_delay(100);
 		Step_Motor_Reset();
 		
 }
@@ -96,15 +101,15 @@ void Step_Motor_Put()
 {
 		rt_thread_delay(100);
 		gpio_set_level(B10,1);
-		servo_slow_ctrl(160, 145, 100);
-		rt_thread_delay(500);
-		servo_slow_ctrl(180, 145, 50);
-		rt_thread_delay(300);
-		servo_slow_ctrl(170, 145, 50);
-		rt_thread_delay(100);
-		servo_slow_ctrl(160, 10, 50);
-		rt_thread_delay(200);
-		gpio_set_level(B10,0);
+		servo_slow_ctrl(155, 140, 200);
+		rt_thread_delay(1000);
+		servo_slow_ctrl(180, 140, 100);
+		rt_thread_delay(600);
+		servo_slow_ctrl(165, 140, 100);
+		rt_thread_delay(400);
+		servo_slow_ctrl(160, 10, 100);
+		rt_thread_delay(400);
+		// gpio_set_level(B10,0);
 		Step_Motor_Reset();
 
 }

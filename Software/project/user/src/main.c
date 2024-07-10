@@ -30,31 +30,31 @@ int main()
 	rt_kprintf("----------  Basic Hardware Init ----------\n");
 	//基础外设初始化
 	Step_Motor_Init();
-	// Class_Init();
+	Class_Init();
 	buzzer_init();
 	car_motion_Init();
 	Camera_and_Screen_Init();
-	// MCX_UART_Init();
-	// Art_UART_Init();
+	MCX_UART_Init();
+	Art_UART_Init();
 
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
-	// locate_pic_init();	
-	// side_catch_init();
-	circule_handle_init();
-	// trace_line_init();
+	locate_pic_init();
+	side_catch_init();
+	// circule_handle_init();
+	trace_line_init();
 
 	rt_kprintf("--------- init end ----------\n");
 
-	while(1){
-		if(mt9v03x_finish_flag){
-			circule_trace_line();
-			for(int i = 0;i<imgCol-1;i++){
-				ips200_draw_point(i,cir_line[i],RGB565_RED);
-			}
-		}
-		rt_thread_delay(1);
+	// while(1){
+	// 	if(mt9v03x_finish_flag){
+	// 		circule_trace_line();
+	// 		for(int i = 0;i<imgCol-1;i++){
+	// 			ips200_draw_point(i,cir_line[i],RGB565_RED);
+	// 		}
+	// 	}
+	// 	rt_thread_delay(1);
 
-	}
+	// }
 
 }
