@@ -55,6 +55,10 @@ void Vision_RSHandle()
         ips200_show_string(200,50,"Cor");
         break;
 
+    case ZebraRoads:
+        Vision_ZebraHandle();
+        ips200_show_string(200,50,"Zeb");
+
     default:
         break;
     }
@@ -478,6 +482,27 @@ void Vision_BroderFindFP(int16* broder)
 					(*target_n)++;
         }
     }
+}
+
+/**
+ * @brief 判断前方是否有斑马线
+ * 
+ * @return uint8_t 返回1为发现前方斑马线
+ */
+#define Zebra_Y 35
+#define Zebra_TH 10
+uint8_t Vision_IsZebra(){
+    int change_num;
+    for(int i = 0;i<187;i++){
+        if(my_image[35][i] > Threshold+10 && my_image[35][i+1] < Threshold-10||
+            my_image[35][i] < Threshold-10 && my_image[35][i+1] > Threshold+10){
+            change_num++;
+        }
+    }
+    if(change_num >= Zebra_TH)
+        return 1;
+    return 0;
+    
 }
 
 /**
@@ -999,6 +1024,34 @@ void Vision_CirculeHandle()
                 rt_kprintf("RS:Out of Cir\n");
             }
 						
+        }
+    }
+}
+
+/**
+ * @brief 斑马线处理函数
+ * 
+ */
+void Vision_ZebraHandle(){
+    if(!final_flag){
+        rt_sem_release(final_sem);
+        rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+    }
+    else{
+        if(Vision_IsZebra()){
+            static int tick;
+            static uint8_t flag = 0;
+            if(!flag){
+                tick = rt_tick_get();
+                flag = 1;
+            }
+            
+            if(rt_tick_get() - tick > 1000){
+                Car_Change_Speed(0,0,0);
+                while(1){
+                    rt_kprintf("Finished\n");
+                }
+            }
         }
     }
 }

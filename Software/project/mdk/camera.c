@@ -561,7 +561,7 @@ void Camera_and_Screen_Init(){
  */
 #define BLOCK 7
 #define CLIP_VAL 10
-//单点二值化
+//单点二值化 返回0 则为黑色
 uint8_t VadaptiveTH(uint8_t src[imgRow][imgCol], uint8_t x, uint8_t y)
 {
     int half_block = BLOCK / 2;

@@ -41,6 +41,7 @@ typedef enum{
     CrossRoads,     //十字
     CirculeRoads,   //圆环
     CornerRoads,    //弯道
+    ZebraRoads,     //斑马线
 
 }RoadSymbol_type;
 
@@ -83,6 +84,8 @@ void Vision_CrossHandle();
 void Vision_CirculeHandle();
 //弯道处理
 void Vision_CornerHandle();
+//斑马线处理
+void Vision_ZebraHandle();
 //打印特征点
 void Vision_DrawFP();
 

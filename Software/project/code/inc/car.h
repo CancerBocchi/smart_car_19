@@ -51,19 +51,19 @@ extern uint8_t Car_BootSwitch;
 //车辆开关，1为开 0为关，挂断时，车的速度控制函数将失效
 #define Car_Switch(onoff)	(Car_BootSwitch = onoff)
 
-//车辆运动初始化
+
 void car_motion_Init();
-// 车辆运动运行函数
+
 void car_motion_run();
-// 速度控制接口
+
 void Car_Change_Speed(float xSpeed, float ySpeed, float aSpeed);
-// 汽车转向接口
+
 void Car_Rotate(float angle);
 
 void Car_DistanceMotion(float dx,float dy,float dt);
-// 航向角控制
+
 void Car_Change_Yaw(float Yaw_Ref);
-//车辆开关
+
 void Car_Start();
 void Car_Stop();
 

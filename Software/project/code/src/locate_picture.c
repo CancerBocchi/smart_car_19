@@ -4,6 +4,12 @@
 Pos_PID_t center_y_con;
 Pos_PID_t center_x_con;
 
+#define PUT_X 	120
+#define PUT_Y 	160
+
+#define CATCH_X 120
+#define CATCH_Y 145
+
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
 
@@ -21,7 +27,7 @@ uint8 error_detect_flag = 0;
  * @brief 用于定位抓取图片debug的程序
  * 
  */
-int locate_catch_flag = 0;
+int  locate_catch_flag = 0;
 uint8_t locate_debug_flag;
 int locate_put_flag = 0;
 void locate_picture_debug(){
@@ -33,6 +39,9 @@ void locate_picture_debug(){
 		begin_flag = 1;
 	}
 	if(locate_catch_flag){
+		TARGET_X = CATCH_X;
+		TARGET_Y = CATCH_Y;
+
 		int tick =rt_tick_get();
 		while(located_n<1000){
 			MCX_Change_Mode(MCX_Location_Mode);
@@ -66,33 +75,37 @@ void locate_picture_debug(){
 
 	if(locate_put_flag){
 
-		// int tick =rt_tick_get();
-		// while(located_n<1000){
-		// 	MCX_Change_Mode(MCX_Location_Mode);
-		// 	Vy = Pos_PID_Controller(&center_y_con,center_y);
-		// 	Vx = Pos_PID_Controller(&center_x_con,center_x);
-		// 	Car_Change_Speed(Vx,Vy,0);
-		// 	located_n = Is_Located? located_n+1:0;
-		// 	if(rt_tick_get()-tick >= 3000)
-		// 		break;
-		// }
+	static int located_n;//记录连续定位准确的次数
+	static int begin_flag;
 
-		// Car_Change_Speed(0,0,0);
+	TARGET_X = PUT_X;
+	TARGET_Y = PUT_Y;
+	
+	int tick =rt_tick_get();
+	while(located_n<1000){
+		MCX_Change_Mode(MCX_Location_Mode);
+		Vy = Pos_PID_Controller(&center_y_con,center_y);
+		Vx = Pos_PID_Controller(&center_x_con,center_x);
+		Car_Change_Speed(Vx,Vy,0);
+		located_n = Is_Located? located_n+1:0;
+		if(rt_tick_get()-tick >= 3000)
+			break;
+	}
 
-		// Art_Change_Mode(Art_NumLetter_Mode0);
+	Car_Change_Speed(0,0,0);
 
-		// while(Art_GetData() == Class_Null);
+	Art_Change_Mode(Art_NumLetter_Mode0);
 
-		// Car_DistanceMotion(20,0,0.5);
+	while(Art_GetData() == Class_Null);
 
-		// servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
-		// rt_thread_delay(100);
-		// int class = Art_GetData();
+	servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
+	rt_thread_delay(100);
+	int class = Art_GetData();
 
-		// Art_Change_Mode(Art_Reset_Mode);
-		// rt_kprintf("Classify:the num/letter is %c\n",class);
+	Art_Change_Mode(Art_Reset_Mode);
+	rt_kprintf("Classify:the num/letter is %c\n",class);
 
-		// while(Class_Six_FinalPut(class));
+	while(Class_Six_FinalPut(class))
 		Step_Motor_Put();
 		
 		locate_put_flag = 0;
@@ -108,8 +121,8 @@ void locate_picture_catch(){
 
 	static int located_n;//记录连续定位准确的次数
 	static int begin_flag;
-	rt_sem_take(locate_picture_sem,RT_WAITING_FOREVER);
-	rt_kprintf("task:get into the locate task\n");
+	TARGET_X = CATCH_X;
+	TARGET_Y = CATCH_Y;
 	if(!begin_flag){
 		Car_Rotate(0);
 		begin_flag = 1;
@@ -178,12 +191,72 @@ void locate_picture_catch(){
 		
 }
 
+/**
+ * @brief 放置线程
+ * 
+ */
+void locate_picture_put(){
+
+	static int located_n;//记录连续定位准确的次数
+	static int begin_flag;
+
+	TARGET_X = PUT_X;
+	TARGET_Y = PUT_Y;
+	//放置时只定位x
+	int tick =rt_tick_get();
+	while(located_n<1000){
+		MCX_Change_Mode(MCX_Location_Mode);
+		Vx = Pos_PID_Controller(&center_x_con,center_x);
+		Car_Change_Speed(Vx,0,0);
+		located_n = Is_Located? located_n+1:0;
+		if(rt_tick_get()-tick >= 3000)
+			break;
+	}
+
+	Car_Change_Speed(0,0,0);
+
+	Art_Change_Mode(Art_NumLetter_Mode0);
+
+	while(Art_GetData() == Class_Null);
+
+	servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
+	rt_thread_delay(100);
+	int class = Art_GetData();
+
+	Art_Change_Mode(Art_Reset_Mode);
+	rt_kprintf("Classify:the num/letter is %c\n",class);
+
+	//返回
+	if(final_flag){
+		while(Class_Six_FinalPut(class))
+			Step_Motor_Put();
+		rt_sem_release(final_sem);
+	}
+		
+	else if(circule_handle_flag){
+
+		if(Class_Six_CirPut(class) == 0);
+			Step_Motor_Put();
+		
+		rt_sem_release(circule_handle_sem);
+	}
+		
+	
+}
+
 void locate_picture_entry()
 {
 	while(1)
 	{
-		if(locate_debug_flag == 0)
-			locate_picture_catch();
+		if(locate_debug_flag == 0){
+			rt_sem_take(locate_picture_sem,RT_WAITING_FOREVER);
+			rt_kprintf("task:get into the locate task\n");
+			if(!final_flag)
+				locate_picture_catch();
+			else if(final_flag)
+				locate_picture_put();
+		}
+			
 		else
 			locate_picture_debug();
 	}

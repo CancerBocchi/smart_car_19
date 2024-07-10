@@ -54,5 +54,7 @@ void Camera_CirFindLine(uint8_t src[imgRow][imgCol]);
 
 void Vision_Draw();
 
+uint8_t VadaptiveTH(uint8_t src[imgRow][imgCol], uint8_t x, uint8_t y);
+
 
 #endif
