@@ -10,8 +10,8 @@
       <TargetName>nor_sdram_zf_dtcm</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pArmCC>6190000::V6.19::ARMCLANG</pArmCC>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pArmCC>6210000::V6.21::ARMCLANG</pArmCC>
+      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -670,6 +670,31 @@
               <FileName>art.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\code\src\art.c</FilePath>
+            </File>
+            <File>
+              <FileName>cross_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\cross_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>final.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\final.c</FilePath>
+            </File>
+            <File>
+              <FileName>putdown_pic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\src\putdown_pic.c</FilePath>
+            </File>
+            <File>
+              <FileName>art.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\code\inc\art.h</FilePath>
+            </File>
+            <File>
+              <FileName>putdown_pic.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\code\inc\putdown_pic.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -25,6 +25,7 @@ void circule_handle_entry(){
     while(1){
         rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
         rt_kprintf("task:get into the circule task\n");
+        circule_handle_flag = 1;
         //初始处理
         if(!begin_flag){
             //得到初始角度
@@ -38,10 +39,12 @@ void circule_handle_entry(){
             rt_thread_delay(500);
             //定位跑
             Car_DistanceMotion(0,-20,0.4);
+            printf("cirhandle:Start to catch\n");
+            rt_sem_release(locate_picture_sem);
+            rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
 
         }
 
-        rt_thread_delay(2000);
         //启动定位抓取线程
         // rt_kprintf("task:start to catch things\n");
         // circule_handle_flag = 1;
@@ -61,8 +64,8 @@ void circule_handle_entry(){
         // Step_Motor_Put();
         //转向并且回到圆环中心
         if(Circule_LorR == LEFT_CIRCULE){
-            //左转
-            Car_Rotate(90);
+            //右转
+            Car_Rotate(-90);
             //给足时间使得车转到位
             rt_thread_delay(500);
             Car_DistanceMotion(-50,0,0.8);
@@ -71,7 +74,7 @@ void circule_handle_entry(){
         }
         else{
             //右转
-            Car_Rotate(-90);
+            Car_Rotate(90);
             //给足时间使得车转到位
             rt_thread_delay(500);
             Car_DistanceMotion(50,0,0.6);

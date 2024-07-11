@@ -1034,6 +1034,7 @@ void Vision_CirculeHandle()
  */
 void Vision_ZebraHandle(){
     if(!final_flag){
+        printf("Vision:Zebra Detected\n");
         rt_sem_release(final_sem);
         rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
     }

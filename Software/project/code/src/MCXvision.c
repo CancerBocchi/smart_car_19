@@ -97,6 +97,7 @@ void MCX_uart_handle(){
 		case Location_Mode:
 			center_x = MCX_rx_buffer[2];
 			center_y = MCX_rx_buffer[3];
+			printf("MCX:(%d,%d)\n",center_x,center_y);
 		break;
 
 		case Reset_Mode:
@@ -109,6 +110,7 @@ void MCX_uart_handle(){
 				center_y = MCX_rx_buffer[3];
 				MCX_Detection_Flag = 1;
 				MCX_Change_Mode(MCX_Reset_Mode);
+				printf("MCX:(%d,%d)\n",center_x,center_y);
 			}
 		break;
 	}

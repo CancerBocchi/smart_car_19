@@ -28,7 +28,7 @@ void final_entry(){
             MCX_Change_Mode(MCX_Location_Mode);
             if(center_x!=0||center_y!=0){
                 Car_Change_Speed(0,0,0);
-                rt_sem_release(locate_catch_flag);
+                rt_sem_release(locate_picture_sem);
                 rt_sem_take(final_sem,RT_WAITING_FOREVER);
                 rt_kprintf("final_thread:return from location\n");
                 class_num += 1;
