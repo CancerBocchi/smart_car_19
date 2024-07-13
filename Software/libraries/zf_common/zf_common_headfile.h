@@ -149,6 +149,7 @@
 #include "art.h"
 #include "putdown_pic.h"
 #include "final.h"
+#include "cross_handle.h"
 //===================================================用户自定义文件===================================================
 
 #endif

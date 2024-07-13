@@ -54,6 +54,7 @@
         "zf_common_debug.h": "c",
         "zf_driver_gpio.h": "c",
         "rtthread.h": "c",
-        "final.h": "c"
+        "final.h": "c",
+        "cross_handle.h": "c"
     }
 }

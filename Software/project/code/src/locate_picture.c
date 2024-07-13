@@ -193,7 +193,7 @@ void locate_picture_catch(){
 
 		if(side_catch_flag)
 			Class_Six_AddOneThing(Art_GetData(),Class_Side);
-		else if(circule_handle_flag)
+		else if(circule_handle_flag || cross_handle_flag)
 			Class_Six_AddOneThing(Art_GetData(),Class_Cir);
 
 		rt_kprintf("Classify:the class is %c\n",Art_GetData());
@@ -220,6 +220,12 @@ void locate_picture_catch(){
 		rt_kprintf("task:ready to return to circule_handle thread\n");
 		rt_sem_release(circule_handle_sem);
 	}
+	// 返回十字出线程
+	if(cross_handle_flag == 1){
+		rt_kprintf("task:ready to return to cross_handle thread\n");
+		rt_sem_release(circule_handle_sem);
+	}
+
 		
 }
 
@@ -298,7 +304,6 @@ void locate_picture_entry()
 			else if(put_flag){
 				locate_picture_put();
 			}
-				
 		}
 			
 		else

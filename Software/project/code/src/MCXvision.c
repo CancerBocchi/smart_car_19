@@ -129,6 +129,16 @@ void MCX_uart_handle(){
 }
 
 /**
+ * @brief 清除缓冲区
+ * 
+ */
+void MCX_Clear(){
+	center_x = 0;
+	center_y = 0;
+	cur_PicNum = 0;
+}
+
+/**
  * @brief 初始化函数
  * 
  */

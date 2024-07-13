@@ -68,9 +68,9 @@ void final_entry(){
         Car_Change_Speed(0,0,0);
         Car_Rotate(90);
         while(1);
-        
+        rt_thread_delay(500);
+        rt_sem_release(trace_line_sem);
     }
-
 }
 
 /**

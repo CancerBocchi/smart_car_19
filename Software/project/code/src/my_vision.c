@@ -1042,6 +1042,7 @@ void Vision_ZebraHandle(){
         rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
     }
     else{
+    //÷’µ„Õ£≥µ
         if(Vision_IsZebra()){
             static int tick;
             static uint8_t flag = 0;

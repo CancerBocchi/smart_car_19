@@ -14,6 +14,11 @@ extern uint8 error_detect_flag;
 extern uint8_t put_flag;
 extern uint8_t locate_arr_flag;
 
+#define Locate_Catch 1
+#define Locate_Put   0
+#define Locate_SetMode(mode) (put_flag = mode)
+
+
 
 void locate_pic_init();
 

@@ -23,5 +23,6 @@ extern uint8_t cur_PicNum;
 void MCX_Change_Mode(uint8_t mode);
 void MCX_UART_Init(void);
 void MCX_uart_handle();
+void MCX_Clear();
 
 #endif

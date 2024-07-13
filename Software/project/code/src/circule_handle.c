@@ -103,9 +103,15 @@ void circule_handle_entry(){
 
         }
         Car_Change_Speed(0,0,0);
+        
         while(1);
+        if(Circule_LorR == LEFT_CIRCULE)
+            Car_DistanceMotion(50,-15,1);
+        else if(Circule_LorR == RIGHT_CIRCULE)
+            Car_DistanceMotion(-50,-15,1);
         //返回巡线线程
         Car_Speed_ConRight = Con_By_TraceLine;
+        circule_handle_flag = 0;
         rt_sem_release(trace_line_sem);
 
     }

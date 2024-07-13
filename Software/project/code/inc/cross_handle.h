@@ -3,6 +3,8 @@
 
 #include "zf_common_headfile.h"
 
+extern uint8_t cross_handle_flag;
+
 
 
 #endif // !__CROSS_HANDLE_H__
