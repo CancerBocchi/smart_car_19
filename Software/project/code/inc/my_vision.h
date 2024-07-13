@@ -89,4 +89,6 @@ void Vision_ZebraHandle();
 //´òÓ¡ÌØÕ÷µã
 void Vision_DrawFP();
 
+uint8_t Vision_IsZebra();
+
 #endif

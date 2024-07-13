@@ -12,7 +12,8 @@ uint8_t MCX_uart_rx_buffer;
 typedef enum{
     Reset_Mode,
     Detection_Mode,
-    Location_Mode
+    Location_Mode,
+	Put_Mode
 }MCX_Current_Mode;
 
 //此变量用于切换寻线和编写采集线程
@@ -24,6 +25,7 @@ uint8_t MCX_rx_buffer[128];
 
 int16_t center_x;
 int16_t center_y;
+uint8_t cur_PicNum;
 
 void MCX_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData)
 {
@@ -49,7 +51,7 @@ void MCX_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t stat
 		{
 			MCX_rx_buffer[count] = MCX_uart_rx_buffer;
 			count++;
-			if(count > 4)
+			if(count > 5)
 			{
 				rt_kprintf("MCX:buffer overload\n");
 				count = 0;
@@ -84,6 +86,10 @@ void MCX_Change_Mode(uint8_t mode){
 		case 'D':
 			mcxCurrent_Mode = Detection_Mode;
 		break;
+
+		case 'F':
+			mcxCurrent_Mode = Put_Mode;
+		break;
 	}
 }
 
@@ -95,9 +101,9 @@ void MCX_uart_handle(){
 	switch (mcxCurrent_Mode)
 	{
 		case Location_Mode:
-			center_x = MCX_rx_buffer[2];
-			center_y = MCX_rx_buffer[3];
-			printf("MCX:(%d,%d)\n",center_x,center_y);
+			center_x = MCX_rx_buffer[2]*1.5;
+			center_y = MCX_rx_buffer[3]*1.5;
+			// rt_kprintf("%d,%d\n",center_x,center_y);
 		break;
 
 		case Reset_Mode:
@@ -106,13 +112,19 @@ void MCX_uart_handle(){
 
 		case Detection_Mode:
 			if(MCX_rx_buffer[1] == 1){
-				center_x = MCX_rx_buffer[2];
-				center_y = MCX_rx_buffer[3];
+				center_x = MCX_rx_buffer[2]*1.5;
+				center_y = MCX_rx_buffer[3]*1.5;
 				MCX_Detection_Flag = 1;
 				MCX_Change_Mode(MCX_Reset_Mode);
-				printf("MCX:(%d,%d)\n",center_x,center_y);
+				rt_kprintf("MCX:(%d,%d)\n",center_x,center_y);
 			}
 		break;
+
+		case Put_Mode:
+			center_x = MCX_rx_buffer[2]*1.5;
+			center_y = MCX_rx_buffer[3]*1.5;
+			cur_PicNum = MCX_rx_buffer[4];
+			rt_kprintf("%d,%d,%d\n",center_x,center_y,cur_PicNum);
 	}
 }
 

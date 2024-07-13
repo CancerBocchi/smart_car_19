@@ -105,7 +105,10 @@ void Vision_SymbolJudge()
 
     //只有当道路情况为正常道路时才需要进行判断
     if(Current_Road == NormalRoads){
-        if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_R[1]))||
+        if(Vision_IsZebra()){
+            Current_Road = ZebraRoads;
+        }
+        else if( (F.segment_n_L == 1 && IsStrai(F.my_segment_L[0]) && IsLose(F.my_segment_R[1]))||
             (F.segment_n_R == 1 && IsStrai(F.my_segment_R[0]) && IsLose(F.my_segment_L[1])) )
             Current_Road = CirculeRoads;
 
@@ -489,13 +492,13 @@ void Vision_BroderFindFP(int16* broder)
  * 
  * @return uint8_t 返回1为发现前方斑马线
  */
-#define Zebra_Y 35
+#define Zebra_Y 60
 #define Zebra_TH 10
 uint8_t Vision_IsZebra(){
-    int change_num;
+    int change_num = 0;
     for(int i = 0;i<187;i++){
-        if(my_image[35][i] > Threshold+10 && my_image[35][i+1] < Threshold-10||
-            my_image[35][i] < Threshold-10 && my_image[35][i+1] > Threshold+10){
+        if(my_image[Zebra_Y][i] > Threshold+10 && my_image[Zebra_Y][i+1] < Threshold-10||
+            my_image[Zebra_Y][i] < Threshold-10 && my_image[Zebra_Y][i+1] > Threshold+10){
             change_num++;
         }
     }
@@ -937,13 +940,13 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
-                // //启动圆环 同时阻塞寻仙
-                // rt_kprintf("task:ready to get into the circulehandle task\n");
-                // rt_sem_release(circule_handle_sem);
-                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // // rt_thread_delay(1000);
-                // rt_kprintf("task:return to the traceline thread\n");
+                Car_Change_Speed(0,0,0);
+                //启动圆环 同时阻塞寻仙
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_thread_delay(1000);
+                rt_kprintf("task:return to the traceline thread\n");
 
             }
         }
@@ -1002,14 +1005,14 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                // Car_Change_Speed(0,0,0);
+                Car_Change_Speed(0,0,0);
                 
-                // //启动圆环 同时阻塞寻仙
-                // rt_kprintf("task:ready to get into the circulehandle task\n");
-                // rt_sem_release(circule_handle_sem);
-                // rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // // rt_thread_delay(1000);
-                // rt_kprintf("task:return to the traceline thread\n");
+                //启动圆环 同时阻塞寻仙
+                rt_kprintf("task:ready to get into the circulehandle task\n");
+                rt_sem_release(circule_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                // rt_thread_delay(1000);
+                rt_kprintf("task:return to the traceline thread\n");
             }
         }
         else if(state == Circule_Stop){
@@ -1034,7 +1037,7 @@ void Vision_CirculeHandle()
  */
 void Vision_ZebraHandle(){
     if(!final_flag){
-        printf("Vision:Zebra Detected\n");
+        rt_kprintf("Vision:Zebra Detected\n");
         rt_sem_release(final_sem);
         rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
     }

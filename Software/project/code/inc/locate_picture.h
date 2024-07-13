@@ -11,6 +11,8 @@ extern int locate_catch_flag;
 extern int locate_put_flag;
 
 extern uint8 error_detect_flag;
+extern uint8_t put_flag;
+extern uint8_t locate_arr_flag;
 
 
 void locate_pic_init();

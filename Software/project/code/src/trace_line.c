@@ -114,7 +114,7 @@ void trace_line_init()
 	else 
 		rt_kprintf("trace_line_thread created failed\n");
 
-	MCX_Change_Mode(MCX_Detection_Mode);
+	//MCX_Change_Mode(MCX_Detection_Mode);
 }
 
 

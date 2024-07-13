@@ -59,6 +59,7 @@ void Vision_Handle()
        //ÖÐÏß
        ips200_draw_point((int)(94), i, RGB565_GREEN);
    }
+   ips200_draw_line(0,60,187,60,RGB565_CYAN);
 
     
     
@@ -94,6 +95,18 @@ void Camera_PreProcess()
 
     
 //          Pixle_Filter(imgRow-1,imgCol-1);
+}
+
+/**
+ * ¿½±´Í¼Ïñ
+*/
+void Camera_CopyMyImage(){
+    for(int i=0;i<imgRow;i++){
+        for(int j=0;j<imgCol;j++)
+        {
+            my_image[i][j] = mt9v03x_image[i][j];
+        }
+    }
 }
 
 /**

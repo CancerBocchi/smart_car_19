@@ -5,10 +5,10 @@ Pos_PID_t center_y_con;
 Pos_PID_t center_x_con;
 
 #define PUT_X 	120
-#define PUT_Y 	160
+#define PUT_Y 	130
 
 #define CATCH_X 120
-#define CATCH_Y 145
+#define CATCH_Y 140
 
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
@@ -21,6 +21,8 @@ rt_sem_t locate_picture_sem;
 float Vx;
 float Vy;
 
+uint8_t put_flag;
+
 uint8 error_detect_flag = 0;
 
 /**
@@ -30,6 +32,7 @@ uint8 error_detect_flag = 0;
 int  locate_catch_flag = 0;
 uint8_t locate_debug_flag;
 int locate_put_flag = 0;
+uint8_t locate_arr_flag = 0;
 void locate_picture_debug(){
 
 	static int begin_flag;
@@ -63,7 +66,8 @@ void locate_picture_debug(){
 		servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
 		rt_thread_delay(100);
 
-		Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		// Class_Six_AddOneThing(Art_GetData(),Class_Side);
+		Class_Six_AddOneThing(Art_GetData(),Class_Cir);
 		rt_kprintf("Classify:the class is %c\n",Art_GetData());
 
 		Art_Change_Mode(Art_Reset_Mode);
@@ -105,10 +109,39 @@ void locate_picture_debug(){
 	Art_Change_Mode(Art_Reset_Mode);
 	rt_kprintf("Classify:the num/letter is %c\n",class);
 
-	while(Class_Six_FinalPut(class))
+	//while(Class_Six_FinalPut(class));
+	int ret = Class_Six_CirPut(class);
+
+	if(ret == 1){
+		Car_DistanceMotion(0,15,0.3);
 		Step_Motor_Put();
+	}
 		
-		locate_put_flag = 0;
+	else if(ret == 0){
+		rt_kprintf("No such class\n");
+		Step_Motor_Reset();
+	}
+	else if(ret == 2){
+		rt_kprintf("Class Doen\n");	
+		Step_Motor_Reset();
+	}
+		
+	located_n = 0;
+	locate_put_flag = 0;
+	}
+	
+	if(locate_arr_flag){
+		TARGET_X = PUT_X;
+		TARGET_Y = PUT_Y;
+		while(1){
+			MCX_Change_Mode(MCX_Location_Mode);
+			Vy = Pos_PID_Controller(&center_y_con,center_y);
+			Vx = Pos_PID_Controller(&center_x_con,center_x);
+			Car_Change_Speed(Vx,Vy,0);
+			rt_thread_delay(1);
+			if(!locate_arr_flag)
+				break;
+		}
 	}
 	rt_thread_delay(1);
 }
@@ -179,13 +212,12 @@ void locate_picture_catch(){
 	if(side_catch_flag == 1){
 		rt_kprintf("task:ready to return to side_catch thread\n");
 		side_catch_flag = 0;
+		MCX_Detection_Flag = 0;
 		rt_sem_release(side_catch_sem);
 	}
 	//返回圆环处理线程
 	if(circule_handle_flag == 1){
 		rt_kprintf("task:ready to return to circule_handle thread\n");
-		circule_handle_flag = 0;
-		MCX_Detection_Flag = 0;
 		rt_sem_release(circule_handle_sem);
 	}
 		
@@ -207,9 +239,10 @@ void locate_picture_put(){
 	while(located_n<1000){
 		MCX_Change_Mode(MCX_Location_Mode);
 		Vx = Pos_PID_Controller(&center_x_con,center_x);
-		Car_Change_Speed(Vx,0,0);
+		Vy = Pos_PID_Controller(&center_y_con,center_y);
+		Car_Change_Speed(Vx,Vy,0);
 		located_n = Is_Located? located_n+1:0;
-		if(rt_tick_get()-tick >= 3000)
+		if(rt_tick_get()-tick >= 4000)
 			break;
 	}
 
@@ -226,18 +259,27 @@ void locate_picture_put(){
 	Art_Change_Mode(Art_Reset_Mode);
 	rt_kprintf("Classify:the num/letter is %c\n",class);
 
+	rt_kprintf("final_flag:%d,circule_flag:%d\n",final_flag,circule_handle_flag);
+
 	//返回
 	if(final_flag){
-		while(Class_Six_FinalPut(class))
-			Step_Motor_Put();
+		while(Class_Six_FinalPut(class));
+		put_flag = 0;
+		rt_kprintf("locate_pic:ready to return to the final_thread\n");
 		rt_sem_release(final_sem);
 	}
 		
 	else if(circule_handle_flag){
-
-		if(Class_Six_CirPut(class) == 0);
+		rt_kprintf("circule");
+		int ret = Class_Six_CirPut(class);
+		Car_DistanceMotion(10,15,0.5);
+		if(ret == 1){
 			Step_Motor_Put();
-		
+		}
+		Step_Motor_Reset();
+			
+		put_flag = 0;
+		rt_kprintf("locate_pic:ready to return to the cir_thread\n");
 		rt_sem_release(circule_handle_sem);
 	}
 		
@@ -251,10 +293,12 @@ void locate_picture_entry()
 		if(locate_debug_flag == 0){
 			rt_sem_take(locate_picture_sem,RT_WAITING_FOREVER);
 			rt_kprintf("task:get into the locate task\n");
-			if(!final_flag)
+			if(!put_flag)
 				locate_picture_catch();
-			else if(final_flag)
+			else if(put_flag){
 				locate_picture_put();
+			}
+				
 		}
 			
 		else

@@ -76,9 +76,10 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
 
         //将圆环标记好
         Class_Basket[Class_CirNum].DetailClass = DetailClass;
-        Class_CirNum--; //存储的圆环个数相加
-        Turntable_Rotate(Class_Basket[Class_CirNum].angle);
         current_basket = Class_CirNum+1;
+        Turntable_Rotate(Class_Basket[Class_CirNum].angle);
+        Class_CirNum--; //存储的圆环个数相加
+        
     }
 
     else if(cir_side_flag == Class_Side){
@@ -103,14 +104,28 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
  */
 int Class_Six_FinalPut(int FinalClass){
     FinalClass -= 48;
+
+    if((FinalClass != 1 && FinalClass != 2 && FinalClass != 3)){
+        Step_Motor_Reset();
+        return 0;
+    }
+
     if(current_basket != FinalClass){
         Turntable_Rotate(Class_Basket[FinalClass - 1].angle);
         current_basket = FinalClass;
+
+
         rt_thread_delay(500);
     }
-    Step_Motor_Put();
+    
+    if(Class_Basket[FinalClass - 1].howmany == 0){
+        Step_Motor_Reset();
+         return 0;
+    }
+       
+    
     Class_Basket[FinalClass - 1].howmany = (Class_Basket[FinalClass - 1].howmany)?Class_Basket[FinalClass - 1].howmany-1:0;
-
+    Step_Motor_Put();
     return Class_Basket[FinalClass - 1].howmany;
 }
 
@@ -166,10 +181,10 @@ void Class_Debug(){
         if(Class_Basket[i].DetailClass == Class_Null)
             rt_kprintf("--circule %d_class:NULL\n",i);
         else
-            rt_kprintf("--circule %d_class:%c\n",i,Class_Basket[i]);
+            rt_kprintf("--circule %d_class:%c\n",i,Class_Basket[i].DetailClass);
     }
 
-    rt_kprintf("--------------end---------------");
+    rt_kprintf("--------------end---------------\n");
 }
 
 

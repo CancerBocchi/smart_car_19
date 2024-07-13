@@ -181,7 +181,7 @@ void car_motion_Init()
 	
 	//车辆控制块初始化
 		Car_Speed_ConRight = Con_By_TraceLine;
-		Pos_PID_Init(&Car_Yaw_Controller,5,0,0);
+		Pos_PID_Init(&Car_Yaw_Controller,4,0,0);
 		Car_Yaw_Controller.Ref = 0;
 		Car_Yaw_Controller.Output_Max = 300;
 		Car_Yaw_Controller.Output_Min = -300;
@@ -192,7 +192,7 @@ void car_motion_Init()
 #if MOTOR_LOOP_METHOD == MOTOR_USE_CAR_LOOP
 	#if CAR_LOOP_METHOD == CAR_USE_THREAD
 	
-		car_motion_thread = rt_thread_create("car_motion_thread",car_motion_entry,NULL,4096,1,1000);
+		car_motion_thread = rt_thread_create("car_motion_thread",car_motion_entry,NULL,4096*2,1,1000);
 	
 		if(car_motion_thread != NULL)
 		{

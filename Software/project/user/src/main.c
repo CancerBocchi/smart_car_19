@@ -20,7 +20,6 @@ int main()
 	rt_thread_startup(led_thread);
 
 	debug_tool_init();
-	
 	while(!Start_Flag){
 		rt_thread_delay(1);
 	}
@@ -29,7 +28,9 @@ int main()
 
 	rt_kprintf("----------  Basic Hardware Init ----------\n");
 	//基础外设初始化
+
 	Step_Motor_Init();
+	rt_thread_delay(200);
 	Class_Init();
 	buzzer_init();
 	car_motion_Init();
@@ -40,9 +41,11 @@ int main()
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
 	locate_pic_init();
-	side_catch_init();
-	// circule_handle_init();
+	// side_catch_init();
+	final_init();
+	circule_handle_init();
 	trace_line_init();
+
 
 	rt_kprintf("--------- init end ----------\n");
 
@@ -54,7 +57,6 @@ int main()
 	// 		}
 	// 	}
 	// 	rt_thread_delay(1);
-
 	// }
 
 }
