@@ -13,12 +13,14 @@
 
 #define Art_NumLetter_Mode0     (0x4D)
 #define Art_NumLetter_Mode1     (0X4E)
+#define Art_NumLetter_Mode2     (0x4F)
 
 #define Art_Reset_Mode          (0x53)
 
 uint8_t Art_GetData();
 void Art_Change_Mode(uint8_t mode);
 void Art_UART_Init(void);
+void Art_DataClear();
 
 
 #endif

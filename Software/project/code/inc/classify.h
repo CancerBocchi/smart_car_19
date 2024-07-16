@@ -9,7 +9,7 @@
 #define Class_Side          2
 
 
-#define Turntable_Rotate(angle) Step_angle_con(angle,100)
+#define Turntable_Rotate(angle) Step_angle_con(angle,150)
 
 //三大类物品分类
 typedef enum{
@@ -59,6 +59,7 @@ typedef struct{
     int howmany;        //框内数量
     float angle;
     int DetailClass;   //细分
+    int DetailNum;
     int FinalClass;     //大分类
     
 }Class_Basket_t;
@@ -81,5 +82,9 @@ uint8_t Class_Six_CirPut(int DetailClass);
 void Class_Init();
 
 void Class_Debug();
+
+void Class_Cir_Reset();
+
+void Class_Change_Basket(int basketNum);
 
 #endif 

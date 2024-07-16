@@ -39,6 +39,17 @@ void Class_Init(){
 }
 
 /**
+ * 重置圆环后的的参数
+*/
+void Class_Cir_Reset(){
+    for(int i = 0;i<5;i++){
+        Class_Basket[i].DetailClass = Class_Null;
+        Class_Basket[i].DetailNum = 0;
+    }
+    Class_CirNum = 5;
+}
+
+/**
  * @brief 将小分类分到大分类
  * 
  * @return Class_Three_t 大分类
@@ -68,15 +79,29 @@ Class_Three_t Class_ClassifyTheDetailed(int class){
 void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
     
     if(cir_side_flag == Class_Cir){
-        //出错
+
+        //若有相同类型的
+        for(int i = 5;i>0;i--){
+            if(Class_Basket[i].DetailClass == DetailClass){
+                rt_kprintf("cir:detail_class exist\n");
+                Turntable_Rotate(Class_Basket[i].angle);
+                Class_Basket[i].DetailNum++;
+                return;
+            }
+        }
+
+                        //出错
         if(Class_CirNum == 0){
             rt_kprintf("Fault:Class Cir overload\n");
-            while(1);
+            while(1){
+                rt_thread_delay(1);
+            }
         }
 
         //将圆环标记好
         Class_Basket[Class_CirNum].DetailClass = DetailClass;
         current_basket = Class_CirNum+1;
+        Class_Basket[Class_CirNum].DetailNum++;
         Turntable_Rotate(Class_Basket[Class_CirNum].angle);
         Class_CirNum--; //存储的圆环个数相加
         
@@ -93,7 +118,18 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
         Class_Basket[class - 1].howmany++;
     }
     //等圆环转到位
-    rt_thread_delay(200);
+    rt_thread_delay(500);
+}
+
+/**
+ * 改变当前框的函数
+*/
+void Class_Change_Basket(int basketNum){
+    servo_slow_ctrl(140, DOWN_MOTOR_INIT_ANGLE, 50);
+    rt_thread_delay(100);
+    Turntable_Rotate(Class_Basket[basketNum - 1].angle);
+    Step_Motor_Reset();
+    current_basket = basketNum;
 }
 
 /**
@@ -134,15 +170,18 @@ int Class_Six_FinalPut(int FinalClass){
  * 
  * @param DetailClass 识别到框的类型
  * 
- * @retval 是否存在分类 并且 分类是否已经完成 1--存在 0--不存在 2--分类已经完成
+ * @retval 该类的数量
  */
 uint8_t Class_Six_CirPut(int DetailClass){
     //判断是否已经分类完成
     for(int i = 5;i>Class_CirNum;i--){
         if(Class_Basket[i].DetailClass != Class_Null)
             break;
-        if(i == Class_CirNum)
-            return 2;
+        if(i == Class_CirNum){
+            Class_CirNum = 5;
+            return 0;
+        }
+            
     }   
 
     //倒序寻找框
@@ -150,10 +189,16 @@ uint8_t Class_Six_CirPut(int DetailClass){
         if(Class_Basket[i].DetailClass == DetailClass){
             Turntable_Rotate(Class_Basket[i].angle);
             current_basket = i+1;
-
-            rt_thread_delay(200);
-            Class_Basket[i].DetailClass = Class_Null;
-            return 1;
+            rt_thread_delay(500);
+            if(Class_Basket[i].DetailNum == 1){
+                Class_Basket[i].DetailClass = Class_Null;
+                Class_Basket[i].DetailNum--;
+                return 1;
+            }
+            else{
+                return Class_Basket[i].DetailNum--;
+            }
+                
         }
     }
     return 0;
@@ -181,7 +226,7 @@ void Class_Debug(){
         if(Class_Basket[i].DetailClass == Class_Null)
             rt_kprintf("--circule %d_class:NULL\n",i);
         else
-            rt_kprintf("--circule %d_class:%c\n",i,Class_Basket[i].DetailClass);
+            rt_kprintf("--circule %d_class:%c num:%d\n",i,Class_Basket[i].DetailClass,Class_Basket[i].DetailNum);
     }
 
     rt_kprintf("--------------end---------------\n");

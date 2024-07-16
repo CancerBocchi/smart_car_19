@@ -55,6 +55,9 @@
         "zf_driver_gpio.h": "c",
         "rtthread.h": "c",
         "final.h": "c",
-        "cross_handle.h": "c"
+        "cross_handle.h": "c",
+        "zf_device_mt9v03x_flexio.h": "c",
+        "zf_device_oled.h": "c",
+        "zf_common_typedef.h": "c"
     }
 }

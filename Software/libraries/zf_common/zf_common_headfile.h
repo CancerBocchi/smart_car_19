@@ -152,4 +152,7 @@
 #include "cross_handle.h"
 //===================================================用户自定义文件===================================================
 
+extern int Start_Flag;
+extern int exposure_time;
+
 #endif

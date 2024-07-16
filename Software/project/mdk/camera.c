@@ -73,6 +73,7 @@ void Vision_Handle()
 
 void Vision_Draw(){
     ips200_show_gray_image(0, 0, (const uint8 *)my_image, imgCol, imgRow, 188, 70, 0);
+    ips200_show_gray_image(0, 100, (const uint8 *)my_image_BW, imgCol, imgRow, 188, 70, 0);
 
 }
 

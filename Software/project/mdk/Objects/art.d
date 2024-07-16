@@ -141,4 +141,5 @@
   ..\code\inc\MCXvision.h ..\code\inc\side_catch.h \
   ..\code\inc\my_vision.h ..\code\inc\locate_picture.h \
   ..\code\inc\circule_handle.h ..\code\inc\classify.h \
-  ..\code\inc\putdown_pic.h ..\code\inc\final.h
+  ..\code\inc\putdown_pic.h ..\code\inc\final.h \
+  ..\code\inc\cross_handle.h

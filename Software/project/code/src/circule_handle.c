@@ -22,6 +22,7 @@ void circule_trace_line();
 void circule_handle_entry(){
     static uint8_t begin_flag = 0;
     static float init_yaw;
+    static uint8_t error_flag = 0;
     while(1){
         rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
         rt_kprintf("task:get into the circule task\n");
@@ -40,76 +41,107 @@ void circule_handle_entry(){
             rt_thread_delay(500);
             //定位跑
             Car_DistanceMotion(0,-10,0.4);
-            rt_kprintf("cirhandle:Start to catch\n");
-            rt_sem_release(locate_picture_sem);
-            rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+            MCX_Change_Mode(MCX_Location_Mode);
+            MCX_Clear();
+            
+            rt_thread_delay(100);
+            while(!MCX_rx_flag);
 
-        }
+            rt_kprintf("x:%d,y:%d,n:%d\n",center_x,center_y,cur_PicNum);
 
-        //抓取完毕 旋转180度，先放置最不好放置的东西
-        Car_Rotate(180);
-        Car_DistanceMotion(0,-10,0.4);
-        rt_thread_delay(500);
-        put_flag = 1;
-        rt_sem_release(locate_picture_sem);
-        rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
-        
-  
-
-        //转向并且回到圆环中心
-        if(Circule_LorR == LEFT_CIRCULE){
-            //右转
-            Car_Rotate(-90);
-            //给足时间使得车转到位
-            rt_thread_delay(500);
-            Car_DistanceMotion(65,25,1.5);
-            rt_thread_delay(500);
-            // Car_DistanceMotion(30,-30,0.8);
-        }
-        else{
-            //右转
-            Car_Rotate(90);
-            //给足时间使得车转到位
-            rt_thread_delay(500);
-            Car_DistanceMotion(-65,-25,1.5);
-            rt_thread_delay(500);
-            // Car_DistanceMotion(-30,-30,0.8);
-        }
-        //巡线放置
-        int cur_yaw = Att_CurrentYaw;
-        int tar_angle = 0;
-        while(1){
-            if(mt9v03x_finish_flag)
-                circule_trace_line();
-            rt_thread_delay(1);
-    
-
-            if(Tool_IsFloatEqu(abs(Att_CurrentYaw - cur_yaw),tar_angle,0.01f)){
-                Car_Change_Speed(0,0,0);
-                rt_thread_delay(100);
-                Car_DistanceMotion(0,-15,0.5);
-                put_flag = 1;
+            if(cur_PicNum){
+                error_flag = 0;
+                rt_kprintf("cir_handle:Start to catch\n");
                 rt_sem_release(locate_picture_sem);
                 rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
-                Car_DistanceMotion(0,25,0.5);
-                if(tar_angle  == 180){
-                    rt_kprintf("cir:return to the init yaw\n");
-                    break;
-                }
-                tar_angle+=60;
             }
 
-
+            else{
+                Car_DistanceMotion(0,10,0.4);
+                if(Circule_LorR == LEFT_CIRCULE)
+                    Car_Rotate(-90);
+                else 
+                    Car_Rotate(90);
+                rt_thread_delay(500);
+                Car_DistanceMotion(0,-50,0.4);
+                error_flag = 1;
+            }
 
         }
-        Car_Change_Speed(0,0,0);
+
+        if(!error_flag){
+                        //抓取完毕 旋转180度，先放置最不好放置的东西
+            Car_Rotate(180);
+            rt_thread_delay(500);
+            Car_DistanceMotion(0,-20,0.5);
+            
+            put_flag = 1;
+            rt_sem_release(locate_picture_sem);
+            rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+            
+    
+
+            //转向并且回到圆环中心
+            if(Circule_LorR == LEFT_CIRCULE){
+                //右转
+                Car_Rotate(-90);
+                //给足时间使得车转到位
+                rt_thread_delay(500);
+                Car_DistanceMotion(65,-25,1.0);
+                rt_thread_delay(500);
+                // Car_DistanceMotion(30,-30,0.8);
+            }
+            else{
+                //右转
+                Car_Rotate(90);
+                //给足时间使得车转到位
+                rt_thread_delay(500);
+                Car_DistanceMotion(-65,-25,1.0);
+                rt_thread_delay(500);
+                // Car_DistanceMotion(-30,-30,0.8);
+            }
+            //巡线放置
+            int cur_yaw = Att_CurrentYaw;
+            int tar_angle = 0;
+            while(1){
+                if(mt9v03x_finish_flag)
+                    circule_trace_line();
+                rt_thread_delay(1);
         
-        while(1);
-        if(Circule_LorR == LEFT_CIRCULE)
-            Car_DistanceMotion(50,-15,1);
-        else if(Circule_LorR == RIGHT_CIRCULE)
-            Car_DistanceMotion(-50,-15,1);
+
+                if(Tool_IsFloatEqu(abs(Att_CurrentYaw - cur_yaw),tar_angle,0.01f)){
+                    Car_Change_Speed(0,0,0);
+                    rt_thread_delay(100);
+                    Car_DistanceMotion(0,-20,0.4);
+                    put_flag = 1;
+                    rt_sem_release(locate_picture_sem);
+                    rt_sem_take(circule_handle_sem,RT_WAITING_FOREVER);
+                    Car_DistanceMotion(0,30,0.5);
+                    if(tar_angle  == 180){
+                        rt_kprintf("cir:return to the init yaw\n");
+                        break;
+                    }
+                    tar_angle+=60;
+                }
+
+
+
+            }
+            Car_Change_Speed(0,0,0);
+            
+            
+            if(Circule_LorR == LEFT_CIRCULE)
+                Car_DistanceMotion(60,-60,1.8);
+            else if(Circule_LorR == RIGHT_CIRCULE)
+                Car_DistanceMotion(-60,-60,1.8);
+        }
+
+
+        //while(1);
         //返回巡线线程
+        error_flag = 0;
+        Class_Cir_Reset();
+        MCX_Clear();
         Car_Speed_ConRight = Con_By_TraceLine;
         circule_handle_flag = 0;
         rt_sem_release(trace_line_sem);
@@ -142,7 +174,10 @@ void circule_trace_line(){
         left_right_error -= cir_line[i+34];
     }
     //左边圆环速度应当向左，右边圆环速度应当向右
-    cirucle_xspeed = Circule_LorR? -Circule_Normal_xSpeed : Circule_Normal_xSpeed;
+    if(circule_handle_flag == 1)
+        cirucle_xspeed = Circule_LorR? -Circule_Normal_xSpeed : Circule_Normal_xSpeed;
+    else if(cross_handle_flag == 1)
+        cirucle_xspeed = L_or_R_Cross? Circule_Normal_xSpeed : -Circule_Normal_xSpeed;
 
     //PID闭环控制
     Car_Change_Speed(cirucle_xspeed,

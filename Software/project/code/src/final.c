@@ -26,6 +26,8 @@ void final_entry(){
         Car_Rotate(-90);
         rt_thread_delay(1000);
 
+        Car_DistanceMotion(30,0,0.6);
+
         
         // while(1){
         //     Car_DistanceMotion(150,0,6);
@@ -47,7 +49,7 @@ void final_entry(){
                 rt_sem_release(locate_picture_sem);
                 rt_sem_take(final_sem,RT_WAITING_FOREVER);
                 rt_kprintf("final_thread:return from location\n");
-                rt_thread_delay(1000);
+                rt_thread_delay(100);
                 ignore_flag = 1;
                 class_num += 1;
             }
@@ -67,9 +69,12 @@ void final_entry(){
         }
         Car_Change_Speed(0,0,0);
         Car_Rotate(90);
-        while(1);
         rt_thread_delay(500);
+        Car_DistanceMotion(-20,0,0.4);
+        Car_Speed_ConRight = Con_By_TraceLine;
+        rt_kprintf("final:return to the trace_line\n");
         rt_sem_release(trace_line_sem);
+        
     }
 }
 

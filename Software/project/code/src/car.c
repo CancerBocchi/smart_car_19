@@ -181,10 +181,10 @@ void car_motion_Init()
 	
 	//车辆控制块初始化
 		Car_Speed_ConRight = Con_By_TraceLine;
-		Pos_PID_Init(&Car_Yaw_Controller,4,0,0);
+		Pos_PID_Init(&Car_Yaw_Controller,4.5,0,0);
 		Car_Yaw_Controller.Ref = 0;
-		Car_Yaw_Controller.Output_Max = 300;
-		Car_Yaw_Controller.Output_Min = -300;
+		Car_Yaw_Controller.Output_Max = 250;
+		Car_Yaw_Controller.Output_Min = -250;
 		Car_Yaw_Controller.Value_I_Max = 1000;
 
 

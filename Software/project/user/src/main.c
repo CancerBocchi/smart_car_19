@@ -4,6 +4,9 @@ rt_thread_t led_thread;
 
 int Start_Flag = 0;
 
+int exposure_time = 128;
+
+
 void led_thread_entry()
 {
 	gpio_init(B9,GPO,0, GPO_PUSH_PULL);
@@ -20,9 +23,6 @@ int main()
 	rt_thread_startup(led_thread);
 
 	debug_tool_init();
-	while(!Start_Flag){
-		rt_thread_delay(1);
-	}
 	
 	rt_kprintf("\nSystem_Init:\n");
 
@@ -33,17 +33,27 @@ int main()
 	rt_thread_delay(200);
 	Class_Init();
 	buzzer_init();
-	car_motion_Init();
 	Camera_and_Screen_Init();
-	MCX_UART_Init();
-	Art_UART_Init();
+	
+	while(!Start_Flag){
+		if(mt9v03x_finish_flag){
+			Vision_Handle();
+		}
+		mt9v03x_set_exposure_time(exposure_time);
+			
+		rt_thread_delay(1);
+	}
 
 	rt_kprintf("---------- task init ----------\n");
 	//任务初始化
+	MCX_UART_Init();
+	Art_UART_Init();
+	car_motion_Init();
 	locate_pic_init();
-	// side_catch_init();
+	side_catch_init();
 	final_init();
 	circule_handle_init();
+	cross_handle_init();
 	trace_line_init();
 
 

@@ -222,6 +222,7 @@ arg_change arg_register[] = {
 		{"catch_flag",DEBUG_INT,&locate_catch_flag},
         {"put_flag",DEBUG_INT,&locate_put_flag},
         {"loc_arr",DEBUG_INT,&locate_arr_flag},
+        {"ex_time",DEBUG_INT,&exposure_time},
 		{NULL,NULL,NULL}
 };
 
@@ -347,3 +348,20 @@ static void HardwareTest(){
 }
 
 MSH_CMD_EXPORT(HardwareTest, HardwareTest sample: HardwareTest);
+
+
+/**
+ * @brief ≥µ∂®æ‡≈‹÷∏¡Ó
+*/
+static void SetBasket(int argc, char**argv){
+    int num = atoi(argv[1]);
+    if(atoi(argv[1]) < 7 && atoi(argv[1]) > 0){
+        Class_Change_Basket(num);
+        rt_kprintf("Current Basket Changed to %d\n",num);
+        return;
+    }
+     rt_kprintf("Error input:%d\n",num);
+        
+}
+
+MSH_CMD_EXPORT(SetBasket, SetBasket sample: SetBasket <num>);

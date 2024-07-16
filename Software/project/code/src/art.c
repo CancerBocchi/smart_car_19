@@ -111,6 +111,10 @@ uint8_t Art_GetData(){
     return Art_Data;
 }
 
+void Art_DataClear(){
+	Art_Data = Class_Null;
+}
+
 /**
  * @brief 初始化函数
  * 
@@ -127,4 +131,6 @@ void Art_UART_Init(void)
 	Art_receivexfer.data = &Art_uart_rx_buffer;
 	// 设置中断函数及其参数
 	uart_set_handle(Art_UART, &Art_g_lpuartHandle, Art_uart_callback, NULL, 0, Art_receivexfer.data, 1);
+
+	Art_Change_Mode(Art_Reset_Mode);
 }

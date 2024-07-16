@@ -17,45 +17,47 @@ void side_catch_entry()
 		rt_kprintf("task:get into side catch task\n");
 
 		Car_Change_Speed(0,0,0);
-		// rt_thread_delay(1000);
+		rt_thread_delay(100);
 		BUZZER_SPEAK;
 		
-		if(center_x > 125){
+		if(center_x > 160){
 			// Car_Rotate(-90);//右转
-			Car_DistanceMotion(35,20,1);
+			Car_DistanceMotion(35,15,0.8);
 			LorR = 1;
 		}
-		else if(center_x < 125){
+		else if(center_x < 160){
 			//Car_Rotate(90);//左转
-			Car_DistanceMotion(-35,20,1);
+			Car_DistanceMotion(-35,15,0.8);
 			LorR = 0;
 		}
 
-		//延迟是的车辆转弯完成
-		// rt_thread_delay(1000);
-
+		//延迟是的车辆转弯完
+		MCX_Change_Mode(MCX_Location_Mode);
+		rt_thread_delay(200);
 		//启动定位抓取线程 挂起边线线程
 		
 		side_catch_flag = 1;
+		Locate_SetMode(Locate_Catch);
 		rt_sem_release(locate_picture_sem);
 		rt_sem_take(side_catch_sem,RT_WAITING_FOREVER);
+
 		//如果没有误识别
 		if(!error_detect_flag){
 			if(LorR)
-				Car_DistanceMotion(-30,0,0.5);
+				Car_DistanceMotion(-30,10,0.8);
 			else if(!LorR)
-				Car_DistanceMotion(30,0,0.5);
+				Car_DistanceMotion(30,10,0.8);
 		}
 		else{
 			if(LorR)
-				Car_DistanceMotion(-30,-10,0.5);
+				Car_DistanceMotion(-30,-10,0.8);
 			else if(!LorR)
-				Car_DistanceMotion(30,-10,0.5);
+				Car_DistanceMotion(30,-10,0.8);
 			error_detect_flag = 0;
 		}
 
 		
-		// rt_thread_delay(1000);
+		rt_thread_delay(350);
 		//转换 MCX 工作模式
 		MCX_Change_Mode(MCX_Detection_Mode);
 		rt_kprintf("handle success\n");

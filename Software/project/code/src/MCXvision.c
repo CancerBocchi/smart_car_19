@@ -7,6 +7,8 @@ lpuart_transfer_t MCX_receivexfer;
 lpuart_handle_t MCX_g_lpuartHandle;
 uint8_t MCX_uart_rx_buffer;
 
+uint8_t MCX_rx_flag;
+
 
 //记录当前模式
 typedef enum{
@@ -103,6 +105,7 @@ void MCX_uart_handle(){
 		case Location_Mode:
 			center_x = MCX_rx_buffer[2]*1.5;
 			center_y = MCX_rx_buffer[3]*1.5;
+			cur_PicNum = MCX_rx_buffer[4];
 			// rt_kprintf("%d,%d\n",center_x,center_y);
 		break;
 
@@ -111,21 +114,24 @@ void MCX_uart_handle(){
 		break;
 
 		case Detection_Mode:
-			if(MCX_rx_buffer[1] == 1){
+			if(MCX_rx_buffer[1] == 1 && MCX_rx_buffer[4] != 0){
 				center_x = MCX_rx_buffer[2]*1.5;
 				center_y = MCX_rx_buffer[3]*1.5;
 				MCX_Detection_Flag = 1;
 				MCX_Change_Mode(MCX_Reset_Mode);
-				rt_kprintf("MCX:(%d,%d)\n",center_x,center_y);
 			}
+			else
+				MCX_Clear();
+			// rt_kprintf("%d,%d,%d\n",MCX_rx_buffer[1],center_x,center_y);
 		break;
 
 		case Put_Mode:
 			center_x = MCX_rx_buffer[2]*1.5;
 			center_y = MCX_rx_buffer[3]*1.5;
 			cur_PicNum = MCX_rx_buffer[4];
-			rt_kprintf("%d,%d,%d\n",center_x,center_y,cur_PicNum);
+			//rt_kprintf("%d,%d,%d\n",center_x,center_y,cur_PicNum);
 	}
+	MCX_rx_flag = 1;
 }
 
 /**
@@ -136,6 +142,8 @@ void MCX_Clear(){
 	center_x = 0;
 	center_y = 0;
 	cur_PicNum = 0;
+	MCX_Detection_Flag = 0;
+	MCX_rx_flag = 0;
 }
 
 /**

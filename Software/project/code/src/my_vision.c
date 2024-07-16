@@ -58,6 +58,7 @@ void Vision_RSHandle()
     case ZebraRoads:
         Vision_ZebraHandle();
         ips200_show_string(200,50,"Zeb");
+        break;
 
     default:
         break;
@@ -493,17 +494,29 @@ void Vision_BroderFindFP(int16* broder)
  * @return uint8_t 返回1为发现前方斑马线
  */
 #define Zebra_Y 60
-#define Zebra_TH 10
+#define Zebra_TH 12
+#define Zebra_Range 20
 uint8_t Vision_IsZebra(){
     int change_num = 0;
-    for(int i = 0;i<187;i++){
-        if(my_image[Zebra_Y][i] > Threshold+10 && my_image[Zebra_Y][i+1] < Threshold-10||
-            my_image[Zebra_Y][i] < Threshold-10 && my_image[Zebra_Y][i+1] > Threshold+10){
+    int mid = (Image_S.leftBroder[30]+Image_S.rightBroder[30])/2;
+
+    for(int i = mid;i<Image_S.rightBroder[30];i++){
+        if(my_image[Zebra_Y][i] > Threshold+Zebra_Range && my_image[Zebra_Y][i+1] < Threshold-Zebra_Range||
+            my_image[Zebra_Y][i] < Threshold-Zebra_Range && my_image[Zebra_Y][i+1] > Threshold+Zebra_Range){
             change_num++;
         }
     }
+
+    for(int i = mid;i>Image_S.leftBroder[30];i--){
+        if(my_image[Zebra_Y][i] > Threshold+Zebra_Range && my_image[Zebra_Y][i+1] < Threshold-Zebra_Range||
+            my_image[Zebra_Y][i] < Threshold-Zebra_Range && my_image[Zebra_Y][i+1] > Threshold+Zebra_Range){
+            change_num++;
+        }
+    }
+
     if(change_num >= Zebra_TH)
         return 1;
+
     return 0;
     
 }
@@ -770,8 +783,24 @@ void Vision_CrossHandle()
     else if(state == Cross_State_1){
         if(!IsLose(!F.my_segment_L[0])&&!IsLose(F.my_segment_R[0])){
             BUZZER_SPEAK;
+            if(Start_Flag){
+                Car_Change_Speed(0,0,0);
+                point_t first_point = {69,(Image_S.leftBroder[69]+Image_S.rightBroder[69])/2};
+                point_t last_point = {10,(Image_S.leftBroder[10]+Image_S.rightBroder[10])/2};
+                float k = Line_CalK(first_point,last_point);
+                rt_kprintf("%d,%d,%.2f\n",(Image_S.leftBroder[10]+Image_S.rightBroder[10])/2,(Image_S.leftBroder[69]+Image_S.rightBroder[69])/2,k);
+                if(k>0){
+                    L_or_R_Cross = Right_Cross;
+                }
+                else 
+                    L_or_R_Cross = Left_Cross;
+                rt_kprintf("trace:ready to get into cross thread\n");
+                rt_sem_release(cross_handle_sem);
+                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+            }
             state = Cross_Begin;
             Current_Road = NormalRoads;
+            
         }
     }
     //补线
@@ -867,7 +896,8 @@ void Vision_CirculeHandle()
         rt_kprintf("RS:Circule\n");
         BUZZER_SPEAK;
         //防止误识别
-        MCX_Change_Mode(MCX_Reset_Mode);
+        // MCX_Change_Mode(MCX_Reset_Mode);
+        MCX_Clear();
         if(IsStrai(F.my_segment_L[0]) && F.segment_n_L == 1)
             Circule_LorR = RIGHT_CIRCULE;
         else if(IsStrai(F.my_segment_R[0]) && F.segment_n_R == 1)
@@ -879,7 +909,7 @@ void Vision_CirculeHandle()
         static int out_n;
         case RIGHT_CIRCULE:
             out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
-            if(out_n == 5){
+            if(out_n == 4){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 out_n = 0;
@@ -889,7 +919,7 @@ void Vision_CirculeHandle()
         break;
         case LEFT_CIRCULE:
             out_n = !IsStrai(F.my_segment_R[0])? out_n+1:0;
-            if(out_n == 5){
+            if(out_n == 4){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
                 MCX_Change_Mode(MCX_Detection_Mode);
@@ -940,14 +970,16 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_R[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
-                //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_thread_delay(1000);
-                rt_kprintf("task:return to the traceline thread\n");
-
+                if(Start_Flag){
+                    Car_Change_Speed(0,0,0);
+                    //启动圆环 同时阻塞寻仙
+                    rt_kprintf("task:ready to get into the circulehandle task\n");
+                    rt_sem_release(circule_handle_sem);
+                    rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                    // rt_thread_delay(1000);
+                    rt_kprintf("task:return to the traceline thread\n");
+                }
+                
             }
         }
         else if(state == Circule_Stop){
@@ -1005,14 +1037,16 @@ void Vision_CirculeHandle()
             else if(IsLose(F.my_segment_L[0])){
                 state = Circule_Stop;
                 BUZZER_SPEAK;
-                Car_Change_Speed(0,0,0);
-                
-                //启动圆环 同时阻塞寻仙
-                rt_kprintf("task:ready to get into the circulehandle task\n");
-                rt_sem_release(circule_handle_sem);
-                rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-                // rt_thread_delay(1000);
-                rt_kprintf("task:return to the traceline thread\n");
+
+                if(Start_Flag){
+                    Car_Change_Speed(0,0,0);
+                    //启动圆环 同时阻塞寻仙
+                    rt_kprintf("task:ready to get into the circulehandle task\n");
+                    rt_sem_release(circule_handle_sem);
+                    rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+                    // rt_thread_delay(1000);
+                    rt_kprintf("task:return to the traceline thread\n");
+                }
             }
         }
         else if(state == Circule_Stop){
@@ -1036,29 +1070,25 @@ void Vision_CirculeHandle()
  * 
  */
 void Vision_ZebraHandle(){
-    if(!final_flag){
+    if(!final_flag&&Start_Flag){
         rt_kprintf("Vision:Zebra Detected\n");
         rt_sem_release(final_sem);
         rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+        rt_kprintf("return from the final thread\n");
+        MCX_Change_Mode(MCX_Reset_Mode);
+        Current_Road = NormalRoads;
     }
     else{
     //终点停车
-        if(Vision_IsZebra()){
-            static int tick;
-            static uint8_t flag = 0;
-            if(!flag){
-                tick = rt_tick_get();
-                flag = 1;
+            Car_Change_Speed(0,0,0);
+            rt_thread_delay(10);
+            Car_DistanceMotion(0,-50,0.8);
+            rt_kprintf("Task Finished\n");
+            while(1){
+                rt_thread_delay(10);
             }
-            
-            if(rt_tick_get() - tick > 1000){
-                Car_Change_Speed(0,0,0);
-                while(1){
-                    rt_kprintf("Finished\n");
-                }
-            }
+
         }
-    }
 }
 
 
