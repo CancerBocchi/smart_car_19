@@ -7,8 +7,8 @@ Pos_PID_t center_x_con;
 #define PUT_X 	120
 #define PUT_Y 	130
 
-#define CATCH_X 118
-#define CATCH_Y 140
+#define CATCH_X 120
+#define CATCH_Y 148
 
 #define TARGET_X center_x_con.Ref
 #define TARGET_Y center_y_con.Ref
@@ -46,13 +46,16 @@ void locate_picture_debug(){
 		TARGET_Y = CATCH_Y;
 
 		int tick =rt_tick_get();
-		while(located_n<1000){
-			MCX_Change_Mode(MCX_Location_Mode);
-			Vy = Pos_PID_Controller(&center_y_con,center_y);
-			Vx = Pos_PID_Controller(&center_x_con,center_x);
-			Car_Change_Speed(Vx,Vy,0);
-			located_n = Is_Located? located_n+1:0;
-			if(rt_tick_get()-tick >= 8000)
+		MCX_Change_Mode(MCX_Location_Mode);
+		while(located_n<30){
+			if(MCX_rx_flag){
+				Vy = Pos_PID_Controller(&center_y_con,center_y);
+				Vx = Pos_PID_Controller(&center_x_con,center_x);
+				Car_Change_Speed(Vx,Vy,0);
+				located_n = Is_Located? located_n+1:0;
+				MCX_Clear();
+			}
+			if(rt_tick_get()-tick >= 2000)
 				break;
 		}
 		//抓取测试
@@ -66,8 +69,7 @@ void locate_picture_debug(){
 		servo_slow_ctrl(150, DOWN_MOTOR_INIT_ANGLE, 100);
 		rt_thread_delay(100);
 
-		// Class_Six_AddOneThing(Art_GetData(),Class_Side);
-		Class_Six_AddOneThing(Art_GetData(),Class_Cir);
+		Class_Six_AddOneThing(Art_GetData(),Class_Side);
 		rt_kprintf("Classify:the class is %c\n",Art_GetData());
 
 		Art_Change_Mode(Art_Reset_Mode);
@@ -99,6 +101,7 @@ void locate_picture_debug(){
 	Car_Change_Speed(0,0,0);
 
 	Art_Change_Mode(Art_NumLetter_Mode0);
+	Art_DataClear();
 
 	while(Art_GetData() == Class_Null);
 
@@ -110,12 +113,17 @@ void locate_picture_debug(){
 	rt_kprintf("Classify:the num/letter is %c\n",class);
 
 	//while(Class_Six_FinalPut(class));
-	int ret = Class_Six_CirPut(class);
+	// int ret = Class_Six_CirPut(class);
 
-	for(int i = 0;i<ret;i++){
-		servo_slow_ctrl(140, 140, 50);
-		rt_thread_delay(100);
-		Step_Motor_Put();
+	// for(int i = 0;i<ret;i++){
+	// 	servo_slow_ctrl(140, 140, 50);
+	// 	rt_thread_delay(100);
+	// 	Step_Motor_Put();
+	// }
+	// Step_Motor_Reset();
+		while(Class_Six_FinalPut(class)){
+		servo_slow_ctrl(140, 140, 30);
+		rt_thread_delay(20);
 	}
 	Step_Motor_Reset();
 		
@@ -156,12 +164,14 @@ void locate_picture_debug(){
  * @brief 定位图片运行函数 用于正式做任务
  * 
  */
+uint8_t num_letter_flag; //若判断为捡起来的是字母
 void locate_picture_catch(){
 
 	static int located_n;//记录连续定位准确的次数
 	static int begin_flag;
 	static int fail_to_catch_flag = 0;
-	static int error_n;
+	static int error_n;//用于判断是否是误识别
+	static int Is_NumLetter_n;//用于判断是否是字母卡片
 	TARGET_X = CATCH_X;
 	TARGET_Y = CATCH_Y;
 	if(!begin_flag){
@@ -189,7 +199,7 @@ void locate_picture_catch(){
 				MCX_rx_flag = 0;
 			}
 
-			if(rt_tick_get() - tick >= 4000)
+			if(rt_tick_get() - tick >= 3000)
 				break;
 		}
 
@@ -204,15 +214,14 @@ void locate_picture_catch(){
 
 		Car_Change_Speed(0,0,0);
 		MCX_Clear();
-
+		//如果是边线没有拾取，跳过分类过程
 		if(!fail_to_catch_flag){
 			//识别
 			Art_DataClear();
 			Art_Change_Mode(Art_Classify_Mode2);
 			while(Art_GetData() == Class_Null);
 
-			servo_slow_ctrl(140, DOWN_MOTOR_INIT_ANGLE, 50);
-			rt_thread_delay(100);
+			servo_slow_ctrl(140, DOWN_MOTOR_INIT_ANGLE, 30);
 
 			if(side_catch_flag)
 				Class_Six_AddOneThing(Art_GetData(),Class_Side);
@@ -225,12 +234,23 @@ void locate_picture_catch(){
 
 		//抓取
 		Step_Motor_Catch();
-
+		MCX_Clear();
+		rt_thread_delay(50);
+		while(!MCX_rx_flag);
 		//若捡到卡片后没有卡片了 
 		if(cur_PicNum == 0)
 			break;
-		else if(!cur_PicNum&&side_catch_flag)
+		else if(cur_PicNum&&side_catch_flag){
 			fail_to_catch_flag = 1;
+			Is_NumLetter_n++;
+			rt_kprintf("side: failed to catch\n");
+		}
+
+		if(Is_NumLetter_n >= 3){
+			rt_kprintf("side: catch letter/num card\n");
+			error_detect_flag = 1;
+			break;
+		}
 	}
 
 	MCX_Change_Mode(MCX_Reset_Mode);
@@ -239,6 +259,7 @@ void locate_picture_catch(){
 	located_n = 0;
 	fail_to_catch_flag = 0;
 	error_n = 0;
+	Is_NumLetter_n = 0;
 	//返回边线处理线程
 	if(side_catch_flag == 1){
 		rt_kprintf("task:ready to return to side_catch thread\n");
@@ -275,12 +296,15 @@ void locate_picture_put(){
 	//放置时只定位x
 	uint32_t tick =rt_tick_get();
 	while(located_n<1000){
-		rt_thread_delay(1);
-		Vx = Pos_PID_Controller(&center_x_con,center_x);
-		Vy = Pos_PID_Controller(&center_y_con,center_y);
-		Car_Change_Speed(Vx,Vy,0);
-		located_n = Is_Located? located_n+1:0;
-		if(rt_tick_get()-tick >= 4000)
+		if(MCX_rx_flag){
+			Vx = Pos_PID_Controller(&center_x_con,center_x);
+			Vy = Pos_PID_Controller(&center_y_con,center_y);
+			Car_Change_Speed(Vx,Vy,0);
+			located_n = Is_Located? located_n+1:0;
+			MCX_Clear();
+		}
+			
+		if(rt_tick_get()-tick >= 2000)
 			break;
 	}
 
@@ -291,8 +315,7 @@ void locate_picture_put(){
 
 	while(Art_GetData() == Class_Null);
 
-	servo_slow_ctrl(140, 140, 50);
-	rt_thread_delay(100);
+	servo_slow_ctrl(140, 140, 30);
 	int class = Art_GetData();
 
 	Art_Change_Mode(Art_Reset_Mode);
@@ -304,7 +327,11 @@ void locate_picture_put(){
 
 	//返回
 	if(final_flag){
-		while(Class_Six_FinalPut(class));
+		while(Class_Six_FinalPut(class)){
+			servo_slow_ctrl(140, 140, 30);
+			rt_thread_delay(20);
+		}
+		Step_Motor_Reset();
 		put_flag = 0;
 		rt_kprintf("locate_pic:ready to return to the final_thread\n");
 		rt_sem_release(final_sem);
@@ -313,10 +340,10 @@ void locate_picture_put(){
 	else if(circule_handle_flag){
 		rt_kprintf("circule\n");
 		int ret = Class_Six_CirPut(class);
-		Car_DistanceMotion(10,15,0.5);
+		Car_DistanceMotion(10,10,0.4);
 		for(int i = 0;i<ret;i++){
-			servo_slow_ctrl(140, 140, 50);
-			rt_thread_delay(100);
+			servo_slow_ctrl(140, 140, 30);
+			rt_thread_delay(50);
 			Step_Motor_Put();
 		}
 		Step_Motor_Reset();
@@ -329,10 +356,10 @@ void locate_picture_put(){
 	else if(cross_handle_flag){
 		rt_kprintf("cross\n");
 		int ret = Class_Six_CirPut(class);
-		Car_DistanceMotion(20,10,0.6);
+		Car_DistanceMotion(20,5,0.3);
 		for(int i = 0;i<ret;i++){
-			servo_slow_ctrl(140, 140, 50);
-			rt_thread_delay(100);	
+			servo_slow_ctrl(140, 140, 30);
+			rt_thread_delay(50);	
 			Step_Motor_Put();
 		}
 		Step_Motor_Reset();
@@ -381,13 +408,13 @@ void locate_pic_init()
 	locate_picture_thread = rt_thread_create("locate",locate_picture_entry,RT_NULL,1024,3,1000);
 	rt_thread_startup(locate_picture_thread);
 	
-	Pos_PID_Init(&center_y_con,-1.4,0,0);
+	Pos_PID_Init(&center_y_con,-1.3,0,0);
 	center_y_con.Output_Max = 100;
 	center_y_con.Output_Min = -100;
 	center_y_con.Value_I_Max = 500;
 	center_y_con.Ref = 145;
 	
-	Pos_PID_Init(&center_x_con,-1.2,0,0);
+	Pos_PID_Init(&center_x_con,-1.3,0,0);
 	center_x_con.Output_Max = 100;
 	center_x_con.Output_Min = -100;
 	center_x_con.Value_I_Max = 500;

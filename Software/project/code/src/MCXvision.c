@@ -25,9 +25,12 @@ MCX_Current_Mode mcxCurrent_Mode;
 //此变量用于保存帧
 uint8_t MCX_rx_buffer[128];
 
+
+
 int16_t center_x;
 int16_t center_y;
 uint8_t cur_PicNum;
+uint8_t L_or_R_pic;
 
 void MCX_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData)
 {
@@ -114,15 +117,18 @@ void MCX_uart_handle(){
 		break;
 
 		case Detection_Mode:
-			if(MCX_rx_buffer[1] == 1 && MCX_rx_buffer[4] != 0){
+			
+
+			if(MCX_rx_buffer[4] != 0){
 				center_x = MCX_rx_buffer[2]*1.5;
 				center_y = MCX_rx_buffer[3]*1.5;
+				cur_PicNum = MCX_rx_buffer[4];
+				L_or_R_pic = MCX_rx_buffer[1];
+				rt_kprintf("%d,%d,%d\n",cur_PicNum,center_x,center_y);
 				MCX_Detection_Flag = 1;
 				MCX_Change_Mode(MCX_Reset_Mode);
 			}
-			else
-				MCX_Clear();
-			// rt_kprintf("%d,%d,%d\n",MCX_rx_buffer[1],center_x,center_y);
+
 		break;
 
 		case Put_Mode:

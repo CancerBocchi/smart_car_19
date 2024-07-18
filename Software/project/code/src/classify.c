@@ -16,6 +16,8 @@ static int Class_CirNum = 5;
 //记录目前的篮筐 为 1-6 如果要访问对应数组元素 则需要减 1
 static int current_basket;
 
+static uint16_t cir_pic_num; //此时圆环的卡片总数
+
 /**
  * @brief 结构体初始化
  * 
@@ -25,6 +27,10 @@ void Class_Init(){
     Class_Basket[0].FinalClass = Class_Traffic_Tool;
     Class_Basket[1].FinalClass = Class_Weapons;
     Class_Basket[2].FinalClass = Class_Supply;
+
+    Class_Basket[3].FinalClass = Class_Traffic_Tool;
+    Class_Basket[4].FinalClass = Class_Weapons;
+    Class_Basket[5].FinalClass = Class_Supply;
 
     Class_Basket[0].angle = 23.6;
     Class_Basket[1].angle = 60+23.6;
@@ -85,12 +91,19 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
             if(Class_Basket[i].DetailClass == DetailClass){
                 rt_kprintf("cir:detail_class exist\n");
                 Turntable_Rotate(Class_Basket[i].angle);
+                // if(fabs(current_basket - Class_CirNum) <= 3)
+                //     rt_thread_delay(250);
+                // else
+                //     rt_thread_delay(500);
+
                 Class_Basket[i].DetailNum++;
+                current_basket = i+1;
+                cir_pic_num++;
                 return;
             }
         }
 
-                        //出错
+        //出错
         if(Class_CirNum == 0){
             rt_kprintf("Fault:Class Cir overload\n");
             while(1){
@@ -100,10 +113,12 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
 
         //将圆环标记好
         Class_Basket[Class_CirNum].DetailClass = DetailClass;
-        current_basket = Class_CirNum+1;
         Class_Basket[Class_CirNum].DetailNum++;
         Turntable_Rotate(Class_Basket[Class_CirNum].angle);
-        Class_CirNum--; //存储的圆环个数相加
+        current_basket = Class_CirNum+1;
+        cir_pic_num++;
+        Class_CirNum--;
+        return;
         
     }
 
@@ -111,6 +126,8 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
         //获取大类
         int class = Class_ClassifyTheDetailed(DetailClass);
         rt_kprintf("Class:%d\n",class);
+        if(Class_Basket[class - 1].howmany >= 4)
+            class += 3;
         //转盘转到对应角度
         Turntable_Rotate(Class_Basket[class - 1].angle);
         current_basket = class;
@@ -118,7 +135,7 @@ void Class_Six_AddOneThing(int DetailClass,int cir_side_flag){
         Class_Basket[class - 1].howmany++;
     }
     //等圆环转到位
-    rt_thread_delay(500);
+
 }
 
 /**
@@ -136,33 +153,44 @@ void Class_Change_Basket(int basketNum){
  * @brief 最终分类函数（后面可能回改成电磁铁放置）
  * 
  * @param FinalClass 识别到的类别
- * @return int 框内剩余的数量
+ * @return int 是否放置完毕 
  */
 int Class_Six_FinalPut(int FinalClass){
     FinalClass -= 48;
-
+    //最终的类不是1，2，3
     if((FinalClass != 1 && FinalClass != 2 && FinalClass != 3)){
         Step_Motor_Reset();
         return 0;
     }
-
-    if(current_basket != FinalClass){
-        Turntable_Rotate(Class_Basket[FinalClass - 1].angle);
-        current_basket = FinalClass;
-
-
-        rt_thread_delay(500);
-    }
     
-    if(Class_Basket[FinalClass - 1].howmany == 0){
+    if(Class_Basket[FinalClass - 1].howmany > 0){
+        Class_Basket[FinalClass - 1].howmany = (Class_Basket[FinalClass - 1].howmany)?Class_Basket[FinalClass - 1].howmany-1:0;
+        if(current_basket != FinalClass){
+            Turntable_Rotate(Class_Basket[FinalClass - 1].angle);
+            current_basket = FinalClass;
+        }
+        
+        Step_Motor_Put();
+        return 1;
+    }
+    else if(Class_Basket[FinalClass - 1 + 3].howmany > 0){
+        Class_Basket[FinalClass - 1 + 3].howmany = (Class_Basket[FinalClass - 1 + 3].howmany)?Class_Basket[FinalClass - 1 + 3].howmany-1:0;
+        if(current_basket != FinalClass + 3){
+            Turntable_Rotate(Class_Basket[FinalClass - 1 + 3].angle);
+            current_basket = FinalClass + 3;
+        }
+        
+        Step_Motor_Put();
+        return 1;
+    }
+    else{
         Step_Motor_Reset();
-         return 0;
+        return 0;
     }
-       
-    
-    Class_Basket[FinalClass - 1].howmany = (Class_Basket[FinalClass - 1].howmany)?Class_Basket[FinalClass - 1].howmany-1:0;
-    Step_Motor_Put();
-    return Class_Basket[FinalClass - 1].howmany;
+        
+
+    //旋转到对应的框
+
 }
 
 /**
@@ -189,7 +217,6 @@ uint8_t Class_Six_CirPut(int DetailClass){
         if(Class_Basket[i].DetailClass == DetailClass){
             Turntable_Rotate(Class_Basket[i].angle);
             current_basket = i+1;
-            rt_thread_delay(500);
             if(Class_Basket[i].DetailNum == 1){
                 Class_Basket[i].DetailClass = Class_Null;
                 Class_Basket[i].DetailNum--;

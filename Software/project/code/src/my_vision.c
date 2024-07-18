@@ -494,20 +494,20 @@ void Vision_BroderFindFP(int16* broder)
  * @return uint8_t 返回1为发现前方斑马线
  */
 #define Zebra_Y 60
-#define Zebra_TH 12
-#define Zebra_Range 20
+#define Zebra_TH 10
+#define Zebra_Range 10
 uint8_t Vision_IsZebra(){
     int change_num = 0;
     int mid = (Image_S.leftBroder[30]+Image_S.rightBroder[30])/2;
 
-    for(int i = mid;i<Image_S.rightBroder[30];i++){
+    for(int i = mid;i<140;i++){
         if(my_image[Zebra_Y][i] > Threshold+Zebra_Range && my_image[Zebra_Y][i+1] < Threshold-Zebra_Range||
             my_image[Zebra_Y][i] < Threshold-Zebra_Range && my_image[Zebra_Y][i+1] > Threshold+Zebra_Range){
             change_num++;
         }
     }
 
-    for(int i = mid;i>Image_S.leftBroder[30];i--){
+    for(int i = mid;i>46;i--){
         if(my_image[Zebra_Y][i] > Threshold+Zebra_Range && my_image[Zebra_Y][i+1] < Threshold-Zebra_Range||
             my_image[Zebra_Y][i] < Threshold-Zebra_Range && my_image[Zebra_Y][i+1] > Threshold+Zebra_Range){
             change_num++;
@@ -528,11 +528,11 @@ uint8_t Vision_IsZebra(){
 void Vision_BroderPrint()
 {
     rt_kprintf("left:\n");
-    for(int i = 0; i< 69; i++){
+    for(int i = 0; i< imgRow-1; i++){
         rt_kprintf("%d\n",Image_S.leftBroder[i]);
     }
     rt_kprintf("right:\n");
-    for(int i = 0; i< 69; i++){
+    for(int i = 0; i< imgRow-1; i++){
         rt_kprintf("%d\n",Image_S.rightBroder[i]);
     }
 }
@@ -785,11 +785,16 @@ void Vision_CrossHandle()
             BUZZER_SPEAK;
             if(Start_Flag){
                 Car_Change_Speed(0,0,0);
-                point_t first_point = {69,(Image_S.leftBroder[69]+Image_S.rightBroder[69])/2};
-                point_t last_point = {10,(Image_S.leftBroder[10]+Image_S.rightBroder[10])/2};
+                point_t first_point = {0,(Image_S.leftBroder[0]+Image_S.rightBroder[0])/2};
+                point_t last_point = {30,(Image_S.leftBroder[30]+Image_S.rightBroder[30])/2};
                 float k = Line_CalK(first_point,last_point);
-                rt_kprintf("%d,%d,%.2f\n",(Image_S.leftBroder[10]+Image_S.rightBroder[10])/2,(Image_S.leftBroder[69]+Image_S.rightBroder[69])/2,k);
-                if(k>0){
+                rt_kprintf("%d,%d,%.2f\n",(Image_S.leftBroder[30]+Image_S.rightBroder[30])/2,(Image_S.leftBroder[0]+Image_S.rightBroder[0])/2,k);
+                // for(int i = 0;i<imgRow;i++)
+                //     rt_kprintf("%d\n",Image_S.leftBroder[i]);
+                //  for(int i = 0;i<imgRow;i++)
+                //     rt_kprintf("%d\n",Image_S.rightBroder[i]);
+                // while(1);
+                if(k<0){
                     L_or_R_Cross = Right_Cross;
                 }
                 else 
@@ -908,7 +913,7 @@ void Vision_CirculeHandle()
     switch(Circule_LorR){
         static int out_n;
         case RIGHT_CIRCULE:
-            out_n = !IsStrai(F.my_segment_L[0])? out_n+1:0;
+            out_n = (!IsStrai(F.my_segment_L[0])&&(Vision_GetSegLenghth(F.my_segment_L[0]) >= 20))? out_n+1:0;
             if(out_n == 4){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
@@ -918,7 +923,7 @@ void Vision_CirculeHandle()
             }
         break;
         case LEFT_CIRCULE:
-            out_n = !IsStrai(F.my_segment_R[0])? out_n+1:0;
+            out_n = (!IsStrai(F.my_segment_R[0])&&(Vision_GetSegLenghth(F.my_segment_R[0]) >= 20))? out_n+1:0;
             if(out_n == 4){
                 Current_Road = NormalRoads;
                 state = Circule_Begin;
@@ -940,6 +945,7 @@ void Vision_CirculeHandle()
         }
         else if(state == Circule_State2){
             //做直线
+            MCX_Change_Mode(MCX_Reset_Mode);
             if(IsLose(F.my_segment_R[0])){
                 //计算直线的平均斜率
                 float slope = Point_CalSlope((point_t){0,Image_S.leftBroder[0]},(point_t){69,Image_S.leftBroder[69]});
@@ -1008,6 +1014,7 @@ void Vision_CirculeHandle()
         }
         else if(state == Circule_State2){
             //做直线
+            MCX_Change_Mode(MCX_Reset_Mode);
             if(IsLose(F.my_segment_L[0])){
                 //计算直线的平均斜率
                 float slope = Point_CalSlope((point_t){0,Image_S.rightBroder[0]},(point_t){69,Image_S.rightBroder[69]});
@@ -1070,16 +1077,17 @@ void Vision_CirculeHandle()
  * 
  */
 void Vision_ZebraHandle(){
-    if(!final_flag&&Start_Flag){
-        rt_kprintf("Vision:Zebra Detected\n");
-        rt_sem_release(final_sem);
-        rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
-        rt_kprintf("return from the final thread\n");
-        MCX_Change_Mode(MCX_Reset_Mode);
-        Current_Road = NormalRoads;
-    }
-    else{
-    //终点停车
+    if(Start_Flag){
+        if(!final_flag){
+            rt_kprintf("Vision:Zebra Detected\n");
+            rt_sem_release(final_sem);
+            rt_sem_take(trace_line_sem,RT_WAITING_FOREVER);
+            rt_kprintf("return from the final thread\n");
+            MCX_Change_Mode(MCX_Reset_Mode);
+            Current_Road = NormalRoads;
+        }
+        else{
+        //终点停车
             Car_Change_Speed(0,0,0);
             rt_thread_delay(10);
             Car_DistanceMotion(0,-50,0.8);
@@ -1089,6 +1097,9 @@ void Vision_ZebraHandle(){
             }
 
         }
+    }
+    Current_Road = NormalRoads;
+
 }
 
 

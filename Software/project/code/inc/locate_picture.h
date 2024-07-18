@@ -14,6 +14,8 @@ extern uint8 error_detect_flag;
 extern uint8_t put_flag;
 extern uint8_t locate_arr_flag;
 
+extern uint8_t num_letter_flag; //若判断为捡起来的是字母
+
 #define Locate_Catch 0
 #define Locate_Put   1
 #define Locate_SetMode(mode) (put_flag = mode)

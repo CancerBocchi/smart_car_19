@@ -26,21 +26,21 @@ void Vision_Handle()
 
     Vision_Draw();
    //获取中线
-   for(int i=imgRow-1;i>=0;i--)
-   {
-      Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
-   } 
-   int16 MID_Table[imgRow];
-   int16 leftBroder[imgRow];//左边边界
-   int16 rightBroder[imgRow];//右边边界
-   for(int i=imgRow-1;i>=0;i--){
-       MID_Table[i] = Image_S.MID_Table[i];
-       leftBroder[i] = Image_S.leftBroder[i];
-       rightBroder[i] = Image_S.rightBroder[i];
-   }
+    for(int i=imgRow-1;i>=0;i--)
+    {
+        Image_S.MID_Table[i]=(int16)((Image_S.rightBroder[i]+Image_S.leftBroder[i])/2);
+    } 
+    int16 MID_Table[imgRow];
+    int16 leftBroder[imgRow];//左边边界
+    int16 rightBroder[imgRow];//右边边界
+    for(int i=imgRow-1;i>=0;i--){
+        MID_Table[i] = Image_S.MID_Table[i];
+        leftBroder[i] = Image_S.leftBroder[i];
+        rightBroder[i] = Image_S.rightBroder[i];
+    }
 
-   for(int i=imgRow-1;i>0;i--)
-   {
+    for(int i=imgRow-1;i>0;i--)
+    {
        if(MID_Table[i]>=188)
            MID_Table[i] = 187;
         MID_Table[i] = MID_Table[i]<0? 0:MID_Table[i];
@@ -58,8 +58,11 @@ void Vision_Handle()
        ips200_draw_point(rightBroder[i], i, RGB565_BROWN);
        //中线
        ips200_draw_point((int)(94), i, RGB565_GREEN);
-   }
-   ips200_draw_line(0,60,187,60,RGB565_CYAN);
+    }
+    ips200_draw_line(0,60,187,60,RGB565_CYAN);
+
+    ips200_draw_line(46,0,46,69,RGB565_CYAN);
+    ips200_draw_line(140,0,140,69,RGB565_CYAN);
 
     
     

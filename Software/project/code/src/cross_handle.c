@@ -16,32 +16,22 @@ void cross_handle_entry(){
         cross_handle_flag = 1;
 
         MCX_Clear();
-        MCX_Change_Mode(MCX_Put_Mode);
+        MCX_Change_Mode(MCX_Location_Mode);
         rt_thread_delay(100);
         //ÓÒ±ß
         if(L_or_R_Cross == Right_Cross){
             Car_Rotate(-90);
             rt_thread_delay(400);
-            Car_DistanceMotion(-50,0,1);
+            Car_DistanceMotion(-60,0,0.8);
         }
             
             
         //×ó±ß
         else if(L_or_R_Cross == Left_Cross){
             Car_Rotate(90);
-            rt_thread_delay(400);
-            Car_DistanceMotion(50,0,1);
-        }
-
-        rt_thread_delay(500);
-
-        if(cur_PicNum == 0){
-            L_or_R_Cross = !L_or_R_Cross;
-            Car_Rotate(180);
-            rt_thread_delay(800);
-        }
-        
-            
+            rt_thread_delay(500);
+            Car_DistanceMotion(60,0,0.8);
+        }   
 
         Locate_SetMode(Locate_Catch);
         rt_sem_release(locate_picture_sem);
@@ -59,18 +49,21 @@ void cross_handle_entry(){
             if(mt9v03x_finish_flag)
                 circule_trace_line();
             rt_thread_delay(1);
-            // rt_kprintf("%.2f\n",fabs(Att_CurrentYaw - cur_yaw));
-            if(Tool_IsFloatEqu(fabs(Att_CurrentYaw - cur_yaw),tar_angle,1.0f)){
+            rt_kprintf("%.2f\n",fabs(Att_CurrentYaw - cur_yaw));
+            if(Tool_IsFloatEqu(fabs(Att_CurrentYaw - cur_yaw),tar_angle,1.5f)){
                 Car_Change_Speed(0,0,0);
                 rt_thread_delay(100);
-                Car_DistanceMotion(0,-15,0.5);
+                Car_DistanceMotion(0,-30,0.5);
                 put_flag = 1;
                 rt_sem_release(locate_picture_sem);
                 rt_sem_take(cross_handle_sem,RT_WAITING_FOREVER);
-                if(L_or_R_Cross == Left_Cross)
-                    Car_DistanceMotion(25,40,1.3);
-                else 
-                    Car_DistanceMotion(0,40,1.2);
+                if(tar_angle != 250){
+                    if(L_or_R_Cross == Left_Cross)
+                        Car_DistanceMotion(25,45,1);
+                    else 
+                        Car_DistanceMotion(-20,45,1);
+                }
+                    
                 if(tar_angle  == 250){
                     rt_kprintf("cro:return to the final yaw\n");
                     break;
@@ -83,19 +76,23 @@ void cross_handle_entry(){
         
 
         if(L_or_R_Cross == Left_Cross){
-            Car_DistanceMotion(-90,-20,1.5);
-            Car_Rotate(90);
+            Car_Rotate(110);
+            rt_thread_delay(700);
+            Car_DistanceMotion(20,-90,1.3);
+            
         }
            
         else if(L_or_R_Cross == Right_Cross){
-             Car_DistanceMotion(90,-20,1.5);
-            Car_Rotate(-90);
+            Car_Rotate(-110);
+            rt_thread_delay(700);
+            Car_DistanceMotion(-20,-90,1.3);
         }
 
-        rt_thread_delay(500);
+       
         cross_handle_flag = 0;
         Car_Speed_ConRight = Con_By_TraceLine;
         Class_Cir_Reset();
+        MCX_Change_Mode(MCX_Detection_Mode);
         rt_kprintf("cross handled successfully\n");
         rt_sem_release(trace_line_sem);
     }

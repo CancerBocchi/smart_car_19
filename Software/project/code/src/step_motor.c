@@ -77,17 +77,17 @@ void Step_Motor_Reset()
 
 void Step_Motor_Catch()
 {
-		servo_slow_ctrl(98, 6, 75);
+		servo_slow_ctrl(96, 6, 80);
 		rt_thread_delay(50);
 		gpio_set_level(B10,1);
-		rt_thread_delay(500);
+		rt_thread_delay(350);
 		servo_slow_ctrl(140, 6, 75);
 		rt_thread_delay(100);
 		servo_slow_ctrl(140, 100, 50);
 		rt_thread_delay(50);
 		servo_slow_ctrl(175, 100, 50);
 		rt_thread_delay(50);
-		servo_slow_ctrl(180, 120, 50);
+		servo_slow_ctrl(180, 130, 50);
 		rt_thread_delay(50);
 		gpio_set_level(B10,0);
 		servo_slow_ctrl(140, 120, 50);

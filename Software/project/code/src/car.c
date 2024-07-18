@@ -183,8 +183,8 @@ void car_motion_Init()
 		Car_Speed_ConRight = Con_By_TraceLine;
 		Pos_PID_Init(&Car_Yaw_Controller,4.5,0,0);
 		Car_Yaw_Controller.Ref = 0;
-		Car_Yaw_Controller.Output_Max = 250;
-		Car_Yaw_Controller.Output_Min = -250;
+		Car_Yaw_Controller.Output_Max = 160;
+		Car_Yaw_Controller.Output_Min = -160;
 		Car_Yaw_Controller.Value_I_Max = 1000;
 
 

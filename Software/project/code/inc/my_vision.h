@@ -53,6 +53,8 @@ typedef struct segment{
     uint8 position;
 }segment_t;
 
+#define Vision_GetSegLenghth(seg) (fabs(seg.begin - seg.end + 1))
+
 extern int adaptivePara;
 extern uint8 handle_image[IMAGE_ROW][IMAGE_COL];
 extern RoadSymbol_type Current_Road;
