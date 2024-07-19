@@ -4,8 +4,8 @@
 Pos_PID_t center_y_con;
 Pos_PID_t center_x_con;
 
-#define PUT_X 	120
-#define PUT_Y 	130
+#define PUT_X 	90
+#define PUT_Y 	125
 
 #define CATCH_X 120
 #define CATCH_Y 148
@@ -22,6 +22,8 @@ float Vx;
 float Vy;
 
 uint8_t put_flag;
+
+uint8_t Heap_Flag = 0;
 
 uint8 error_detect_flag = 0;
 
@@ -207,8 +209,8 @@ void locate_picture_catch(){
 		if(error_detect_flag&&side_catch_flag)
 			break;
 
-		if(cross_handle_flag || circule_handle_flag)
-			located_n = 1000;
+		if((cross_handle_flag || circule_handle_flag) && Heap_Flag)
+			located_n = 60;
 		else 
 			located_n = 0;
 
@@ -290,12 +292,12 @@ void locate_picture_put(){
 	static int located_n;//记录连续定位准确的次数
 	static int begin_flag;
 
-	TARGET_X = PUT_X;
-	TARGET_Y = PUT_Y;
+	TARGET_X = CATCH_X;
+	TARGET_Y = CATCH_Y;
 	MCX_Change_Mode(MCX_Location_Mode);
 	//放置时只定位x
 	uint32_t tick =rt_tick_get();
-	while(located_n<1000){
+	while(located_n<50){
 		if(MCX_rx_flag){
 			Vx = Pos_PID_Controller(&center_x_con,center_x);
 			Vy = Pos_PID_Controller(&center_y_con,center_y);
@@ -315,8 +317,27 @@ void locate_picture_put(){
 
 	while(Art_GetData() == Class_Null);
 
-	servo_slow_ctrl(140, 140, 30);
 	int class = Art_GetData();
+
+	//定位使得防止准确
+	TARGET_X = PUT_X;
+	TARGET_Y = PUT_Y;
+	tick =rt_tick_get();
+	while(located_n<50){
+		if(MCX_rx_flag){
+			Vx = Pos_PID_Controller(&center_x_con,center_x);
+			Vy = Pos_PID_Controller(&center_y_con,center_y);
+			Car_Change_Speed(Vx,Vy,0);
+			located_n = Is_Located? located_n+1:0;
+			MCX_Clear();
+		}
+			
+		if(rt_tick_get()-tick >= 1500)
+			break;
+	}
+	Car_Change_Speed(0,0,0);
+
+	servo_slow_ctrl(140, 140, 30);
 
 	Art_Change_Mode(Art_Reset_Mode);
 	rt_kprintf("Classify:the num/letter is %c\n",class);
@@ -340,7 +361,7 @@ void locate_picture_put(){
 	else if(circule_handle_flag){
 		rt_kprintf("circule\n");
 		int ret = Class_Six_CirPut(class);
-		Car_DistanceMotion(10,10,0.4);
+		// Car_DistanceMotion(10,10,0.4);
 		for(int i = 0;i<ret;i++){
 			servo_slow_ctrl(140, 140, 30);
 			rt_thread_delay(50);
@@ -356,7 +377,7 @@ void locate_picture_put(){
 	else if(cross_handle_flag){
 		rt_kprintf("cross\n");
 		int ret = Class_Six_CirPut(class);
-		Car_DistanceMotion(20,5,0.3);
+		// Car_DistanceMotion(20,5,0.3);
 		for(int i = 0;i<ret;i++){
 			servo_slow_ctrl(140, 140, 30);
 			rt_thread_delay(50);	

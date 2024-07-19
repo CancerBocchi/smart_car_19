@@ -223,6 +223,8 @@ arg_change arg_register[] = {
         {"put_flag",DEBUG_INT,&locate_put_flag},
         {"loc_arr",DEBUG_INT,&locate_arr_flag},
         {"ex_time",DEBUG_INT,&exposure_time},
+        {"heap",DEBUG_INT,&Heap_Flag},
+        {"line_f",DEBUG_INT,&cir_or_main_line},
 		{NULL,NULL,NULL}
 };
 
@@ -365,3 +367,17 @@ static void SetBasket(int argc, char**argv){
 }
 
 MSH_CMD_EXPORT(SetBasket, SetBasket sample: SetBasket <num>);
+
+
+static void SetFinal(int argc, char**argv){
+    if(argc == 2){
+        if(*argv[1] == 'l')
+            final_L_or_R = Final_LEFT;
+        else if(*argv[1] == 'r')
+            final_L_or_R = Final_RIGHT;
+
+    }
+   
+}
+
+MSH_CMD_EXPORT(SetFinal, SetFinal sample: SetFinal <l/r>);

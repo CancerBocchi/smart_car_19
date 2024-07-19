@@ -5,6 +5,7 @@ rt_thread_t final_thread;
 
 int final_flag = 0;
 uint8_t final_debug_mode = 0;
+uint8_t final_L_or_R = Final_LEFT;
 
 /**
  * @brief 最终任务运行函数
@@ -23,20 +24,23 @@ void final_entry(){
         //停车右转
         Car_Change_Speed(0,0,0);
         rt_thread_delay(200);
-        Car_Rotate(-90);
-        rt_thread_delay(1000);
-
-        Car_DistanceMotion(30,0,0.6);
+        if(final_L_or_R == Final_RIGHT){
+            Car_Rotate(-90);
+            rt_thread_delay(1000);
+            Car_DistanceMotion(30,0,0.6);
+            Car_Change_Speed(50,0,0);
+        }
+            
+        else if(final_L_or_R == Final_LEFT){
+            Car_Rotate(90);
+            rt_thread_delay(1000);
+            Car_DistanceMotion(-30,0,0.6);
+            Car_Change_Speed(-50,0,0);
+        }
+            
+            
 
         
-        // while(1){
-        //     Car_DistanceMotion(150,0,6);
-        //     rt_thread_delay(3000);
-        //     Car_DistanceMotion(-150,0,6);
-        //     rt_thread_delay(3000);
-        // }
-
-        Car_Change_Speed(50,0,0);
         
         int class_num = 0;
         int ignore_flag = 0;
@@ -53,7 +57,11 @@ void final_entry(){
                 ignore_flag = 1;
                 class_num += 1;
             }
-            Car_Change_Speed(50,0,0);
+            if(final_L_or_R == Final_RIGHT)
+                Car_Change_Speed(50,0,0);
+            else if(final_L_or_R == Final_LEFT)
+                Car_Change_Speed(-50,0,0);
+
             rt_thread_delay(10);
             one_num = 0;
             i = 0;
@@ -68,9 +76,19 @@ void final_entry(){
            
         }
         Car_Change_Speed(0,0,0);
-        Car_Rotate(90);
-        rt_thread_delay(500);
-        Car_DistanceMotion(-20,0,0.4);
+        if(final_L_or_R == Final_RIGHT){
+            Car_Rotate(90);
+            rt_thread_delay(500);
+            Car_DistanceMotion(-20,0,0.4);
+        }
+            
+        else if(final_L_or_R == Final_LEFT){
+            Car_Rotate(-90);
+            rt_thread_delay(500);
+            Car_DistanceMotion(20,0,0.4);
+        }
+            
+        
         Car_Speed_ConRight = Con_By_TraceLine;
         rt_kprintf("final:return to the trace_line\n");
         rt_sem_release(trace_line_sem);
