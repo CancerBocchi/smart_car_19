@@ -58,6 +58,7 @@
         "cross_handle.h": "c",
         "zf_device_mt9v03x_flexio.h": "c",
         "zf_device_oled.h": "c",
-        "zf_common_typedef.h": "c"
+        "zf_common_typedef.h": "c",
+        "thread": "c"
     }
 }

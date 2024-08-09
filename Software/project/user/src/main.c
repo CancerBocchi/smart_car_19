@@ -6,8 +6,6 @@ int Start_Flag = 0;
 
 int exposure_time = 256;
 
-uint8_t cir_or_main_line;
-
 
 void led_thread_entry()
 {
@@ -42,14 +40,7 @@ int main()
 	
 	while(!Start_Flag){
 		if(mt9v03x_finish_flag){
-			if(cir_or_main_line)
-				Vision_Handle();
-			else if(!cir_or_main_line){
-				circule_trace_line();
-				for(int i = 0;i<imgCol-1;i++){
-					ips200_draw_point(i,cir_line[i],RGB565_RED);
-				}
-			}
+			Vision_Handle();
 		}
 		mt9v03x_set_exposure_time(exposure_time);
 		
@@ -79,14 +70,14 @@ int main()
 
 	rt_kprintf("--------- init end ----------\n");
 
-//	while(1){
-//		if(mt9v03x_finish_flag){
-//			circule_trace_line();
-//			for(int i = 0;i<imgCol-1;i++){
-//				ips200_draw_point(i,cir_line[i],RGB565_RED);
-//			}
-//		}
-//		rt_thread_delay(1);
-//	}
+	// while(1){
+	// 	if(mt9v03x_finish_flag){
+	// 		circule_trace_line();
+	// 		for(int i = 0;i<imgCol-1;i++){
+	// 			ips200_draw_point(i,cir_line[i],RGB565_RED);
+	// 		}
+	// 	}
+	// 	rt_thread_delay(1);
+	// }
 
 }

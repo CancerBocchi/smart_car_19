@@ -768,7 +768,7 @@ void Vision_CrossHandle()
 
         //状态切换
     if(state == Cross_Begin){
-        //当进入十字的时候发现两边都未能发现角点 突出十字
+        //当进入十字的时候发现两边都未能发现角点 退出十字
         //十字的时候应当有明显的角点
         // rt_kprintf("RS:Cross\n");
         if(F.FP_n_L == 0&&F.FP_n_R == 0){

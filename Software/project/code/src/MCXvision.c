@@ -106,17 +106,9 @@ void MCX_uart_handle(){
 	switch (mcxCurrent_Mode)
 	{
 		case Location_Mode:
+			center_x = MCX_rx_buffer[2]*1.5;
+			center_y = MCX_rx_buffer[3]*1.5;
 			cur_PicNum = MCX_rx_buffer[4];
-			if(cur_PicNum>0){
-				center_x = MCX_rx_buffer[2]*1.5;
-				center_y = MCX_rx_buffer[3]*1.5;
-			}
-			else{
-				center_x = 0;
-				center_y = 0;
-			}
-				
-			
 			// rt_kprintf("%d,%d\n",center_x,center_y);
 		break;
 

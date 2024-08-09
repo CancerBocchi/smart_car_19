@@ -1,7 +1,7 @@
 Dependencies for Project 'rt1064', Target 'nor_sdram_zf_dtcm': (DO NOT MODIFY !)
 CompilerVersion: 6190000::V6.19::ARMCLANG
 F (..\user\src\isr.c)(0x66927B17)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/isr.o -MD)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -151,17 +151,17 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 I (..\user\inc\isr.h)(0x66927B17)
 I (..\..\libraries\sdk\board\board.h)(0x66927B16)
-F (..\user\src\main.c)(0x669951ED)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/main.o -MD)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+F (..\user\src\main.c)(0x6698F53E)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/main.o -MD)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -311,18 +311,18 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\user\src\user_math.c)(0x66927B17)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/user_math.o -MD)
 I (..\user\inc\user_math.h)(0x66927B17)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63884908)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
 I (..\..\libraries\sdk\drives\fsl_common.h)(0x66927B16)
@@ -469,19 +469,19 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\user\inc\isr.h)(0x66927B17)()
 F (..\user\inc\user_math.h)(0x66927B17)()
 F (..\code\src\Attitude_algorithm.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/attitude_algorithm.o -MD)
 I (..\code\inc\Attitude_algorithm.h)(0x66927B16)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63884908)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -629,16 +629,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\car.c)(0x66978326)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/car.o -MD)
 I (..\code\inc\car.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -787,14 +787,14 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
-F (..\code\src\debug_tool.c)(0x669946F7)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/debug_tool.o -MD)
+F (..\code\src\debug_tool.c)(0x6695FDED)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/debug_tool.o -MD)
 I (..\code\inc\debug_tool.h)(0x66927B16)
 I (..\..\libraries\rttherad_libraries\include\rtthread.h)(0x66927B16)
 I (..\..\libraries\rttherad_libraries\bsp\rtconfig.h)(0x66927B16)
@@ -824,7 +824,7 @@ I (C:\Keil_v5\ARM\ARMCLANG\include\ctype.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
 I (..\..\libraries\rttherad_libraries\components\finsh\shell.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (..\..\libraries\sdk\drives\fsl_common.h)(0x66927B16)
 I (C:\Keil_v5\ARM\ARMCLANG\include\assert.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
@@ -945,16 +945,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\encoder.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/encoder.o -MD)
 I (..\code\inc\encoder.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1103,17 +1103,17 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\motor.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/motor.o -MD)
 I (..\code\inc\motor.h)(0x66927B16)
 I (..\code\inc\encoder.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1261,12 +1261,12 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\myuart.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/myuart.o -MD)
 I (..\code\inc\myuart.h)(0x66927B16)
@@ -1303,7 +1303,7 @@ I (..\code\inc\PID.h)(0x66927B16)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63884908)
 F (..\code\src\vofa.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/vofa.o -MD)
 I (..\code\inc\vofa.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1452,12 +1452,12 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\Attitude_algorithm.h)(0x66927B16)()
 F (..\code\inc\car.h)(0x66927B16)()
@@ -1470,7 +1470,7 @@ F (..\code\inc\PID.h)(0x66927B16)()
 F (..\code\inc\vofa.h)(0x66927B16)()
 F (..\code\src\trace_line.c)(0x6698CD93)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/trace_line.o -MD)
 I (..\code\inc\trace_line.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1619,16 +1619,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\trace_line.h)(0x66927B16)()
 F (.\camera.c)(0x6697E0EA)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/camera.o -MD)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1778,18 +1778,18 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (.\camera.h)(0x66927B17)()
 F (..\code\inc\step_motor.h)(0x66927B16)()
-F (..\code\src\step_motor.c)(0x669903B5)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/step_motor.o -MD)
+F (..\code\src\step_motor.c)(0x6698D15A)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/step_motor.o -MD)
 I (..\code\inc\step_motor.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -1938,16 +1938,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\system_perform.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/system_perform.o -MD)
 I (..\code\inc\system_perform.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2096,17 +2096,17 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\system_perform.h)(0x66927B16)()
 F (..\code\src\side_catch.c)(0x669879E6)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/side_catch.o -MD)
 I (..\code\inc\side_catch.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2255,17 +2255,17 @@ I (..\code\inc\system_perform.h)(0x66927B16)
 I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\side_catch.h)(0x66927B16)()
 F (..\code\src\buzzer.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/buzzer.o -MD)
 I (..\code\inc\buzzer.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2414,18 +2414,18 @@ I (..\code\inc\system_perform.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\buzzer.h)(0x66927B16)()
-F (..\code\inc\locate_picture.h)(0x6699436F)()
-F (..\code\src\locate_picture.c)(0x669943B7)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/locate_picture.o -MD)
-I (..\code\inc\locate_picture.h)(0x6699436F)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+F (..\code\inc\locate_picture.h)(0x6697D534)()
+F (..\code\src\locate_picture.c)(0x6698F654)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/locate_picture.o -MD)
+I (..\code\inc\locate_picture.h)(0x6697D534)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2579,11 +2579,11 @@ I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\my_vision.c)(0x6698F41E)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/my_vision.o -MD)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2732,17 +2732,17 @@ I (..\code\inc\system_perform.h)(0x66927B16)
 I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\my_vision.h)(0x6698F385)()
-F (..\code\src\circule_handle.c)(0x66995361)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/circule_handle.o -MD)
+F (..\code\src\circule_handle.c)(0x6698808F)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/circule_handle.o -MD)
 I (..\code\inc\circule_handle.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -2892,16 +2892,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\circule_handle.h)(0x66927B16)()
-F (..\code\src\MCXvision.c)(0x66991691)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/mcxvision.o -MD)
+F (..\code\src\MCXvision.c)(0x66987A3B)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/mcxvision.o -MD)
 I (..\code\inc\MCXvision.h)(0x66987914)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3050,17 +3050,17 @@ I (..\code\inc\system_perform.h)(0x66927B16)
 I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\MCXvision.h)(0x66987914)()
 F (..\code\src\classify.c)(0x6698DB13)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/classify.o -MD)
 I (..\code\inc\classify.h)(0x669526EA)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3210,16 +3210,16 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\classify.h)(0x669526EA)()
 F (..\code\src\art.c)(0x669657A7)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/art.o -MD)
 I (..\code\inc\art.h)(0x66966BFC)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3369,15 +3369,15 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
-F (..\code\src\cross_handle.c)(0x6699240A)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/cross_handle.o -MD)
+F (..\code\src\cross_handle.c)(0x6698F660)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/cross_handle.o -MD)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3527,15 +3527,15 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
-F (..\code\src\final.c)(0x66993D8A)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/final.o -MD)
-I (..\code\inc\final.h)(0x66993B41)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\code\inc\final.h)(0x66927B16)
+F (..\code\src\final.c)(0x66949B1A)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/final.o -MD)
+I (..\code\inc\final.h)(0x66927B16)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3685,7 +3685,7 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
@@ -3693,7 +3693,7 @@ I (..\code\inc\putdown_pic.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\src\putdown_pic.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/putdown_pic.o -MD)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -3843,11 +3843,11 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\code\inc\art.h)(0x66966BFC)()
 F (..\code\inc\putdown_pic.h)(0x66927B16)()
@@ -3919,7 +3919,7 @@ I (..\..\libraries\zf_driver\zf_driver_pwm.h)(0x66927B16)
 I (..\..\libraries\zf_driver\zf_driver_uart.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_lpuart.h)(0x66927B16)
 I (..\..\libraries\zf_common\zf_common_debug.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (..\..\libraries\sdk\utilities\debug_console\fsl_debug_console.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_iomuxc.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_cache.h)(0x66927B16)
@@ -4038,12 +4038,12 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\..\libraries\zf_common\zf_common_debug.h)(0x66927B16)()
 F (..\..\libraries\zf_common\zf_common_fifo.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/zf_common_fifo.o -MD)
@@ -4127,7 +4127,7 @@ I (..\..\libraries\sdk\drives\fsl_common_arm.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_clock.h)(0x66927B16)
 I (..\..\libraries\zf_common\zf_common_function.h)(0x66927B16)
 F (..\..\libraries\zf_common\zf_common_function.h)(0x66927B16)()
-F (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)()
+F (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)()
 F (..\..\libraries\zf_common\zf_common_interrupt.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/zf_common_interrupt.o -MD)
 I (..\..\libraries\zf_common\zf_common_interrupt.h)(0x66927B16)
 I (..\..\libraries\zf_common\zf_common_typedef.h)(0x66927B16)
@@ -4797,7 +4797,7 @@ I (..\..\libraries\zf_driver\zf_driver_usb_cdc.h)(0x66927B16)
 F (..\..\libraries\zf_driver\zf_driver_usb_cdc.h)(0x66927B16)()
 F (..\..\libraries\zf_driver\zf_qtimer.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/zf_qtimer.o -MD)
 I (..\..\libraries\zf_driver\zf_qtimer.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -4945,12 +4945,12 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 I (..\..\libraries\sdk\drives\fsl_qtmr.h)(0x66927B16)
 F (..\..\libraries\zf_driver\zf_qtimer.h)(0x66927B16)()
@@ -4978,7 +4978,7 @@ I (..\..\libraries\sdk\drives\fsl_common_arm.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_clock.h)(0x66927B16)
 I (..\..\libraries\sdk\drives\fsl_iomuxc.h)(0x66927B16)
 I (..\..\libraries\zf_driver\zf_iomuxc.h)(0x66927B16)
-I (..\..\libraries\zf_common\zf_common_headfile.h)(0x66994705)
+I (..\..\libraries\zf_common\zf_common_headfile.h)(0x6695FCA3)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (..\..\libraries\sdk\utilities\debug_console\fsl_debug_console.h)(0x66927B16)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdarg.h)(0x63884908)
@@ -5105,12 +5105,12 @@ I (..\code\inc\buzzer.h)(0x66927B16)
 I (..\code\inc\MCXvision.h)(0x66987914)
 I (..\code\inc\side_catch.h)(0x66927B16)
 I (..\code\inc\my_vision.h)(0x6698F385)
-I (..\code\inc\locate_picture.h)(0x6699436F)
+I (..\code\inc\locate_picture.h)(0x6697D534)
 I (..\code\inc\circule_handle.h)(0x66927B16)
 I (..\code\inc\classify.h)(0x669526EA)
 I (..\code\inc\art.h)(0x66966BFC)
 I (..\code\inc\putdown_pic.h)(0x66927B16)
-I (..\code\inc\final.h)(0x66993B41)
+I (..\code\inc\final.h)(0x66927B16)
 I (..\code\inc\cross_handle.h)(0x66927EAE)
 F (..\..\libraries\zf_driver\zf_iomuxc.h)(0x66927B16)()
 F (..\..\libraries\zf_device\zf_device_absolute_encoder.c)(0x66927B16)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard -c-fsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -w -I ../user/inc -I ../code -I ../../libraries/sdk/startup/mdk -I ../../libraries/sdk/deceive -I ../../libraries/sdk/drives -I ../../libraries/sdk/xip -I ../../libraries/sdk/utilities -I ../../libraries/sdk/utilities/debug_console -I ../../libraries/sdk/utilities/str -I ../../libraries/sdk/cmsis_drivers -I ../../libraries/sdk/CMSIS/Include -I ../../libraries/sdk/CMSIS/Driver/Include -I ../../libraries/sdk/components/lists -I ../../libraries/sdk/components/osa -I ../../libraries/sdk/components/serial_manager -I ../../libraries/sdk/components/uart -I ../../libraries/sdk/board -I ../../libraries/components/fatfs/source -I ../../libraries/components/fatfs/source/fsl_sd_disk -I ../../libraries/components/sdmmc -I ../../libraries/components/sdmmc/common -I ../../libraries/components/sdmmc/host/usdhc -I ../../libraries/components/sdmmc/osa -I ../../libraries/components/sdmmc/sd -I ../../libraries/components/usb/device -I ../../libraries/components/usb/include -I ../../libraries/components/usb/phy -I ../../libraries/components/usb/usb_cdc_adapter -I ../../libraries/zf_common -I ../../libraries/zf_driver -I ../../libraries/zf_device -I ../../libraries/zf_components -I ../../libraries/rttherad_libraries/bsp -I ../../libraries/rttherad_libraries/include -I ../../libraries/rttherad_libraries/include/libc -I ../../libraries/rttherad_libraries/components/finsh -I ../code/inc -I ../mdk -fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb -Wno-invalid-source-encoding -D__UVISION_VERSION="538" -DCPU_MIMXRT1064DVL6A -DCPU_MIMXRT1064DVL6A -DSKIP_SYSCLK_INIT -DXIP_EXTERNAL_FLASH="1" -DXIP_BOOT_HEADER_DCD_ENABLE="1" -DXIP_BOOT_HEADER_ENABLE="1" -DPRINTF_FLOAT_ENABLE="1" -DSCANF_FLOAT_ENABLE="1" -DPRINTF_ADVANCED_ENABLE="1" -DSCANF_ADVANCED_ENABLE="1" -DFSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ="0" -DUSB_STACK_BM -DDEBUG -DMCUXPRESSO_SDK -DSD_ENABLED-o ./objects/zf_device_absolute_encoder.o -MD)

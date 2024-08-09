@@ -13,9 +13,9 @@
 
 //三大类物品分类
 typedef enum{
-    Class_Traffic_Tool = 1,
-    Class_Weapons = 2,
-    Class_Supply = 3
+    Class_Traffic_Tool = 3,
+    Class_Weapons = 1,
+    Class_Supply = 2
 }Class_Three_t;
 
 //十五类物品分类

@@ -43,13 +43,7 @@ void cross_handle_entry(){
         Car_DistanceMotion(0,10,0.5);
 
         float cur_yaw = Att_CurrentYaw;
-        int tar_angle;
-        int first_tar;
-        if(L_or_R_Cross == Right_Cross)
-            tar_angle = 10;
-        else
-            tar_angle = 10;
-        first_tar = tar_angle;
+        int tar_angle = 10;
         rt_kprintf("cur_yaw:%.2f\n",cur_yaw);
         while(1){
             if(mt9v03x_finish_flag)
@@ -59,18 +53,18 @@ void cross_handle_entry(){
             if(Tool_IsFloatEqu(fabs(Att_CurrentYaw - cur_yaw),tar_angle,1.5f)){
                 Car_Change_Speed(0,0,0);
                 rt_thread_delay(100);
-                Car_DistanceMotion(0,-10,0.3);
+                Car_DistanceMotion(0,-30,0.5);
                 put_flag = 1;
                 rt_sem_release(locate_picture_sem);
                 rt_sem_take(cross_handle_sem,RT_WAITING_FOREVER);
-                if(tar_angle != first_tar+240){
+                if(tar_angle != 250){
                     if(L_or_R_Cross == Left_Cross)
                         Car_DistanceMotion(25,45,1);
                     else 
-                        Car_DistanceMotion(0,50,1);
+                        Car_DistanceMotion(-20,45,1);
                 }
                     
-                if(tar_angle  == first_tar + 240){
+                if(tar_angle  == 250){
                     rt_kprintf("cro:return to the final yaw\n");
                     break;
                 }
@@ -84,7 +78,7 @@ void cross_handle_entry(){
         if(L_or_R_Cross == Left_Cross){
             Car_Rotate(110);
             rt_thread_delay(700);
-            Car_DistanceMotion(0,-90,1.3);
+            Car_DistanceMotion(20,-90,1.3);
             
         }
            

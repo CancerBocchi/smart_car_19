@@ -154,6 +154,5 @@
 
 extern int Start_Flag;
 extern int exposure_time;
-extern uint8_t cir_or_main_line;
 
 #endif
