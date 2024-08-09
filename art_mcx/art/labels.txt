@@ -1,0 +1,15 @@
+ambulance
+armoured-car
+bulletproof-vest
+dagger
+explosive
+firearms
+fire-axe
+first-aid-kit
+fire-engine
+flashlight
+helmet
+intercom
+motorcycle
+spontoon
+telescope

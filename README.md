@@ -6,8 +6,22 @@
 
 - Rt-thread：[RT-Thread 官方文档](https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-standard/README)
 
+主要代码编写者：
+
+- 逻辑 & 总钻风视觉部分 Cancer QQ：1761721506
+- MCX & ART视觉部分 Asaka   QQ ：2459973404
+
+完赛寄录：
+
+- [华东 完赛寄录（附控制开源） 赛博败犬 终究还是差一名](https://www.bilibili.com/video/BV1GRiGe3EaM/?spm_id_from=333.999.list.card_archive.click&vd_source=16cf9fe495e6537559260c9d32da5153)
+
+车车遗照：
+
+![车车遗照](img\车车遗照.JPG)
 
 ## 引脚规划
+
+注意：1064有些引脚作为boot选项引脚，使用这些引脚时，会导致单片机启动不顺利
 
 预留出 2个SPI，2个I2C，4个Encoder，3个UART，1个CSI
 
@@ -115,7 +129,9 @@
 
 ## 视觉算法部分
 
-视觉算法部分，图像预处理部分使用的大津法+八邻域，借鉴的车u的算法，而元素判断部分使用的则是自己的方法
+### 视觉预处理
+
+视觉预处理使用的时传统的大津法+偏振片；搜线算法使用的是抄来的八邻域；再华东赛场上这样的巡线没出过什么问题；笔者建议车u们一定要留出曝光度调整的接口，防止赛场极端情况的出现
 
 ### 元素判断部分思路
 
